@@ -31,4 +31,7 @@ urlpatterns = [
 
     # --- Pages "Mon Espace Entrepreneur"
     path('dashboard/contractor/', views.contractor_dashboard, name='contractor_dashboard'),  # 🔐 Page sécurisée
+
+    # --- Pages "Mon Espace Client"
+    path('dashboard/client/', views.client_dashboard, name='client_dashboard'),  # 🔐 Page sécurisée
 ]
