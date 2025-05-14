@@ -17,7 +17,7 @@ class Project(models.Model):
     # 👤 Le client qui a créé ce projet (doit être un utilisateur avec is_client = True)
     client = models.ForeignKey(
         CustomUser,
-        on_delete=models.CASCADE,  # Si le client est supprimé, ses projets aussi
+        on_delete=models.SET_NULL,  # Si le client est supprimé, on garde le projet mais client devient NULL
         related_name='projects_posted',  # Permet de faire client.projects_posted.all()
         limit_choices_to={'is_client': True},
         help_text="Client qui a publié ce projet"
