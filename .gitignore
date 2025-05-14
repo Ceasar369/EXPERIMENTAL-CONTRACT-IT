@@ -1,0 +1,37 @@
+# 🔒 Fichiers secrets et d'environnement
+.env
+*.env
+
+# 🐍 Python
+*.pyc
+*.pyo
+__pycache__/
+*.pyd
+
+# 🧪 Django
+db.sqlite3
+media/
+staticfiles/
+*.log
+
+# 📁 Migrations
+*/migrations/
+*/migrations/*.pyc
+*/migrations/*.py
+
+# 🧠 VS Code
+.vscode/
+*.code-workspace
+
+# 💻 OS
+.DS_Store
+Thumbs.db
+
+# 🚫 Node/npm
+node_modules/
+package-lock.json
+
+# 📦 Virtualenv
+env/
+venv/
+ENV/
