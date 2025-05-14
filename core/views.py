@@ -50,3 +50,7 @@ def login_view(request):
 
 def contractor_dashboard(request):
     return render(request, 'core/contractor_dashboard.html')
+
+def client_dashboard(request):
+    return render(request, 'core/client_dashboard.html')
+
