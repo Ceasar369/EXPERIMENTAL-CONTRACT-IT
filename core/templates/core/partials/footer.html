@@ -1,0 +1,70 @@
+{% load i18n %}
+<footer class="bg-gray-900 text-white px-6 py-12 mt-12">
+    <div class="max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-8">
+
+        <!-- For Clients -->
+        <div>
+            <h3 class="text-sm font-semibold text-gray-400 uppercase mb-4">{% trans "For Clients" %}</h3>
+            <ul class="space-y-2 text-sm">
+                <li><a href="{% url 'how_to_hire' %}" class="hover:underline">{% trans "How to Hire" %}</a></li>
+                <li><a href="{% url 'talent_marketplace' %}" class="hover:underline">{% trans "Talent Marketplace" %}</a></li>
+                <li><a href="{% url 'project_catalog' %}" class="hover:underline">{% trans "Project Catalog" %}</a></li>
+            </ul>
+        </div>
+
+        <!-- For Entrepreneurs -->
+        <div>
+            <h3 class="text-sm font-semibold text-gray-400 uppercase mb-4">{% trans "For Entrepreneurs" %}</h3>
+            <ul class="space-y-2 text-sm">
+                <li><a href="{% url 'how_to_find_work' %}" class="hover:underline">{% trans "How to Find Work" %}</a></li>
+            </ul>
+        </div>
+
+        <!-- Support -->
+        <div>
+            <h3 class="text-sm font-semibold text-gray-400 uppercase mb-4">{% trans "Support" %}</h3>
+            <ul class="space-y-2 text-sm">
+                <li><a href="{% url 'help' %}" class="hover:underline">{% trans "Help & Support" %}</a></li>
+                <li><a href="{% url 'contact' %}" class="hover:underline">{% trans "Contact Us" %}</a></li>
+                <li><a href="{% url 'trust_safety' %}" class="hover:underline">{% trans "Trust & Safety" %}</a></li>
+            </ul>
+        </div>
+
+        <!-- Company -->
+        <div>
+            <h3 class="text-sm font-semibold text-gray-400 uppercase mb-4">{% trans "Company" %}</h3>
+            <ul class="space-y-2 text-sm">
+                <li><a href="{% url 'about' %}" class="hover:underline">{% trans "About Us" %}</a></li>
+                <li><a href="{% url 'cookies' %}" class="hover:underline">{% trans "Cookie Settings" %}</a></li>
+                <li><a href="{% url 'accessibility' %}" class="hover:underline">{% trans "Accessibility" %}</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Bottom section -->
+    <div class="mt-10 border-t border-gray-700 pt-6 flex flex-col md:flex-row justify-between items-center text-sm text-gray-500">
+
+        <div class="flex items-center space-x-4 mb-4 md:mb-0">
+            <span>{% trans "Follow Us" %}</span>
+            <a href="#"><i class="fab fa-facebook"></i></a>
+            <a href="#"><i class="fab fa-linkedin"></i></a>
+            <a href="#"><i class="fab fa-x-twitter"></i></a>
+            <a href="#"><i class="fab fa-youtube"></i></a>
+            <a href="#"><i class="fab fa-instagram"></i></a>
+        </div>
+
+        <div class="flex items-center space-x-4 mb-4 md:mb-0">
+            <span>{% trans "Mobile app" %}</span>
+            <a href="#"><i class="fab fa-apple"></i></a>
+            <a href="#"><i class="fab fa-android"></i></a>
+        </div>
+
+        <div class="text-center md:text-right">
+            <p>&copy; 2025 Contract_it Global Inc.</p>
+            <div class="space-x-2">
+                <a href="{% url 'terms' %}" class="hover:underline">{% trans "Terms of Service" %}</a>
+                <a href="{% url 'privacy' %}" class="hover:underline">{% trans "Privacy Policy" %}</a>
+            </div>
+        </div>
+    </div>
+</footer>

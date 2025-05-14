@@ -1,0 +1,67 @@
+{% load i18n %}
+<!-- core/templates/core/base2 -->
+<!-- base2.html : utilisé pour les pages fonctionnelles (formulaires, dashboard, etc.) -->
+
+{% load i18n %}
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script src="https://cdn.tailwindcss.com"></script>
+        <title>{% block title %}{% endblock %} | Contract_it</title>
+    </head>
+
+    <body>
+        <!-- 🌐 Barre de navigation simple -->
+        <nav class="py-4 px-6 flex justify-between items-center border-b border-gray-200">
+            <!-- Logo à gauche -->
+            <a href="/" class="text-xl font-semibold">Contract_it</a>
+
+            <!-- Sélecteur de langue à droite -->
+            <div class="flex space-x-2 items-center">
+                <form id="lang-fr" action="{% url 'set_language' %}" method="post">
+                    {% csrf_token %}
+                    <input type="hidden" name="language" value="fr">
+                    <input type="hidden" name="next" id="next-fr">
+                    <button type="submit" class="text-sm font-medium border px-3 py-1 rounded hover:bg-gray-100 {% if LANGUAGE_CODE == 'fr' %}bg-gray-300{% endif %}">
+                        Français
+                    </button>
+                </form>
+
+                <form id="lang-en" action="{% url 'set_language' %}" method="post">
+                    {% csrf_token %}
+                    <input type="hidden" name="language" value="en">
+                    <input type="hidden" name="next" id="next-en">
+                    <button type="submit" class="text-sm font-medium border px-3 py-1 rounded hover:bg-gray-100 {% if LANGUAGE_CODE == 'en' %}bg-gray-300{% endif %}">
+                        English
+                    </button>
+                </form>
+            </div>
+
+            <script>
+                const currentPath = window.location.pathname;
+
+                const getLangPrefix = (path) => {
+                    if (path.startsWith("/fr/")) return "fr";
+                    if (path.startsWith("/en/")) return "en";
+                    return "";
+                };
+
+                const stripLangPrefix = (path) => {
+                    return path.replace(/^\/(fr|en)(\/|$)/, "/");
+                };
+
+                const newPath = stripLangPrefix(currentPath);
+                document.getElementById("next-fr").value = "/fr" + newPath;
+                document.getElementById("next-en").value = "/en" + newPath;
+            </script>
+        </nav>
+
+        <!-- Contenu de la page -->
+        <div class="px-6 py-6">
+            {% block content %}
+            {% endblock %}
+        </div>
+    </body>
+</html>

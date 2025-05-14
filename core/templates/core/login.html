@@ -1,0 +1,94 @@
+{% extends "core/base2.html" %}
+{% load i18n %}
+{# core/templates/core/login.html #}
+
+{% block title %}{% trans "Log in" %}{% endblock %}
+
+{% block content %}
+<div class="max-w-xl mx-auto bg-white p-8 shadow-md rounded-md">
+    <h2 class="text-2xl font-bold mb-6 text-center">{% trans "Log in to CONTRACT-IT" %}</h2>
+
+    <form id="login-form" method="POST">
+        <label for="username" class="block mb-2 font-medium">{% trans "Username" %}</label>
+        <input type="text" name="username" id="username" required class="w-full p-3 border rounded mb-4" placeholder="{% trans 'e.g. Ceasar123' %}">
+
+        <label for="password" class="block mb-2 font-medium">{% trans "Password" %}</label>
+        <input type="password" name="password" id="password" required class="w-full p-3 border rounded mb-4" placeholder="••••••••">
+
+        <button type="submit" class="w-full bg-teal-500 text-white py-3 rounded hover:bg-teal-600">
+            {% trans "Log in" %}
+        </button>
+    </form>
+
+    <div id="login-message" class="mt-4 text-center text-green-600 hidden">
+        {% trans "Logged in successfully!" %}
+    </div>
+
+    <div class="text-center mt-4 text-sm">
+        {% trans "Don't have an account?" %}
+        <a href="{% url 'signup' %}" class="text-teal-600 hover:underline">{% trans "Sign up" %}</a>
+    </div>
+</div>
+
+<script>
+document.getElementById("login-form").addEventListener("submit", async function(event) {
+    event.preventDefault(); // 🚫 Empêche le rechargement de la page après soumission du formulaire
+
+    // 🧾 Récupère les valeurs saisies par l’utilisateur
+    const username = document.getElementById("username").value;
+    const password = document.getElementById("password").value;
+
+    // 🎯 Sélectionne l’élément qui affichera les messages de retour
+    const loginMsg = document.getElementById("login-message");
+
+    // 🧹 Réinitialise les styles/messages précédents (cache l’ancien message)
+    loginMsg.classList.add("hidden");
+    loginMsg.classList.remove("text-red-600", "text-green-600");
+
+    // 🔐 Envoie des identifiants à l’API backend Django (endpoint JWT)
+    const response = await fetch("/api/accounts/login/", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"  // ✅ Format JSON requis par l’API
+        },
+        body: JSON.stringify({ username, password })  // 🔁 Conversion des données en JSON
+    });
+
+    // 📦 Récupération de la réponse (access, refresh tokens, rôles, erreurs, etc.)
+    const data = await response.json();
+
+    if (response.ok) {
+        // ✅ Si le login a fonctionné, on stocke les tokens JWT localement
+        localStorage.setItem("access_token", data.access);
+        localStorage.setItem("refresh_token", data.refresh);
+
+        // ✅ Affiche un message de succès
+        loginMsg.classList.remove("hidden");
+        loginMsg.classList.add("text-green-600");
+        loginMsg.textContent = "{% trans 'Logged in successfully!' %}";
+
+        // 🔄 Vérifie le rôle pour rediriger vers le bon tableau de bord
+        const isClient = data.is_client;
+        const isContractor = data.is_contractor;
+
+        // 📍 Choix de la redirection selon le rôle
+        const redirectUrl = isClient
+            ? "/dashboard/client/"           // 🎯 Tableau de bord client (à créer si non fait)
+            : isContractor
+            ? "/dashboard/contractor/"       // 🎯 Tableau de bord entrepreneur
+            : "/";                           // 🧯 Fallback si aucun rôle détecté
+
+        // 🚀 Redirige l’utilisateur vers le bon tableau de bord
+        window.location.href = redirectUrl;
+
+    } else {
+        // ❌ Si l’authentification échoue, on affiche un message d’erreur
+        loginMsg.classList.remove("hidden");
+        loginMsg.classList.add("text-red-600");
+        loginMsg.textContent = data.detail || "{% trans 'Login failed. Please check your credentials.' %}";
+    }
+});
+</script>
+
+
+{% endblock %}

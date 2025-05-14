@@ -1,0 +1,85 @@
+{% extends "core/base2.html" %}
+{% load i18n %}
+{# core/templates/core/create_project.html #}
+
+{% block title %}{% trans "Publish a Project" %}{% endblock %}
+
+{% block content %}
+<div class="max-w-xl mx-auto bg-white p-8 shadow-md rounded-md">
+    <h2 class="text-2xl font-bold mb-6 text-center">{% trans "Publish a New Project" %}</h2>
+
+    <form id="project-form">
+        <label for="title" class="block mb-2 font-medium">{% trans "Project title" %}</label>
+        <input type="text" id="title" name="title" required class="w-full p-3 border rounded mb-4">
+
+        <label for="description" class="block mb-2 font-medium">{% trans "Description" %}</label>
+        <textarea id="description" name="description" required class="w-full p-3 border rounded mb-4"></textarea>
+
+        <label for="budget" class="block mb-2 font-medium">{% trans "Budget (CAD)" %}</label>
+        <input type="number" id="budget" name="budget" required class="w-full p-3 border rounded mb-4">
+
+        <label for="deadline" class="block mb-2 font-medium">{% trans "Deadline" %}</label>
+        <input type="date" id="deadline" name="deadline" required class="w-full p-3 border rounded mb-4">
+
+        <label for="location" class="block mb-2 font-medium">{% trans "Location" %}</label>
+        <input type="text" id="location" name="location" required class="w-full p-3 border rounded mb-4">
+
+        <label for="category" class="block mb-2 font-medium">{% trans "Project category" %}</label>
+        <input type="text" id="category" name="category" required class="w-full p-3 border rounded mb-4">
+
+        {# ✅ Champ IA : par défaut false, mais tu peux le rendre visible si tu veux #}
+        <input type="hidden" id="ai_drafted" name="ai_drafted" value="false">
+
+        <button type="submit" class="w-full bg-teal-600 text-white p-3 rounded hover:bg-teal-700">
+            {% trans "Submit Project" %}
+        </button>
+    </form>
+
+    <div class="text-green-600 text-center mt-4 hidden" id="success-message">
+        {% trans "Your project has been published successfully!" %}
+    </div>
+
+    <div class="text-red-600 text-center mt-4 hidden" id="error-message"></div>
+</div>
+
+<script>
+    const form = document.getElementById('project-form');
+    const successMsg = document.getElementById('success-message');
+    const errorMsg = document.getElementById('error-message');
+
+    form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        const data = {
+            title: form.title.value,
+            description: form.description.value,
+            budget: form.budget.value,
+            deadline: form.deadline.value,
+            location: form.location.value,
+            category: form.category.value,
+            ai_drafted: form.ai_drafted.value === "true"
+        };
+
+        const response = await fetch('/projects/', {  // ✅ URL corrigée
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + localStorage.getItem('access_token')
+            },
+            body: JSON.stringify(data)
+        });
+
+        const result = await response.json();
+
+        if (response.ok) {
+            successMsg.style.display = 'block';
+            errorMsg.style.display = 'none';
+            form.reset();
+        } else {
+            successMsg.style.display = 'none';
+            errorMsg.style.display = 'block';
+            errorMsg.textContent = result.detail || "{% trans 'An error occurred. Please try again.' %}";
+        }
+    });
+</script>
+{% endblock %}

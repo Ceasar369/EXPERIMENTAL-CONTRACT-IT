@@ -1,0 +1,57 @@
+{% extends "core/base2.html" %}
+{% load static %}
+{% load i18n %}
+{# core/templates/core/contractor_dashboard.html #}
+
+{% block title %}{% trans "Dashboard" %}{% endblock %}
+
+{% block content %}
+<div class="max-w-2xl mx-auto bg-white p-8 shadow-md rounded-md">
+    <h2 class="text-2xl font-bold mb-6 text-center">{% trans "Welcome Contractor" %} 👷</h2>
+
+    <div class="flex justify-center mb-6">
+        <img id="profile" src="" width="120" alt="{% trans 'Profile picture' %}" class="rounded-full hidden shadow">
+    </div>
+
+    <p class="mb-2"><strong>{% trans "Username" %}:</strong> <span id="username">...</span></p>
+    <p class="mb-2"><strong>{% trans "Specialties" %}:</strong> <span id="specialties">...</span></p>
+    <p class="mb-2"><strong>{% trans "Hourly rate" %}:</strong> <span id="rate">...</span> $/h</p>
+    <p class="mb-2"><strong>{% trans "Availability" %}:</strong> <span id="availability">...</span></p>
+    <p class="mb-2"><strong>{% trans "Certifications" %}:</strong> <span id="certifications">...</span></p>
+
+    <div class="mt-6 text-center">
+        <button onclick="logout()" class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600">
+            {% trans "Log out" %}
+        </button>
+    </div>
+</div>
+
+<script src="{% static 'core/js/authGuard.js' %}"></script>
+<script src="{% static 'core/js/secureFetch.js' %}"></script>
+<script src="{% static 'core/js/logout.js' %}"></script>
+
+<script>
+    // ✅ Redirige si aucun token
+    enforceAuthentication();
+
+    document.addEventListener('DOMContentLoaded', async () => {
+        // 🔐 Appelle l'API sécurisée pour obtenir les infos du contractor
+        const res = await secureFetch('/api/contractor/dashboard/');
+        const data = await res.json();
+
+        // 🧠 Insertion dynamique des données dans le HTML
+        document.getElementById('username').textContent = data.username;
+        document.getElementById('specialties').textContent = data.specialties || '{% trans "Not specified" %}';
+        document.getElementById('rate').textContent = data.hourly_rate || '{% trans "Not specified" %}';
+        document.getElementById('availability').textContent = data.availability || '{% trans "Not specified" %}';
+        document.getElementById('certifications').textContent = data.certifications || '{% trans "None" %}';
+
+        // 📸 Affiche la photo si elle existe
+        if (data.profile_picture) {
+            const img = document.getElementById('profile');
+            img.src = data.profile_picture;
+            img.classList.remove('hidden');
+        }
+    });
+</script>
+{% endblock %}
