@@ -1,7 +1,7 @@
 # accounts/urls.py
 
 from django.urls import path
-from .views import LoginView, RegisterView, ContractorDashboardView
+from .views import LoginView, RegisterView, ContractorDashboardView, ClientDashboardView
 from rest_framework_simplejwt.views import TokenRefreshView
 
 urlpatterns = [
@@ -13,6 +13,9 @@ urlpatterns = [
 
     # 💼 Dashboard REST côté entrepreneur (protégé par JWT)
     path('dashboard/contractor/', ContractorDashboardView.as_view(), name='contractor-dashboard'),
+
+    # 💼 Dashboard REST côté client (protégé par JWT)
+    path('dashboard/client/', ClientDashboardView.as_view(), name='client-dashboard'),
 
     # 🔁 Endpoint pour rafraîchir le token d’accès via un refresh token
     path("token/refresh/", TokenRefreshView.as_view(), name="token_refresh"),

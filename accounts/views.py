@@ -12,6 +12,7 @@ from rest_framework.response import Response
 from .serializers import RegisterSerializer, CustomUserSerializer
 from .models import CustomUser
 from .permissions import IsContractor  # ✅ Permission personnalisée pour restreindre l’accès aux entrepreneurs
+from .permissions import IsClient  # ✅ Permission personnalisée pour restreindre l’accès aux clienst
 
 
 # 🔐 Serializer personnalisé pour enrichir le JWT avec des infos utilisateur
@@ -53,6 +54,17 @@ class RegisterView(generics.CreateAPIView):
 class ContractorDashboardView(APIView):
     # ✅ JWT obligatoire + utilisateur doit être un entrepreneur (grâce à IsContractor)
     permission_classes = [IsAuthenticated, IsContractor]
+
+    def get(self, request):
+        # 🔄 Sérialise l’utilisateur connecté
+        serializer = CustomUserSerializer(request.user)
+        # 📦 Renvoie les infos sous forme JSON
+        return Response(serializer.data)
+
+# 💼 Dashboard REST pour clients connectés uniquement
+class ClientDashboardView(APIView):
+    # ✅ JWT obligatoire + utilisateur doit être un client (grâce à IsClient)
+    permission_classes = [IsAuthenticated, IsClient]
 
     def get(self, request):
         # 🔄 Sérialise l’utilisateur connecté
