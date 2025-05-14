@@ -36,7 +36,7 @@
 
     document.addEventListener('DOMContentLoaded', async () => {
         // 🔐 Appelle l'API sécurisée pour obtenir les infos du client
-        const res = await secureFetch('/api/contractor/dashboard/'); // 📌 À remplacer plus tard par une vraie vue client
+        const res = await secureFetch('/api/accounts/dashboard/client/');
         const data = await res.json();
 
         document.getElementById('username').textContent = data.username;
