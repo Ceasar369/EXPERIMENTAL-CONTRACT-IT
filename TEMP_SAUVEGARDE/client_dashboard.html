@@ -1,0 +1,55 @@
+{% extends "core/base2.html" %}
+{% load static %}
+{% load i18n %}
+{# core/templates/core/client_dashboard.html #}
+
+{% block title %}{% trans "Dashboard Client" %}{% endblock %}
+
+{% block content %}
+<div class="max-w-2xl mx-auto bg-white p-8 shadow-md rounded-md">
+    <h2 class="text-2xl font-bold mb-6 text-center">{% trans "Welcome Client" %} 🧑‍💼</h2>
+
+    <div class="flex justify-center mb-6">
+        <img id="profile" src="" width="120" alt="{% trans 'Profile picture' %}" class="rounded-full hidden shadow">
+    </div>
+
+    <p class="mb-2"><strong>{% trans "Username" %}:</strong> <span id="username">...</span></p>
+    <p class="mb-2"><strong>{% trans "City" %}:</strong> <span id="city">...</span></p>
+    <p class="mb-2"><strong>{% trans "Phone number" %}:</strong> <span id="phone">...</span></p>
+    <p class="mb-2"><strong>{% trans "Company name" %}:</strong> <span id="company">...</span></p>
+    <p class="mb-2"><strong>{% trans "Projects published" %}:</strong> <span id="projects">...</span></p>
+
+    <div class="mt-6 text-center">
+        <button onclick="logout()" class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600">
+            {% trans "Log out" %}
+        </button>
+    </div>
+</div>
+
+<script src="{% static 'core/js/authGuard.js' %}"></script>
+<script src="{% static 'core/js/secureFetch.js' %}"></script>
+<script src="{% static 'core/js/logout.js' %}"></script>
+
+<script>
+    // ✅ Redirige si aucun token
+    enforceAuthentication();
+
+    document.addEventListener('DOMContentLoaded', async () => {
+        // 🔐 Appelle l'API sécurisée pour obtenir les infos du client
+        const res = await secureFetch('/api/accounts/dashboard/client/');
+        const data = await res.json();
+
+        document.getElementById('username').textContent = data.username;
+        document.getElementById('city').textContent = data.city || '{% trans "Not specified" %}';
+        document.getElementById('phone').textContent = data.phone || '{% trans "Not specified" %}';
+        document.getElementById('company').textContent = data.company_name || '{% trans "Not specified" %}';
+        document.getElementById('projects').textContent = data.project_history_count || 0;
+
+        if (data.profile_picture) {
+            const img = document.getElementById('profile');
+            img.src = data.profile_picture;
+            img.classList.remove('hidden');
+        }
+    });
+</script>
+{% endblock %}
