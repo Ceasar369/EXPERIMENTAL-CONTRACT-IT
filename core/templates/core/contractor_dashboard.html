@@ -9,6 +9,11 @@
 <div class="max-w-2xl mx-auto bg-white p-8 shadow-md rounded-md">
     <h2 class="text-2xl font-bold mb-6 text-center">{% trans "Welcome Contractor" %} 👷</h2>
 
+    <a href="{% url 'find_jobs' %}" class="inline-block px-4 py-2 bg-teal-500 text-white rounded hover:bg-teal-600 mb-6">
+        {% trans "Find a Job" %}
+    </a>
+
+
     <div class="flex justify-center mb-6">
         <img id="profile" src="" width="120" alt="{% trans 'Profile picture' %}" class="rounded-full hidden shadow">
     </div>

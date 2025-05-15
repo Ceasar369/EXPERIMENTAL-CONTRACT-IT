@@ -47,10 +47,22 @@ def find_jobs_view(request):
     # 📄 On passe la liste des projets à la page HTML dédiée
     return render(request, 'projects/project_list.html', {'projects': projects})
 
-# ✅ VUE HTML : Affiche les détails d’un projet sélectionné
+# ✅ Vue HTML pour voir les détails d’un projet
+from django.shortcuts import render, get_object_or_404
+from projects.models import Project
+from bids.models import Bid
+
 def project_detail_page(request, project_id):
-    # 🔍 On récupère le projet via son ID ou retourne une erreur 404 s’il n’existe pas
+    # 🔍 Récupération du projet
     project = get_object_or_404(Project, id=project_id)
 
-    # 📄 On rend la page HTML avec les infos du projet
-    return render(request, 'projects/project_detail.html', {'project': project})
+    # ⚠️ Vérifie si l’entrepreneur connecté a déjà soumis une proposition
+    has_already_bid = False
+    if request.user.is_authenticated and getattr(request.user, 'is_contractor', False):
+        has_already_bid = Bid.objects.filter(project=project, contractor=request.user).exists()
+
+    # 🔁 Envoie les infos au template
+    return render(request, 'projects/project_detail.html', {
+        'project': project,
+        'has_already_bid': has_already_bid,
+    })

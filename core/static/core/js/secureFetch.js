@@ -1,3 +1,7 @@
+//core/static/core/js/secureFetch.js
+
+
+
 // 🔐 Fonction utilitaire pour faire une requête API sécurisée avec gestion automatique du token JWT
 async function secureFetch(url, options = {}) {
     // 🔑 On récupère les tokens stockés localement

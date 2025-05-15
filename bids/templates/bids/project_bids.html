@@ -1,0 +1,27 @@
+{% extends "core/base2.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "Bids Received" %}{% endblock %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto bg-white p-8 shadow-md rounded-md">
+    <h2 class="text-2xl font-bold mb-6 text-center">
+        {% trans "Bids Received for Project:" %} {{ project.title }}
+    </h2>
+
+    {% if bids %}
+        <ul class="space-y-6">
+            {% for bid in bids %}
+                <li class="border p-4 rounded-md bg-gray-50">
+                    <p><strong>{% trans "Contractor" %}:</strong> {{ bid.contractor.username }}</p>
+                    <p><strong>{% trans "Bid Amount" %}:</strong> ${{ bid.amount }}</p>
+                    <p><strong>{% trans "Message" %}:</strong> {{ bid.message }}</p>
+                    <p><strong>{% trans "Submitted on" %}:</strong> {{ bid.created_at|date:"Y-m-d H:i" }}</p>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p class="text-center text-gray-600">{% trans "No bids received yet." %}</p>
+    {% endif %}
+</div>
+{% endblock %}
