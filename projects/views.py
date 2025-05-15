@@ -31,7 +31,7 @@ class ProjectListCreateView(generics.ListCreateAPIView):
 class ProjectDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Project.objects.all()
     serializer_class = ProjectSerializer
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly, IsProjectOwner]
 
     def perform_update(self, serializer):
         # 🔒 Le champ client ne doit pas changer, on ne le met pas à jour
