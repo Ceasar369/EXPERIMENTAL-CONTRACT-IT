@@ -1,6 +1,7 @@
 # projects/views.py
 
 from django.shortcuts import render  # Vue HTML
+from django.shortcuts import get_object_or_404
 from rest_framework import generics, permissions
 from .models import Project
 from .serializers import ProjectSerializer
@@ -38,3 +39,18 @@ class ProjectDetailView(generics.RetrieveUpdateDestroyAPIView):
         # 🔁 Supprime le projet (accessible au client ou admin)
         instance.delete()
 
+# ✅ VUE HTML : Liste des projets disponibles (publics et actifs) pour les entrepreneurs
+def find_jobs_view(request):
+    # 🔍 On récupère uniquement les projets publics et encore actifs
+    projects = Project.objects.filter(is_public=True, status='active').order_by('-created_at')
+
+    # 📄 On passe la liste des projets à la page HTML dédiée
+    return render(request, 'projects/project_list.html', {'projects': projects})
+
+# ✅ VUE HTML : Affiche les détails d’un projet sélectionné
+def project_detail_page(request, project_id):
+    # 🔍 On récupère le projet via son ID ou retourne une erreur 404 s’il n’existe pas
+    project = get_object_or_404(Project, id=project_id)
+
+    # 📄 On rend la page HTML avec les infos du projet
+    return render(request, 'projects/project_detail.html', {'project': project})

@@ -1,0 +1,34 @@
+{% extends 'core/base2.html' %}
+{% load static %}
+{% load i18n %}
+{# projects/templates/projects/project_detail.html #}
+
+{% block title %}{{ project.title }}{% endblock %}
+
+{% block content %}
+<div class="max-w-3xl mx-auto bg-white p-8 shadow-md rounded-md">
+
+    <h2 class="text-2xl font-bold mb-4">{{ project.title }}</h2>
+    <p><strong>{% trans "Description" %}:</strong> {{ project.description }}</p>
+    <p><strong>{% trans "Budget" %}:</strong> ${{ project.budget }}</p>
+    <p><strong>{% trans "Status" %}:</strong> {{ project.status }}</p>
+
+    <div class="mt-6 space-y-4">
+
+        {# 🔘 Bouton "Submit a Bid" si l'utilisateur est un entrepreneur et que le projet est ouvert #}
+        {% if request.user.is_authenticated and request.user.is_contractor and project.status == "open" and project.is_public %}
+            <a href="{% url 'submit-bid' %}" class="inline-block px-4 py-2 bg-teal-500 text-white rounded hover:bg-teal-600">
+                {% trans "Submit a Bid" %}
+            </a>
+        {% endif %}
+
+        {# 🔘 Bouton "View Bids Received" si l'utilisateur est le propriétaire du projet #}
+        {% if request.user.is_authenticated and request.user == project.client %}
+            <a href="{% url 'bids-received' project.id %}" class="inline-block px-4 py-2 bg-gray-700 text-white rounded hover:bg-gray-800">
+                {% trans "View Bids Received" %}
+            </a>
+        {% endif %}
+
+    </div>
+</div>
+{% endblock %}

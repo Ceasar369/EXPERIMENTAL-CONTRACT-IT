@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-05-14 16:32-0400\n"
+"POT-Creation-Date: 2025-05-15 15:19-0400\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -30,6 +30,84 @@ msgstr ""
 msgid "Langue d'affichage de l'interface"
 msgstr ""
 
+#: .\bids\templates\bids\bids_received.html:6
+msgid "Bids Received"
+msgstr ""
+
+#: .\bids\templates\bids\bids_received.html:14
+msgid "Bid accepted successfully. This project is now private."
+msgstr ""
+
+#: .\bids\templates\bids\bids_received.html:18
+msgid "Bids Received for this Project"
+msgstr ""
+
+#: .\bids\templates\bids\bids_received.html:25
+msgid "Contractor"
+msgstr ""
+
+#: .\bids\templates\bids\bids_received.html:28
+msgid "Amount"
+msgstr ""
+
+#: .\bids\templates\bids\bids_received.html:31
+#: .\projects\templates\projects\project_detail.html:14
+msgid "Status"
+msgstr ""
+
+#: .\bids\templates\bids\bids_received.html:34
+msgid "Submitted on"
+msgstr ""
+
+#: .\bids\templates\bids\bids_received.html:45
+msgid "Accept this Bid"
+msgstr ""
+
+#: .\bids\templates\bids\bids_received.html:53
+msgid "No bids have been received for this project yet."
+msgstr ""
+
+#: .\bids\templates\bids\bids_received.html:60
+msgid "Are you sure you want to accept this bid? This action cannot be undone."
+msgstr ""
+
+#: .\bids\templates\bids\submit_bid.html:6
+#: .\projects\templates\projects\project_detail.html:21
+msgid "Submit a Bid"
+msgstr ""
+
+#: .\bids\templates\bids\submit_bid.html:10
+msgid "Submit a Bid for this Project"
+msgstr ""
+
+#: .\bids\templates\bids\submit_bid.html:16
+msgid "Project ID"
+msgstr ""
+
+#: .\bids\templates\bids\submit_bid.html:17
+msgid "e.g. 12"
+msgstr ""
+
+#: .\bids\templates\bids\submit_bid.html:20
+msgid "Proposed Amount ($)"
+msgstr ""
+
+#: .\bids\templates\bids\submit_bid.html:21
+msgid "e.g. 2500.00"
+msgstr ""
+
+#: .\bids\templates\bids\submit_bid.html:24
+msgid "Message to the Client"
+msgstr ""
+
+#: .\bids\templates\bids\submit_bid.html:25
+msgid "Write a short message about your proposal..."
+msgstr ""
+
+#: .\bids\templates\bids\submit_bid.html:29
+msgid "Submit Bid"
+msgstr ""
+
 #: .\core\templates\core\base.html:24
 msgid "New item"
 msgstr "Nouvel élément"
@@ -40,6 +118,7 @@ msgstr "Parcourir"
 
 #: .\core\templates\core\base.html:27 .\core\templates\core\login.html:29
 #: .\core\templates\core\signup.html:5 .\core\templates\core\signup.html:42
+#: .\useful_commands_windows.txt:37
 msgid "Sign up"
 msgstr "Inscription"
 
@@ -48,21 +127,65 @@ msgstr "Inscription"
 msgid "Log in"
 msgstr "Connexion"
 
-#: .\core\templates\core\contractor_dashboard.html:6
-msgid "Dashboard"
+#: .\core\templates\core\client_dashboard.html:6
+msgid "Dashboard Client"
 msgstr ""
 
-#: .\core\templates\core\contractor_dashboard.html:10
-msgid "Welcome Contractor"
+#: .\core\templates\core\client_dashboard.html:10
+msgid "Welcome Client"
 msgstr ""
 
+#: .\core\templates\core\client_dashboard.html:13
 #: .\core\templates\core\contractor_dashboard.html:13
 msgid "Profile picture"
 msgstr ""
 
+#: .\core\templates\core\client_dashboard.html:16
 #: .\core\templates\core\contractor_dashboard.html:16
 #: .\core\templates\core\login.html:12 .\core\templates\core\signup.html:12
 msgid "Username"
+msgstr ""
+
+#: .\core\templates\core\client_dashboard.html:17
+#: .\core\templates\core\signup.html:38
+msgid "City"
+msgstr ""
+
+#: .\core\templates\core\client_dashboard.html:18
+#: .\core\templates\core\signup.html:35
+msgid "Phone number"
+msgstr ""
+
+#: .\core\templates\core\client_dashboard.html:19
+msgid "Company name"
+msgstr ""
+
+#: .\core\templates\core\client_dashboard.html:20
+msgid "Projects published"
+msgstr ""
+
+#: .\core\templates\core\client_dashboard.html:24
+#: .\core\templates\core\contractor_dashboard.html:24
+#, fuzzy
+#| msgid "Log in"
+msgid "Log out"
+msgstr "Connexion"
+
+#: .\core\templates\core\client_dashboard.html:43
+#: .\core\templates\core\client_dashboard.html:44
+#: .\core\templates\core\client_dashboard.html:45
+#: .\core\templates\core\contractor_dashboard.html:44
+#: .\core\templates\core\contractor_dashboard.html:45
+#: .\core\templates\core\contractor_dashboard.html:46
+msgid "Not specified"
+msgstr ""
+
+#: .\core\templates\core\contractor_dashboard.html:6
+msgid "Dashboard Contractor"
+msgstr ""
+
+#: .\core\templates\core\contractor_dashboard.html:10
+msgid "Welcome Contractor"
 msgstr ""
 
 #: .\core\templates\core\contractor_dashboard.html:17
@@ -79,18 +202,6 @@ msgstr ""
 
 #: .\core\templates\core\contractor_dashboard.html:20
 msgid "Certifications"
-msgstr ""
-
-#: .\core\templates\core\contractor_dashboard.html:24
-#, fuzzy
-#| msgid "Log in"
-msgid "Log out"
-msgstr "Connexion"
-
-#: .\core\templates\core\contractor_dashboard.html:44
-#: .\core\templates\core\contractor_dashboard.html:45
-#: .\core\templates\core\contractor_dashboard.html:46
-msgid "Not specified"
 msgstr ""
 
 #: .\core\templates\core\contractor_dashboard.html:47
@@ -112,6 +223,7 @@ msgid "Project title"
 msgstr ""
 
 #: .\core\templates\core\create_project.html:15
+#: .\projects\templates\projects\project_detail.html:12
 msgid "Description"
 msgstr ""
 
@@ -561,14 +673,6 @@ msgstr ""
 
 #: .\core\templates\core\signup.html:31
 msgid "I am a contractor"
-msgstr ""
-
-#: .\core\templates\core\signup.html:35
-msgid "Phone number"
-msgstr ""
-
-#: .\core\templates\core\signup.html:38
-msgid "City"
 msgstr ""
 
 #: .\core\templates\core\signup.html:46
@@ -1780,4 +1884,12 @@ msgstr ""
 
 #: .\env\Lib\site-packages\django\views\templates\default_urlconf.html:248
 msgid "Connect, get help, or contribute"
+msgstr ""
+
+#: .\projects\templates\projects\project_detail.html:13
+msgid "Budget"
+msgstr ""
+
+#: .\projects\templates\projects\project_detail.html:28
+msgid "View Bids Received"
 msgstr ""

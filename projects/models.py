@@ -14,12 +14,21 @@ class Project(models.Model):
         ('cancelled', 'Annulé'),     # Projet annulé
     ]
 
+    # 🔒 Détermine si le projet est visible publiquement ou restreint au client + contractor
+    is_public = models.BooleanField(
+        default=True,
+        help_text="Le projet est-il visible par tous (True) ou privé (False)"
+    )
+
+
     # 👤 Le client qui a créé ce projet (doit être un utilisateur avec is_client = True)
     client = models.ForeignKey(
         CustomUser,
         on_delete=models.SET_NULL,  # Si le client est supprimé, on garde le projet mais client devient NULL
         related_name='projects_posted',  # Permet de faire client.projects_posted.all()
         limit_choices_to={'is_client': True},
+        null=True,  # ✅ Important pour que SET_NULL soit autorisé
+        blank=True,  # ✅ Pour le support dans les formulaires admin
         help_text="Client qui a publié ce projet"
     )
 

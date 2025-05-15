@@ -13,11 +13,11 @@
         <img id="profile" src="" width="120" alt="{% trans 'Profile picture' %}" class="rounded-full hidden shadow">
     </div>
 
-    <p class="mb-2"><strong>{% trans "Username" %}:</strong> <span id="username">...</span></p>
-    <p class="mb-2"><strong>{% trans "Specialties" %}:</strong> <span id="specialties">...</span></p>
-    <p class="mb-2"><strong>{% trans "Hourly rate" %}:</strong> <span id="rate">...</span> $/h</p>
-    <p class="mb-2"><strong>{% trans "Availability" %}:</strong> <span id="availability">...</span></p>
-    <p class="mb-2"><strong>{% trans "Certifications" %}:</strong> <span id="certifications">...</span></p>
+    <p><strong>Username:</strong> {{ user.username }}</p>
+    <p><strong>Specialties:</strong> {{ user.specialties }}</p>
+    <p><strong>Hourly rate:</strong> {{ user.hourly_rate }} $/h</p>
+    <p><strong>Availability:</strong> {{ user.availability }}</p>
+    <p><strong>Certifications:</strong> {{ user.certifications }}</p>
 
     <div class="mt-6 text-center">
         <button onclick="logout()" class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600">
