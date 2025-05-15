@@ -4,17 +4,14 @@ from django.shortcuts import render  # Vue HTML
 from rest_framework import generics, permissions
 from .models import Project
 from .serializers import ProjectSerializer
-from rest_framework.permissions import BasePermission
+from .permissions import IsProjectOwner  # ✅ Import propre depuis fichier dédié
+
 
 # ✅ VUE HTML (interface utilisateur classique)
 # Affiche la page de création de projet (formulaire HTML, non-API)
 def create_project_page(request):
     return render(request, 'core/create_project.html')
 
-# 📛 Seul le client propriétaire peut modifier ou supprimer son projet
-class IsProjectOwner(BasePermission):
-    def has_object_permission(self, request, view, obj):
-        return request.user == obj.client or request.user.is_staff
 
 # ✅ API REST : Lister les projets ou en créer un nouveau (GET + POST)
 class ProjectListCreateView(generics.ListCreateAPIView):
