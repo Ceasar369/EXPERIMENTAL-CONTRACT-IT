@@ -6,7 +6,7 @@ from rest_framework.response import Response
 from .models import Bid
 from .serializers import BidSerializer
 from .permissions import IsContractor, IsProjectOwner
-from projects.models import Project
+
 
 # ✅ Vue pour soumettre une bid (uniquement les entrepreneurs)
 class SubmitBidView(generics.CreateAPIView):
@@ -60,3 +60,71 @@ class AcceptBidView(APIView):
 
         except Bid.DoesNotExist:
             return Response({'detail': 'Bid not found.'}, status=status.HTTP_404_NOT_FOUND)
+
+
+# ✅ Vue complète GET + POST pour soumettre une bid
+from django.views import View
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth.decorators import login_required
+from django.utils.decorators import method_decorator
+from .models import Bid
+from projects.models import Project
+
+@method_decorator(login_required, name='dispatch')
+class SubmitBidFormView(View):
+    def get(self, request, project_id):
+        # 🔍 On récupère le projet public actif correspondant
+        project = get_object_or_404(Project, id=project_id, is_public=True, status='active')
+        return render(request, 'bids/submit_bid_form.html', {'project': project})
+
+    def post(self, request, project_id):
+        # 🔁 Même logique de récupération du projet
+        project = get_object_or_404(Project, id=project_id, is_public=True, status='active')
+
+        # 🧾 Données récupérées depuis le formulaire POST
+        title = request.POST.get("title")
+        description = request.POST.get("description")
+        amount = request.POST.get("amount")
+        deadline = request.POST.get("deadline")
+        message = request.POST.get("message")
+
+        # ✅ Création de la proposition
+        Bid.objects.create(
+            project=project,
+            contractor=request.user,
+            amount=amount,
+            message=message
+        )
+
+        # 🚀 Redirection vers la page de confirmation
+        return redirect('bid-confirmation')
+
+
+# ✅ Vue HTML simple de confirmation après soumission d'une bid
+def bid_confirmation_view(request):
+    return render(request, 'bids/bid_confirmation.html')
+
+# bids/views.py
+
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import render, get_object_or_404
+from .models import Bid
+from projects.models import Project
+
+# ✅ Vue HTML pour afficher tous les bids reçus sur un projet spécifique
+@login_required
+def project_bids_view(request, project_id):
+    # 🧱 On récupère le projet ou on renvoie 404 si introuvable
+    project = get_object_or_404(Project, pk=project_id)
+
+    # 🔐 Sécurité : seul le client owner peut voir les bids de ce projet
+    if request.user != project.client:
+        return render(request, "core/403.html", status=403)
+
+    # 📦 On récupère tous les bids associés à ce projet
+    bids = Bid.objects.filter(project=project).order_by('-created_at')
+
+    return render(request, 'bids/project_bids.html', {
+        'project': project,
+        'bids': bids,
+    })

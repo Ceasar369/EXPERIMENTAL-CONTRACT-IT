@@ -9,6 +9,11 @@
 <div class="max-w-2xl mx-auto bg-white p-8 shadow-md rounded-md">
     <h2 class="text-2xl font-bold mb-6 text-center">{% trans "Welcome Client" %} 🧑‍💼</h2>
 
+    <a href="{% url 'create-project' %}" class="inline-block px-4 py-2 bg-teal-500 text-white rounded hover:bg-teal-600 mb-6">
+        {% trans "Post a Job" %}
+    </a>
+
+
     <div class="flex justify-center mb-6">
         <img id="profile" src="" width="120" alt="{% trans 'Profile picture' %}" class="rounded-full hidden shadow">
     </div>
@@ -18,6 +23,43 @@
     <p><strong>Phone number:</strong> {{ user.phone }}</p>
     <p><strong>Company name:</strong> {{ user.company_name }}</p>
     <p><strong>Projects published:</strong> {{ user.project_history_count }}</p>
+
+    {% for project in projects %}
+         <div class="border p-4 rounded mb-4 bg-white shadow">
+            <h3 class="text-xl font-semibold">{{ project.title }}</h3>
+            <p>{% trans "Bids received" %}: {{ project.bid_count }}</p>
+
+            <a href="{% url 'view-project-bids' item.project.id %}" class="text-sm text-teal-600 hover:underline">
+                {% trans "View Bids" %}
+            </a>
+
+
+        </div>
+    {% endfor %}
+
+    <!-- 📋 Liste des projets du client avec nombre de propositions -->
+    <div class="mt-6">
+        <h3 class="text-xl font-bold mb-4">{% trans "My Projects" %}</h3>
+
+        {% if projects_with_bids %}
+            <ul class="space-y-4">
+                {% for item in projects_with_bids %}
+                <li class="border p-4 rounded-md bg-gray-50">
+                    <h4 class="text-lg font-semibold">{{ item.project.title }}</h4>
+                    <p class="text-sm text-gray-700">
+                        {% trans "Bids received" %}: {{ item.bids_count }}
+                    </p>
+                    <a href="{% url 'bids-received' item.project.id %}" class="text-sm text-teal-600 hover:underline">
+                        {% trans "View Bids" %}
+                    </a>
+                </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p class="text-gray-600">{% trans "You have not posted any projects yet." %}</p>
+        {% endif %}
+    </div>
+
 
 
     <div class="mt-6 text-center">

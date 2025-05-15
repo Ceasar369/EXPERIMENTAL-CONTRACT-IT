@@ -9,6 +9,15 @@
 <div class="max-w-3xl mx-auto bg-white p-8 shadow-md rounded-md">
 
     <h2 class="text-2xl font-bold mb-4">{{ project.title }}</h2>
+
+    {% if has_already_bid %}
+        <!-- 🟡 Message d’alerte si l’utilisateur a déjà soumis une proposition -->
+        <div class="bg-yellow-100 text-yellow-800 p-4 rounded mb-4 text-center font-medium">
+            ⚠️ {% trans "You have already submitted a bid for this project." %}
+        </div>
+    {% endif %}
+
+
     <p><strong>{% trans "Description" %}:</strong> {{ project.description }}</p>
     <p><strong>{% trans "Budget" %}:</strong> ${{ project.budget }}</p>
     <p><strong>{% trans "Status" %}:</strong> {{ project.status }}</p>
@@ -28,6 +37,14 @@
                 {% trans "View Bids Received" %}
             </a>
         {% endif %}
+
+        {% if request.user.is_authenticated and is_contractor and project.status == "active" and project.is_public %}
+            <a href="{% url 'submit-bid-form' project.id %}"
+            class="inline-block mt-4 px-4 py-2 bg-teal-600 text-white rounded hover:bg-teal-700">
+                {% trans "Submit a Bid" %}
+            </a>
+        {% endif %}
+
 
     </div>
 </div>

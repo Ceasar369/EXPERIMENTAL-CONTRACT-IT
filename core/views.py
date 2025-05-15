@@ -87,10 +87,30 @@ def contractor_dashboard(request):
         'user': request.user  # ✅ Passe l'objet CustomUser au template
     })
 
-# 💼 Dashboard HTML pour les clients (non-API)
+from django.shortcuts import render
+from django.contrib.auth.decorators import login_required
+from projects.models import Project
+from bids.models import Bid
+
+# ✅ Dashboard HTML pour client
+@login_required
 def client_dashboard(request):
+    user = request.user
+
+    # 🔍 Récupère les projets publiés par le client
+    projects = Project.objects.filter(client=user)
+
+    # 🧮 Prépare la liste avec le nombre de bids
+    project_data = []
+    for project in projects:
+        bids_count = Bid.objects.filter(project=project).count()
+        project_data.append({
+            'project': project,
+            'bids_count': bids_count,
+        })
+
     return render(request, 'core/client_dashboard.html', {
-        'user': request.user  # ✅ Passe l'objet CustomUser au template
+        'projects_with_bids': project_data
     })
 
 

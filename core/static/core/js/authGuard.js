@@ -1,3 +1,7 @@
+//core/static/core/js/authGuard.js
+
+
+
 // 🔐 Vérifie si l'utilisateur est connecté (access_token présent)
 // Si ce n'est pas le cas → redirige vers /login/
 function enforceAuthentication() {

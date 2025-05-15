@@ -1,3 +1,6 @@
+//core/static/core/js/logout.js
+
+
 // 🔁 Fonction appelée lors de la déconnexion d’un utilisateur
 function logout() {
     // 🔐 Supprime le token d’accès stocké dans le navigateur (utilisé pour les appels API sécurisés)
