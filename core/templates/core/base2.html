@@ -18,6 +18,33 @@
             <!-- Logo à gauche -->
             <a href="/" class="text-xl font-semibold">Contract_it</a>
 
+            {% if request.user.is_authenticated %}
+                <p class="text-xs text-red-600 font-mono">
+                    DEBUG: username={{ request.user.username }} | is_client={{ is_client }} | is_contractor={{ is_contractor }}
+                </p>
+            {% endif %}
+
+
+
+
+
+            <!-- 🔘 Lien dynamique selon le rôle -->
+            {% if request.user.is_authenticated %}
+                {% if request.user.is_contractor %}
+                    <!-- 🧑‍🔧 Entrepreneur connecté → voir les projets à soumissionner -->
+                    <a href="{% url 'find_jobs' %}" class="text-sm font-medium text-teal-600 hover:underline">
+                        {% trans "Find a job" %}
+                    </a>
+                {% elif request.user.is_client %}
+                    <!-- 🧑‍💼 Client connecté → lien vers publication d’un projet -->
+                    <a href="{% url 'create-project' %}" class="text-sm font-medium text-teal-600 hover:underline">
+                        {% trans "Post a job" %}
+                    </a>
+                {% endif %}
+            {% endif %}
+
+
+
             <!-- Sélecteur de langue à droite -->
             <div class="flex space-x-2 items-center">
                 <form id="lang-fr" action="{% url 'set_language' %}" method="post">

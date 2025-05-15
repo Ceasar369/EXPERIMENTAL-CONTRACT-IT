@@ -1,0 +1,30 @@
+{% extends 'core/base2.html' %}
+{% load i18n %}
+{# projects/templates/projects/project_list.html #}
+
+{% block title %}{% trans "Find a Job" %}{% endblock %}
+
+{% block content %}
+<h2 class="text-2xl font-bold mb-6 text-center">{% trans "Available Projects" %}</h2>
+
+{% if projects %}
+    <ul class="space-y-4">
+        {% for project in projects %}
+        <li class="border p-4 rounded-md bg-white shadow-sm">
+            <h3 class="text-xl font-semibold">{{ project.title }}</h3>
+            <p class="text-sm text-gray-600">{{ project.description|truncatechars:100 }}</p>
+            <p class="text-sm"><strong>{% trans "Category" %}:</strong> {{ project.category }}</p>
+            <p class="text-sm"><strong>{% trans "Budget" %}:</strong> ${{ project.budget }}</p>
+            <p class="text-sm"><strong>{% trans "Location" %}:</strong> {{ project.location }}</p>
+            <p class="text-sm"><strong>{% trans "Deadline" %}:</strong> {{ project.deadline }}</p>
+            <a href="{% url 'project_detail_html' project.id %}" class="text-teal-600 hover:underline mt-2 inline-block">
+                {% trans "View Details" %}
+            </a>
+
+        </li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <p class="text-center text-gray-500">{% trans "No projects available at the moment." %}</p>
+{% endif %}
+{% endblock %}

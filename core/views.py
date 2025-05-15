@@ -1,6 +1,8 @@
 # core/views.py
 from django.utils.translation import gettext as _
-from django.shortcuts import render
+from django.shortcuts import render, redirect
+from django.contrib.auth import authenticate, login
+from accounts.models import CustomUser  # 🔁 Pour recharger l'utilisateur avec is_client/is_contractor
 
 
 def index(request):
@@ -46,11 +48,49 @@ def signup(request):
     return render(request, 'core/signup.html')
 
 def login_view(request):
+    # 👤 Si l'utilisateur soumet le formulaire (méthode POST)
+    if request.method == "POST":
+        # 🔐 Récupère les données du formulaire
+        username = request.POST.get("username")
+        password = request.POST.get("password")
+
+        # 🔍 Authentifie l'utilisateur (renvoie None si mauvais identifiants)
+        user = authenticate(request, username=username, password=password)
+
+        if user is not None:
+            # ✅ Recharge l'objet CustomUser avec tous les champs (is_client, is_contractor, etc.)
+            user = CustomUser.objects.get(pk=user.pk)
+
+            # 🔐 Connecte l'utilisateur via session Django
+            login(request, user)
+
+            # 🎯 Redirige automatiquement selon le rôle
+            if user.is_client:
+                return redirect('/dashboard/client/')
+            elif user.is_contractor:
+                return redirect('/dashboard/contractor/')
+            else:
+                return redirect('/')  # Fallback si pas de rôle (admin ?)
+
+        else:
+            # ❌ Si l'authentification échoue, on affiche une erreur
+            return render(request, 'core/login.html', {
+                'error': "Identifiants invalides. Veuillez réessayer."
+            })
+
+    # 👁️ Affiche simplement le formulaire si GET
     return render(request, 'core/login.html')
 
+# 💼 Dashboard HTML pour les entrepreneurs (non-API)
 def contractor_dashboard(request):
-    return render(request, 'core/contractor_dashboard.html')
+    return render(request, 'core/contractor_dashboard.html', {
+        'user': request.user  # ✅ Passe l'objet CustomUser au template
+    })
 
+# 💼 Dashboard HTML pour les clients (non-API)
 def client_dashboard(request):
-    return render(request, 'core/client_dashboard.html')
+    return render(request, 'core/client_dashboard.html', {
+        'user': request.user  # ✅ Passe l'objet CustomUser au template
+    })
+
 

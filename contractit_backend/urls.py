@@ -27,4 +27,5 @@ urlpatterns += i18n_patterns(
     path('admin/', admin.site.urls),               # interface d’administration Django
     path('projects/', include('projects.urls')),   # vues HTML liées aux projets
     path('accounts/', include('accounts.urls')),   # si tu veux des vues HTML comptes (optionnel)
+    path('bids/', include('bids.urls')),
 )

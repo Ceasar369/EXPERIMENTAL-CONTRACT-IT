@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     "projects",
     "rest_framework_simplejwt.token_blacklist",  # pour la gestion des tokens JWT
     "accounts",
+    'bids',
 ]
 
 AUTH_USER_MODEL = 'accounts.CustomUser'
@@ -59,6 +60,8 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'contractit_backend.urls'
 
+
+
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -70,6 +73,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'core.context_processors.user_roles',
             ],
         },
     },
