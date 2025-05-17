@@ -17,6 +17,7 @@ from django.contrib.auth.decorators import login_required     # ✅ Pour restrei
 from django.contrib import messages  # ✅ Pour afficher un message d’erreur dans le template
 from .models import CustomUser                        # 👤 Modèle utilisateur personnalisé
 from .permissions import client_required, contractor_required  # 🔒 Décorateurs personnalisés définis dans permissions.py
+from decimal import Decimal, InvalidOperation
 
 # ---------------------------------------------------------------------
 # 🔐 Page de connexion — login_view
@@ -85,7 +86,13 @@ def register_view(request):
         specialties = request.POST.get("specialties", "")
         company_name = request.POST.get("company_name", "")
         certifications = request.POST.get("certifications", "")
-        hourly_rate = request.POST.get("hourly_rate") or None
+        # 💰 Conversion sécurisée du tarif horaire (champ DecimalField) — None si vide ou invalide 
+        hourly_rate_raw = request.POST.get("hourly_rate")
+        try:
+            hourly_rate = Decimal(hourly_rate_raw) if hourly_rate_raw else None
+        except (InvalidOperation, TypeError):
+            hourly_rate = None
+
         availability = request.POST.get("availability", "")
 
         # ✅ Création avec image par défaut

@@ -25,7 +25,6 @@ from django.contrib import messages
 # 📦 IMPORTS INTERNES
 # ---------------------------------------------------------------------
 from .models import Project, Milestone
-from projects.models import Project
 from bids.models import Bid  # Pour afficher les soumissions
 from accounts.models import CustomUser
 
@@ -91,7 +90,7 @@ def create_project_page(request):
             amount = float(amounts[i])
             total_milestone_budget += amount
 
-            # Création du jalon dans la base
+            # 🧱 Création du jalon dans la base de données (lié au projet principal)
             Milestone.objects.create(
                 project=project,
                 title=titles[i],
@@ -197,6 +196,7 @@ def project_detail_page(request, project_id):
     # ⚠️ Vérifie si l’entrepreneur connecté a déjà soumis une proposition
     has_already_bid = False
     if user.is_contractor:
+        # ✅ Vérifie si l’entrepreneur a déjà soumis une offre (pour désactiver le bouton « Soumettre »)
         has_already_bid = Bid.objects.filter(project=project, contractor=user).exists()
 
     # 📦 Récupère les jalons liés à ce projet
@@ -281,7 +281,8 @@ def edit_project_view(request, project_id):
         project.description = request.POST.get("description", "").strip()
         project.category = request.POST.get("category", "").strip()
         project.location = request.POST.get("location", "").strip()
-        project.budget = request.POST.get("budget", "").strip()
+        # 💰 On convertit le budget en float pour l’enregistrer correctement (champ DecimalField)
+        project.budget = float(request.POST.get("budget", "").strip())
         project.deadline = request.POST.get("deadline", "").strip()
         project.save()
 
