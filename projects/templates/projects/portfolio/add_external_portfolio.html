@@ -1,0 +1,85 @@
+{% extends "core/useful/base2.html" %}
+{% load i18n %}
+
+{% comment %} 
+-------------------------------------------------------------------------
+📄 Fichier : add_external_portfolio.html
+📂 Emplacement : projects/templates/projects/portfolio/add_external_portfolio.html
+
+🎯 Ce fichier affiche un formulaire complet permettant à un **entrepreneur**
+    d’ajouter un projet externe (hors plateforme CONTRACT-IT) à son portfolio.
+
+📌 Champs requis :
+    - Titre
+    - Date de réalisation
+    - Durée
+    - Prix
+    - Description
+    - Upload **de plusieurs images** (via champ multiple)
+
+🔐 Cette page est **privée**, uniquement accessible via le Contractor Dashboard.
+
+💡 Ce formulaire POST déclenche la vue `add_external_portfolio_view` qui crée :
+    → un `ExternalPortfolioItem`
+    → plusieurs `ExternalPortfolioMedia` si fichiers envoyés
+-------------------------------------------------------------------------
+{% endcomment %}
+
+{% block title %}{% trans "Add External Project" %}{% endblock %}
+
+{% block content %}
+<div class="max-w-2xl mx-auto p-6 bg-white rounded shadow">
+
+    <!-- 🧭 Titre principal -->
+    <h1 class="text-2xl font-bold mb-6 text-center">{% trans "Add an External Project to Your Portfolio" %}</h1>
+
+    <!-- 🧾 Formulaire d’ajout -->
+    <form method="POST" enctype="multipart/form-data" class="space-y-6">
+        {% csrf_token %}
+
+        <!-- 🏷️ Titre du projet -->
+        <div>
+            <label for="title" class="block font-semibold mb-1">{% trans "Project Title" %}</label>
+            <input type="text" name="title" id="title" class="w-full border rounded p-2" required>
+        </div>
+
+        <!-- 📅 Date de réalisation -->
+        <div>
+            <label for="date" class="block font-semibold mb-1">{% trans "Date Completed" %}</label>
+            <input type="date" name="date" id="date" class="w-full border rounded p-2" required>
+        </div>
+
+        <!-- ⏱️ Durée estimée -->
+        <div>
+            <label for="duration" class="block font-semibold mb-1">{% trans "Project Duration" %}</label>
+            <input type="text" name="duration" id="duration" class="w-full border rounded p-2" placeholder="Ex. : 3 semaines">
+        </div>
+
+        <!-- 💰 Prix total -->
+        <div>
+            <label for="price" class="block font-semibold mb-1">{% trans "Total Price (CAD)" %}</label>
+            <input type="number" name="price" step="0.01" class="w-full border rounded p-2" required>
+        </div>
+
+        <!-- 📝 Description du projet -->
+        <div>
+            <label for="description" class="block font-semibold mb-1">{% trans "Project Description" %}</label>
+            <textarea name="description" rows="5" class="w-full border rounded p-2" placeholder="{% trans 'Describe the work done, challenges, materials used, etc.' %}"></textarea>
+        </div>
+
+        <!-- 🖼️ Upload de plusieurs images -->
+        <div>
+            <label for="images" class="block font-semibold mb-1">{% trans "Upload Images" %}</label>
+            <input type="file" name="images" id="images" accept="image/*" multiple>
+            <p class="text-xs text-gray-500 mt-1">{% trans "You can select multiple images." %}</p>
+        </div>
+
+        <!-- ✅ Bouton soumettre -->
+        <div class="text-center">
+            <button type="submit" class="px-6 py-2 bg-teal-600 text-white font-semibold rounded hover:bg-teal-700">
+                {% trans "Save to My Portfolio" %}
+            </button>
+        </div>
+    </form>
+</div>
+{% endblock %}

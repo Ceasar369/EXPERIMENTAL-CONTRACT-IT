@@ -167,3 +167,33 @@ def contractor_dashboard(request):
     return render(request, "accounts/contractor_dashboard.html", {
         "user": request.user
     })
+
+
+# ---------------------------------------------------------------------
+# 📄 Vue publique : Détail d’un entrepreneur
+# ---------------------------------------------------------------------
+from django.http import Http404  # Pour lever une erreur si l’utilisateur n’existe pas
+
+@login_required  # Optionnel : si tu veux réserver l’accès aux utilisateurs connectés
+def contractor_detail_view(request, user_id):
+    """
+    Affiche le profil public d’un entrepreneur CONTRACT-IT.
+    On vérifie que l’utilisateur demandé est bien un entrepreneur (is_contractor = True).
+    
+    🔗 Accessible depuis une page de recherche ou le profil client.
+
+    📌 Ce profil inclut :
+        - Ses informations publiques (nom, ville, spécialité…)
+        - Son portfolio (projets internes et externes)
+    """
+
+    # 🔎 On cherche l'utilisateur par ID ou on lève une 404
+    try:
+        profile = CustomUser.objects.get(id=user_id, is_contractor=True)
+    except CustomUser.DoesNotExist:
+        raise Http404("Cet entrepreneur n'existe pas ou n'est pas visible publiquement.")
+
+    # 📤 On envoie le profil à la page HTML (nom de variable = profile)
+    return render(request, "accounts/contractor_detail.html", {
+        "profile": profile
+    })

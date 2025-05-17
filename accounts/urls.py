@@ -36,4 +36,9 @@ urlpatterns = [
     # 🚪 Déconnexion
     # Met fin à la session Django et redirige vers la page d’accueil ou de login.
     path("logout/", views.logout_view, name="logout"),
+
+    # 👷 Profil public d’un entrepreneur 
+    # 🔎 Vue publique d’un entrepreneur 
+    path("contractors/<int:user_id>/", views.contractor_detail_view, name="contractor_detail"),
+
 ]

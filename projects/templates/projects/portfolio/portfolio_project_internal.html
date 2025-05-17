@@ -1,0 +1,63 @@
+{% extends "core/useful/base2.html" %}
+{% load i18n %}
+
+{% comment %} 
+-------------------------------------------------------------------------
+📄 Fichier : portfolio_project_internal.html
+📂 Emplacement : projects/templates/projects/portfolio/portfolio_project_internal.html
+
+🎯 Ce fichier affiche **les détails d’un projet réalisé via CONTRACT-IT**
+   qui a été **ajouté au portfolio** de l’entrepreneur (via le switch de visibilité).
+
+🔗 Ces projets sont liés à un objet `Project` (relation OneToOne avec `InternalPortfolioItem`).
+
+🌐 Cette page est **publique**, accessible depuis un profil entrepreneur.
+
+📌 Contient :
+   - Titre
+   - Localisation
+   - Budget
+   - Deadline
+   - Description
+   - Notes personnelles de l’entrepreneur (optionnel)
+-------------------------------------------------------------------------
+{% endcomment %}
+
+{% block title %}{{ item.project.title }}{% endblock %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto px-4 py-8 bg-white shadow rounded">
+
+    <!-- 🧱 TITRE DU PROJET -->
+    <h1 class="text-3xl font-bold text-center text-gray-800 mb-2">
+        {{ item.project.title }}
+    </h1>
+
+    <!-- 🏷️ LIEU ET DATE -->
+    <p class="text-center text-sm text-gray-600 mb-6">
+        {{ item.project.location }} — {{ item.project.deadline }}
+    </p>
+
+    <!-- 📋 INFOS DU PROJET -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6 text-sm text-gray-700">
+        <p><strong>{% trans "Category" %}:</strong> {{ item.project.category }}</p>
+        <p><strong>{% trans "Budget" %}:</strong> ${{ item.project.budget }}</p>
+        <p><strong>{% trans "Status" %}:</strong> {{ item.project.status }}</p>
+    </div>
+
+    <!-- 📝 DESCRIPTION DU PROJET -->
+    <div class="prose max-w-none text-gray-800 mb-8">
+        <h2 class="text-xl font-semibold mb-2">{% trans "Project Description" %}</h2>
+        <p>{{ item.project.description|linebreaks }}</p>
+    </div>
+
+    <!-- 🧾 COMMENTAIRE PERSONNEL DE L'ENTREPRENEUR -->
+    {% if item.notes %}
+    <div class="prose max-w-none text-gray-800 border-t pt-6">
+        <h2 class="text-xl font-semibold mb-2">{% trans "Notes from the Contractor" %}</h2>
+        <p>{{ item.notes|linebreaks }}</p>
+    </div>
+    {% endif %}
+
+</div>
+{% endblock %}
