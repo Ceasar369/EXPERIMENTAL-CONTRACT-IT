@@ -20,6 +20,7 @@
 ⚠️ Cette page est accessible publiquement via : /accounts/contractors/<id>/
 
 Le contenu dynamique est injecté depuis la vue `entrepreneur_detail_view` via la variable `profile`.
+🔁 Correction : la vue correcte est en réalité `contractor_detail_view`
 -------------------------------------------------------------------------
 {% endcomment %}
 
@@ -55,53 +56,47 @@ Le contenu dynamique est injecté depuis la vue `entrepreneur_detail_view` via l
                 </li>
                 <li><strong>{% trans "Availability" %}:</strong> {{ profile.availability|default:"–" }}</li>
             </ul>
-
-            
-
         </div>
     </div>
 
     <!-- 🖼️ SECTION PORTFOLIO DYNAMIQUE -->
-    {% if profile.external_portfolio_items.exists or profile.internal_portfolio_items.filter(visible_in_portfolio=True).exists %}
+    {% if external_has or internal_has %}
         <!-- 🖼️ SECTION : Projets visibles dans le portfolio -->
-            {% if profile.external_portfolio_items.exists or profile.internal_portfolio_items.filter(visible_in_portfolio=True).exists %}
-            <section class="mt-12 bg-gray-50 p-6 shadow rounded-md">
+        <section class="mt-12 bg-gray-50 p-6 shadow rounded-md">
+            
+            <!-- 🎯 Titre principal -->
+            <h2 class="text-2xl font-bold mb-6">{% trans "Completed Projects (Portfolio)" %}</h2>
 
-                <!-- 🎯 Titre principal -->
-                <h2 class="text-2xl font-bold mb-6">{% trans "Completed Projects (Portfolio)" %}</h2>
-
-                <!-- ✅ Projets internes visibles -->
-                {% with profile.internal_portfolio_items.filter(visible_in_portfolio=True) as internal_items %}
-                    {% if internal_items %}
-                        <h3 class="text-lg font-semibold mb-2">{% trans "Internal Projects (via CONTRACT-IT)" %}</h3>
-                        <div class="grid md:grid-cols-2 gap-4 mb-8">
-                            {% for item in internal_items %}
-                                <a href="{% url 'portfolio_project_internal' item.project.id %}" class="block p-4 border rounded hover:shadow bg-white">
-                                    <h4 class="text-gray-800 font-bold">{{ item.project.title }}</h4>
-                                    <p class="text-sm text-gray-600">{{ item.project.location }} — {{ item.project.deadline }}</p>
-                                    <p class="text-sm text-gray-500 mt-1">${{ item.project.budget }} — {{ item.project.category }}</p>
-                                </a>
-                            {% endfor %}
-                        </div>
-                    {% endif %}
-                {% endwith %}
-
-                <!-- ✅ Projets externes -->
-                {% if profile.external_portfolio_items.all %}
-                    <h3 class="text-lg font-semibold mb-2">{% trans "External Projects" %}</h3>
-                    <div class="grid md:grid-cols-2 gap-4">
-                        {% for item in profile.external_portfolio_items.all %}
-                            <a href="{% url 'portfolio_project_external' item.id %}" class="block p-4 border rounded hover:shadow bg-white">
-                                <h4 class="text-gray-800 font-bold">{{ item.title }}</h4>
-                                <p class="text-sm text-gray-600">{{ item.date }} — ${{ item.price }}</p>
-                                <p class="text-sm text-gray-500 mt-1">{{ item.duration }}</p>
+            <!-- ✅ Projets internes visibles -->
+            {% with internal_visible_items as internal_items %}
+                {% if internal_items %}
+                    <h3 class="text-lg font-semibold mb-2">{% trans "Internal Projects (via CONTRACT-IT)" %}</h3>
+                    <div class="grid md:grid-cols-2 gap-4 mb-8">
+                        {% for item in internal_items %}
+                            <a href="{% url 'portfolio_project_internal_view' item.project.id %}" class="block p-4 border rounded hover:shadow bg-white">
+                                <h4 class="text-gray-800 font-bold">{{ item.project.title }}</h4>
+                                <p class="text-sm text-gray-600">{{ item.project.location }} — {{ item.project.deadline }}</p>
+                                <p class="text-sm text-gray-500 mt-1">${{ item.project.budget }} — {{ item.project.category }}</p>
                             </a>
                         {% endfor %}
                     </div>
                 {% endif %}
+            {% endwith %}
 
-            </section>
+            <!-- ✅ Projets externes -->
+            {% if profile.external_portfolio_items.all %}
+                <h3 class="text-lg font-semibold mb-2">{% trans "External Projects" %}</h3>
+                <div class="grid md:grid-cols-2 gap-4">
+                    {% for item in profile.external_portfolio_items.all %}
+                        <a href="{% url 'external_portfolio_detail_view' item.id %}" class="block p-4 border rounded hover:shadow bg-white">
+                            <h4 class="text-gray-800 font-bold">{{ item.title }}</h4>
+                            <p class="text-sm text-gray-600">{{ item.date }} — ${{ item.price }}</p>
+                            <p class="text-sm text-gray-500 mt-1">{{ item.duration }}</p>
+                        </a>
+                    {% endfor %}
+                </div>
             {% endif %}
+        </section>
     {% endif %}
 
 </div>

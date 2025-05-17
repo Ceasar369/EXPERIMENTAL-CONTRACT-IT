@@ -4,7 +4,7 @@
 
    📌 UTILISATION :
    - Ce fichier HTML sert de "layout général" (structure de base) pour les pages publiques du site CONTRACT-IT.
-   - Il est utilisé via l'instruction dans d'autres fichiers HTML.
+   - Il est utilisé via l'instruction `{% extends "core/useful/base1.html" %}` dans d'autres fichiers HTML.
    - Il définit la structure commune :
      - entête (nav)
      - bloc de contenu 
@@ -39,7 +39,7 @@
     <!-- 🔝 ENTÊTE PRINCIPAL (navbar du haut) -->
     <nav class="py-6 px-6 flex justify-between items-center border-b border-gray-200 bg-white shadow-sm">
         <!-- ⬅️ Logo Contract_it à gauche — renvoie vers la page d'accueil -->
-        <a href="{% url 'index' %}"
+        <a href="{% url 'index_view' %}"
            class="text-xl font-bold text-gray-900 hover:text-gray-700 transition">
             Contract_it
         </a>
@@ -47,13 +47,13 @@
         <!-- 🟩 Boutons au centre :  register & Log in -->
         <div class="flex items-center space-x-6">
             <!-- ✅ Bouton pour aller à la page d'inscription -->
-            <a href="{% url 'register' %}"
+            <a href="{% url 'register_view' %}"
                class="px-5 py-2 rounded bg-teal-500 text-white text-sm font-semibold hover:bg-teal-600 transition">
                 {% trans "Register" %}
             </a>
 
             <!-- ✅ Bouton pour aller à la page de connexion -->
-            <a href="{% url 'login' %}"
+            <a href="{% url 'login_view' %}"
                class="px-5 py-2 rounded bg-gray-500 text-white text-sm font-semibold hover:bg-gray-700 transition">
                 {% trans "Log in" %}
             </a>

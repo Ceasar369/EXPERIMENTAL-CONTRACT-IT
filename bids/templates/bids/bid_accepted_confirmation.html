@@ -1,52 +1,52 @@
 {% extends "core/useful/base2.html" %}
 {% load i18n %}
 
-{% comment %} {# -----------------------------------------------------------------------------
-   📄 Fichier : bids/templates/bids/bid_accepted_confirmation.html
-
-   🎯 Objectif :
-       Cette page est affichée après qu’un client ait cliqué sur "Accept this Proposal".
-       Elle confirme que l'offre a été acceptée avec succès et informe l'utilisateur
-       que l'entrepreneur recevra une notification (fonctionnalité à venir).
-
-   📌 Cette version temporaire précède l’intégration du système de messagerie
-       et permet de valider la logique de sélection d’un entrepreneur.
-
-   ✨ Éléments inclus :
-       - Message clair de confirmation
-       - Icône de succès
-       - Bouton retour vers le dashboard client
-       - Bouton vers la page "My Projects"
-   ----------------------------------------------------------------------------- #} {% endcomment %}
+{% comment %}
+# -----------------------------------------------------------------------------
+# 📄 Fichier : bids/templates/bids/bid_accepted_confirmation.html
+#
+# 🎯 Affiché après que le client ait accepté une offre (bid).
+#     Page temporaire avant l’activation du système de messagerie.
+#
+# Affiche :
+#     - Message clair de succès
+#     - Icône de confirmation
+#     - Boutons vers dashboard client et liste de projets
+#
+# ✅ Vue associée : bid_accepted_confirmation_view
+# ✅ Layout utilisé : base2.html (en-tête léger, pas de footer)
+# -----------------------------------------------------------------------------
+{% endcomment %}
 
 {% block title %}{% trans "Proposal Accepted" %}{% endblock %}
 
 {% block content %}
 <div class="max-w-xl mx-auto mt-20 bg-white shadow-md rounded-lg p-10 text-center">
 
-    <!-- ✅ Icône de validation -->
+    <!-- ✅ Icône centrale de succès -->
     <div class="text-green-500 text-6xl mb-6">✅</div>
 
-    <!-- ✅ Message de confirmation principal -->
+    <!-- 🧾 Message principal -->
     <h2 class="text-2xl font-bold text-gray-800 mb-4">
         {% trans "You have successfully accepted this proposal!" %}
     </h2>
 
-    <!-- 🔔 Message secondaire -->
+    <!-- 💬 Message secondaire -->
     <p class="text-gray-600 mb-8">
         {% trans "The contractor has been notified. You’ll be able to chat with them once the messaging system is active." %}
     </p>
 
-    <!-- 🔗 Boutons d'action -->
+    <!-- 🔗 Boutons de navigation -->
     <div class="flex justify-center space-x-4">
-        <!-- Retour au dashboard -->
-        <a href="{% url 'client-dashboard' %}"
+
+        <!-- 🏠 Retour dashboard client -->
+        <a href="{% url 'client_dashboard_view' %}"
            class="bg-teal-600 text-white px-6 py-3 rounded hover:bg-teal-700 transition">
             {% trans "Back to Dashboard" %}
         </a>
 
-        <!-- Voir mes projets -->
-        <a href="{% url 'my_projects' %}"
+        <!-- 📂 Voir mes projets -->
+        <a href="{% url 'my_projects_view' %}"
            class="border border-gray-400 text-gray-800 px-6 py-3 rounded hover:bg-gray-100 transition">
             {% trans "View My Projects" %}
         </a>

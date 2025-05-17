@@ -1,0 +1,74 @@
+{% extends "core/useful/base1.html" %}
+{% load i18n %}
+
+{% comment %}
+-------------------------------------------------------------------------
+📄 Fichier : client_detail.html
+📂 Emplacement : accounts/templates/accounts/client_detail.html
+
+🎯 Ce template affiche le **profil public d’un client CONTRACT-IT**.
+
+✅ Affiche :
+- Nom complet
+- Ville
+- Nom de l'entreprise (si renseigné)
+- Biographie du client (facultative)
+- Nombre total de projets publiés
+- Statut de vérification du client (✔️ ou ❌)
+
+⚠️ Cette page sera accessible publiquement via : /accounts/clients/<id>/
+Le contenu dynamique est injecté via la vue `client_detail_view` avec la variable `profile`.
+-------------------------------------------------------------------------
+{% endcomment %}
+
+{% block title %}{{ profile.get_display_name }}{% endblock %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto px-6 py-10 bg-white shadow rounded">
+
+    <!-- 👤 En-tête : nom + ville -->
+    <div class="text-center mb-6">
+        <h1 class="text-3xl font-bold text-gray-800">{{ profile.get_display_name }}</h1>
+        <p class="text-sm text-gray-500">{{ profile.city }}</p>
+    </div>
+
+    <!-- 🧾 Bloc biographie + informations générales -->
+    <div class="grid md:grid-cols-2 gap-6 mb-8">
+        <div>
+            <h2 class="text-xl font-semibold mb-2">{% trans "About the Client" %}</h2>
+            <p class="text-gray-700 whitespace-pre-line">{{ profile.bio|default:"–" }}</p>
+        </div>
+
+        <div>
+            <h2 class="text-xl font-semibold mb-2">{% trans "Client Information" %}</h2>
+            <ul class="text-gray-700 text-sm space-y-1">
+                <li>
+                    <strong>{% trans "Company Name" %}:</strong>
+                    {{ profile.company_name|default:"–" }}
+                </li>
+                <li>
+                    <strong>{% trans "Projects Posted" %}:</strong>
+                    {{ profile.project_history_count }}
+                </li>
+                <li>
+                    <strong>{% trans "Verified Account" %}:</strong>
+                    {% if profile.is_verified %}
+                        ✅ {% trans "Yes" %}
+                    {% else %}
+                        ❌ {% trans "No" %}
+                    {% endif %}
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- 🔒 Bloc optionnel pour afficher plus tard les évaluations du client -->
+    {# 
+    <section class="mt-12">
+        <h2 class="text-2xl font-bold mb-4">{% trans "Client Reviews" %}</h2>
+        <p class="text-sm text-gray-500">{% trans "This section will show all reviews left by contractors about this client." %}</p>
+    </section> 
+    #}
+
+</div>
+{% endblock %}

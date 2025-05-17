@@ -1,56 +1,73 @@
 {% extends "core/useful/base2.html" %}
 {% load i18n %}
-{% comment %} {# ------------------------------------------------------------------------
-   📁 Fichier : bids/templates/bids/submit_bid_form.html
 
-   🎯 Objectif :
-       Cette page est utilisée par un entrepreneur pour soumettre une offre (bid)
-       sur un projet visible publiquement. Elle est accessible via l’URL :
-       /bids/submit/<project_id>/
-
-   ✅ Contenu :
-       - Détails du projet affichés en haut
-       - Formulaire POST avec :
-         - Montant proposé 💲
-         - Message d’accompagnement 📝
-         - Bouton de soumission
-
-   ⚠️ Le formulaire envoie ses données à la vue SubmitBidFormView (POST).
-   ------------------------------------------------------------------------ #} {% endcomment %}
+{% comment %}
+# ------------------------------------------------------------------------
+# 📄 Fichier : bids/templates/bids/submit_bid_form.html
+#
+# 🎯 Objectif :
+#     Formulaire HTML permettant à un entrepreneur de soumettre une bid
+#     pour un projet public.
+#
+# 📌 Accessible via : /bids/submit/<project_id>/
+# 🔒 Sécurité : vue protégée par login + restriction au rôle is_contractor
+#
+# ✅ Vue associée : SubmitBidFormView (GET + POST)
+# ✅ Layout utilisé : base2.html
+# ------------------------------------------------------------------------
+{% endcomment %}
 
 {% block title %}{% trans "Submit a Proposal" %}{% endblock %}
 
 {% block content %}
 <div class="max-w-3xl mx-auto bg-white p-8 shadow-md rounded-md mt-8">
 
-    <!-- 🧾 En-tête de la page -->
+    <!-- 🧾 Titre principal -->
     <h2 class="text-2xl font-bold mb-4">{% trans "Submit Your Proposal" %}</h2>
-    <p class="text-gray-600 mb-6">{% trans "Please review the project details below and submit your offer." %}</p>
 
-    <!-- 🔍 Section projet -->
+    <!-- 💬 Intro -->
+    <p class="text-gray-600 mb-6">
+        {% trans "Please review the project details below and submit your offer." %}
+    </p>
+
+    <!-- 📦 Détails du projet -->
     <div class="border border-gray-300 p-4 rounded mb-8 bg-gray-50">
         <h3 class="text-xl font-semibold text-teal-700 mb-2">{{ project.title }}</h3>
-        <p class="text-sm text-gray-600 mb-2"><strong>{% trans "Category:" %}</strong> {{ project.category }}</p>
-        <p class="text-sm text-gray-600 mb-2"><strong>{% trans "Location:" %}</strong> {{ project.location }}</p>
-        <p class="text-sm text-gray-600 mb-2"><strong>{% trans "Budget:" %}</strong> {{ project.budget }} $</p>
-        <p class="text-sm text-gray-600 mb-2"><strong>{% trans "Deadline:" %}</strong> {{ project.deadline }}</p>
-        <p class="text-sm text-gray-700 mt-4">{{ project.description }}</p>
+        <p class="text-sm text-gray-600 mb-2">
+            <strong>{% trans "Category:" %}</strong> {{ project.category }}
+        </p>
+        <p class="text-sm text-gray-600 mb-2">
+            <strong>{% trans "Location:" %}</strong> {{ project.location }}
+        </p>
+        <p class="text-sm text-gray-600 mb-2">
+            <strong>{% trans "Budget:" %}</strong> {{ project.budget }} $
+        </p>
+        <p class="text-sm text-gray-600 mb-2">
+            <strong>{% trans "Deadline:" %}</strong> {{ project.deadline }}
+        </p>
+        <p class="text-sm text-gray-700 mt-4">
+            {{ project.description }}
+        </p>
     </div>
 
-    <!-- ✍️ Formulaire de soumission -->
+    <!-- 📝 Formulaire de soumission de la proposition -->
     <form method="post" class="space-y-6">
         {% csrf_token %}
 
-        <!-- 💲 Montant proposé -->
+        <!-- 💲 Champ : montant proposé -->
         <div>
-            <label for="amount" class="block font-medium text-gray-700">{% trans "Proposed Amount (CAD)" %}</label>
+            <label for="amount" class="block font-medium text-gray-700">
+                {% trans "Proposed Amount (CAD)" %}
+            </label>
             <input type="number" name="amount" id="amount" step="0.01" required
                    class="w-full mt-2 p-3 border border-gray-300 rounded">
         </div>
 
-        <!-- 📝 Message d’accompagnement -->
+        <!-- ✉️ Champ : message personnalisé -->
         <div>
-            <label for="message" class="block font-medium text-gray-700">{% trans "Message to the Client" %}</label>
+            <label for="message" class="block font-medium text-gray-700">
+                {% trans "Message to the Client" %}
+            </label>
             <textarea name="message" id="message" rows="5" required
                       class="w-full mt-2 p-3 border border-gray-300 rounded"
                       placeholder="{% trans 'Briefly explain why you are the right person for this job...' %}"></textarea>

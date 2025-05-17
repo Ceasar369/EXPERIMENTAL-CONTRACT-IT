@@ -40,7 +40,7 @@ class ProjectAdmin(admin.ModelAdmin):
         'contractor',      # Entrepreneur attribué (peut être vide)
         'status',          # Statut actuel (actif, en cours, terminé…)
         'budget',          # Budget prévu
-        'deadline',         # Date limite du projet
+        'deadline',        # Date limite du projet
         'milestone_count'  # Nombre total de jalons associés
     )
 

@@ -1,25 +1,28 @@
 {% extends "core/useful/base2.html" %}
 {% load i18n %}
 
-{% comment %} 
+{% comment %}
 -------------------------------------------------------------------------
 📄 Fichier : portfolio_project_internal.html
 📂 Emplacement : projects/templates/projects/portfolio/portfolio_project_internal.html
 
 🎯 Ce fichier affiche **les détails d’un projet réalisé via CONTRACT-IT**
-   qui a été **ajouté au portfolio** de l’entrepreneur (via le switch de visibilité).
+    qui a été **ajouté au portfolio** de l’entrepreneur via le switch de visibilité.
 
 🔗 Ces projets sont liés à un objet `Project` (relation OneToOne avec `InternalPortfolioItem`).
 
 🌐 Cette page est **publique**, accessible depuis un profil entrepreneur.
 
-📌 Contient :
-   - Titre
-   - Localisation
-   - Budget
-   - Deadline
-   - Description
-   - Notes personnelles de l’entrepreneur (optionnel)
+📌 Contenu affiché :
+    - Titre
+    - Localisation
+    - Budget
+    - Deadline
+    - Description
+    - Notes personnelles de l’entrepreneur (facultatif)
+
+✅ Vue utilisée : internal_portfolio_detail_view
+✅ Route : path("portfolio/internal/<int:project_id>/", ...) → name="internal_portfolio_detail_view"
 -------------------------------------------------------------------------
 {% endcomment %}
 
@@ -28,30 +31,30 @@
 {% block content %}
 <div class="max-w-4xl mx-auto px-4 py-8 bg-white shadow rounded">
 
-    <!-- 🧱 TITRE DU PROJET -->
+    <!-- 🧱 TITRE DU PROJET (lié à item.project) -->
     <h1 class="text-3xl font-bold text-center text-gray-800 mb-2">
         {{ item.project.title }}
     </h1>
 
-    <!-- 🏷️ LIEU ET DATE -->
+    <!-- 🗺️ Lieu + Date de livraison -->
     <p class="text-center text-sm text-gray-600 mb-6">
         {{ item.project.location }} — {{ item.project.deadline }}
     </p>
 
-    <!-- 📋 INFOS DU PROJET -->
+    <!-- 📋 INFOS PRINCIPALES DU PROJET -->
     <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6 text-sm text-gray-700">
         <p><strong>{% trans "Category" %}:</strong> {{ item.project.category }}</p>
         <p><strong>{% trans "Budget" %}:</strong> ${{ item.project.budget }}</p>
         <p><strong>{% trans "Status" %}:</strong> {{ item.project.status }}</p>
     </div>
 
-    <!-- 📝 DESCRIPTION DU PROJET -->
+    <!-- 📝 DESCRIPTION DU PROJET CONTRACT-IT -->
     <div class="prose max-w-none text-gray-800 mb-8">
         <h2 class="text-xl font-semibold mb-2">{% trans "Project Description" %}</h2>
         <p>{{ item.project.description|linebreaks }}</p>
     </div>
 
-    <!-- 🧾 COMMENTAIRE PERSONNEL DE L'ENTREPRENEUR -->
+    <!-- 💬 COMMENTAIRES OPTIONNELS (ajoutés par l'entrepreneur) -->
     {% if item.notes %}
     <div class="prose max-w-none text-gray-800 border-t pt-6">
         <h2 class="text-xl font-semibold mb-2">{% trans "Notes from the Contractor" %}</h2>

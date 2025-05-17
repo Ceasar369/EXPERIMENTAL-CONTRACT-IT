@@ -4,98 +4,94 @@
 #   - Connexion (`login_view`)
 #   - Inscription (`register_view`)
 #   - Déconnexion (`logout_view`)
-#   - Dashboard client
-#   - Dashboard entrepreneur
+#   - Dashboard client (`client_dashboard_view`)
+#   - Dashboard entrepreneur (`contractor_dashboard_view`)
+#   - Vue publique d’un entrepreneur (`contractor_detail_view`)
 # Toutes ces vues utilisent les sessions Django classiques et ne nécessitent pas de token ou d’API.
 
 # ---------------------------------------------------------------------
 # 📦 IMPORTS ESSENTIELS
 # ---------------------------------------------------------------------
-from django.shortcuts import render, redirect         # 🔁 Pour afficher des templates ou rediriger l’utilisateur
-from django.contrib.auth import authenticate, login, logout  # 🔐 Fonctions de gestion de l’authentification
-from django.contrib.auth.decorators import login_required     # ✅ Pour restreindre l’accès aux utilisateurs connectés
-from django.contrib import messages  # ✅ Pour afficher un message d’erreur dans le template
-from .models import CustomUser                        # 👤 Modèle utilisateur personnalisé
-from .permissions import client_required, contractor_required  # 🔒 Décorateurs personnalisés définis dans permissions.py
-from decimal import Decimal, InvalidOperation
+from decimal import Decimal, InvalidOperation              # 🔢 Conversion sécurisée du tarif horaire
+from django.shortcuts import render, redirect              # 🔁 Affichage de templates ou redirections
+from django.contrib.auth import authenticate, login, logout  # 🔐 Authentification Django
+from django.contrib.auth.decorators import login_required  # ✅ Restriction d’accès
+from django.http import Http404                            # ❌ Pour lever une erreur 404
+from .models import CustomUser                             # 👤 Modèle utilisateur personnalisé
+from .permissions import client_required, contractor_required  # 🔒 Décorateurs personnalisés
 
 # ---------------------------------------------------------------------
 # 🔐 Page de connexion — login_view
-# Cette vue affiche un formulaire de connexion (email + mot de passe).
-# Si les identifiants sont valides, elle redirige l’utilisateur vers le bon dashboard selon son rôle.
 # ---------------------------------------------------------------------
 def login_view(request):
     """
-    Cette vue gère l’affichage du formulaire de connexion et la validation des identifiants.
-    Elle redirige automatiquement vers le bon dashboard selon le rôle de l’utilisateur.
+    Affiche le formulaire de connexion (email + mot de passe) et valide les identifiants.
+    Redirige automatiquement vers le bon dashboard selon le rôle de l’utilisateur.
     """
     if request.method == "POST":
-        # 🔄 Récupération des données du formulaire
         email = request.POST.get("email")
         password = request.POST.get("password")
-
-        # 🔐 Tentative de connexion avec les identifiants
         user = authenticate(request, email=email, password=password)
 
         if user is not None:
-            # ✅ Connexion réussie → on démarre la session
             login(request, user)
-
-            # 🔁 Redirection automatique selon le rôle
+            # 🔁 Redirection automatique selon le rôle principal
             if user.is_client and not user.is_contractor:
-                return redirect("client-dashboard")
+                return redirect("client_dashboard_view")  # ✅ Nouveau nom avec underscore
             elif user.is_contractor and not user.is_client:
-                return redirect("contractor-dashboard")
+                return redirect("contractor_dashboard_view")  # ✅ Nouveau nom avec underscore
             else:
-                # 🎯 Cas spécial : utilisateur hybride → on choisit un dashboard par défaut
-                return redirect("client-dashboard")  # (ou contractor-dashboard si tu préfères)
+                # 👥 Cas hybride → redirection client par défaut (modifiable)
+                return redirect("client_dashboard_view")  # ✅ Nouveau nom avec underscore
         else:
-            # ❌ Identifiants incorrects → message d’erreur
             return render(request, "accounts/login.html", {
                 "error": "Adresse courriel ou mot de passe incorrect."
             })
 
-    # 🖼️ Affichage initial du formulaire
     return render(request, "accounts/login.html")
 
 # ---------------------------------------------------------------------
 # 🆕 Page d’inscription — register_view
-# Permet de créer un nouveau compte utilisateur avec un rôle (client ou entrepreneur ou les deux).
 # ---------------------------------------------------------------------
 def register_view(request):
     """
-    Affiche un formulaire d'inscription et enregistre un nouvel utilisateur dans la base.
-    Permet de définir le rôle dès l’inscription (client, entrepreneur, ou les deux).
+    Affiche un formulaire d'inscription et enregistre un nouvel utilisateur avec son rôle.
+    Associe un ou deux rôles (client, entrepreneur) dès l'inscription.
     """
     if request.method == "POST":
         email = request.POST.get("email")
         if CustomUser.objects.filter(email=email).exists():
-            # 🚫 Email déjà utilisé → on renvoie une erreur à l’utilisateur
             return render(request, "accounts/register.html", {
-                "error": _("An account with this email already exists. Please log in instead.")
+                "error": "Un compte avec cette adresse existe déjà. Veuillez vous connecter."
             })
 
-        # 🔄 On récupère les autres champs
         password = request.POST.get("password")
         first_name = request.POST.get("first_name")
         last_name = request.POST.get("last_name")
         phone = request.POST.get("phone")
         city = request.POST.get("city")
+
         is_client = bool(request.POST.get("is_client"))
         is_contractor = bool(request.POST.get("is_contractor"))
+
+        # 🛑 Vérification qu'au moins un rôle est sélectionné
+        if not is_client and not is_contractor:
+            return render(request, "accounts/register.html", {
+                "error": "Vous devez choisir au moins un rôle (client ou entrepreneur)."
+            })
+
         specialties = request.POST.get("specialties", "")
         company_name = request.POST.get("company_name", "")
         certifications = request.POST.get("certifications", "")
-        # 💰 Conversion sécurisée du tarif horaire (champ DecimalField) — None si vide ou invalide 
+        availability = request.POST.get("availability", "")
+
         hourly_rate_raw = request.POST.get("hourly_rate")
         try:
             hourly_rate = Decimal(hourly_rate_raw) if hourly_rate_raw else None
         except (InvalidOperation, TypeError):
             hourly_rate = None
 
-        availability = request.POST.get("availability", "")
-
-        # ✅ Création avec image par défaut
+        # ✅ Création de l'utilisateur (l'image de profil par défaut est gérée par le modèle)
         user = CustomUser.objects.create_user(
             email=email,
             password=password,
@@ -109,91 +105,109 @@ def register_view(request):
             company_name=company_name,
             certifications=certifications,
             hourly_rate=hourly_rate,
-            availability=availability,
-            profile_picture="core/images/default-avatar.jpg"  # ✅ image par défaut
+            availability=availability
         )
 
-        # 🔐 Connexion automatique après inscription
         login(request, user)
 
-        # 🔁 Redirection vers le bon dashboard
         if is_client and not is_contractor:
-            return redirect("client-dashboard")
+            return redirect("client_dashboard_view")  # ✅ Nouveau nom avec underscore
         elif is_contractor and not is_client:
-            return redirect("contractor-dashboard")
+            return redirect("contractor_dashboard_view")  # ✅ Nouveau nom avec underscore
         else:
-            return redirect("client-dashboard")  # utilisateur hybride → dashboard client par défaut
+            return redirect("client_dashboard_view")  # ✅ Nouveau nom avec underscore
 
-    # 🖼️ Affichage du formulaire d’inscription
     return render(request, "accounts/register.html")
 
 # ---------------------------------------------------------------------
 # 🚪 Déconnexion — logout_view
-# Termine la session Django et redirige vers la page d’accueil.
 # ---------------------------------------------------------------------
 def logout_view(request):
     """
-    Ferme la session de l’utilisateur (logout) et redirige vers la page d’accueil.
+    Déconnecte l’utilisateur et redirige vers la page d’accueil.
     """
-    logout(request)              # 🔐 Met fin à la session de l'utilisateur connecté
-    return redirect("/")         # 🔁 Redirection vers la racine du site (peut être /login si tu préfères)
+    logout(request)
+    return redirect("/")
 
 # ---------------------------------------------------------------------
-# 🧑‍💼 Dashboard client — client_dashboard
-# Accessible uniquement aux utilisateurs ayant le rôle client (is_client = True)
+# 🧑‍💼 Tableau de bord client — client_dashboard_view
 # ---------------------------------------------------------------------
-@login_required                 # ✅ L’utilisateur doit être connecté
-@client_required               # 🔒 Il doit être un client
-def client_dashboard(request):
+@login_required
+@client_required
+def client_dashboard_view(request):
     """
-    Cette vue affiche le tableau de bord du client.
-    Elle peut contenir la liste des projets publiés, les propositions reçues, etc.
+    Vue principale pour les utilisateurs avec le rôle client.
+    Affiche leurs projets, messages, paiements, etc.
     """
     return render(request, "accounts/client_dashboard.html", {
         "user": request.user
     })
 
 # ---------------------------------------------------------------------
-# 👷 Dashboard entrepreneur — contractor_dashboard
-# Accessible uniquement aux utilisateurs ayant le rôle entrepreneur (is_contractor = True)
+# 👷 Tableau de bord entrepreneur — contractor_dashboard_view
 # ---------------------------------------------------------------------
-@login_required                 # ✅ L’utilisateur doit être connecté
-@contractor_required           # 🔒 Il doit être un entrepreneur
-def contractor_dashboard(request):
+@login_required
+@contractor_required
+def contractor_dashboard_view(request):
     """
-    Cette vue affiche le tableau de bord de l’entrepreneur.
-    Elle peut contenir les projets disponibles à soumissionner, les projets en cours, etc.
+    Vue principale pour les utilisateurs avec le rôle entrepreneur.
+    Affiche les projets disponibles, mandats en cours, outils de gestion.
     """
     return render(request, "accounts/contractor_dashboard.html", {
         "user": request.user
     })
 
-
 # ---------------------------------------------------------------------
-# 📄 Vue publique : Détail d’un entrepreneur
+# 🧾 Vue publique d’un client — client_detail_view
 # ---------------------------------------------------------------------
-from django.http import Http404  # Pour lever une erreur si l’utilisateur n’existe pas
-
-@login_required  # Optionnel : si tu veux réserver l’accès aux utilisateurs connectés
-def contractor_detail_view(request, user_id):
+def client_detail_view(request, user_id):
     """
-    Affiche le profil public d’un entrepreneur CONTRACT-IT.
-    On vérifie que l’utilisateur demandé est bien un entrepreneur (is_contractor = True).
-    
-    🔗 Accessible depuis une page de recherche ou le profil client.
+    Affiche le profil public d’un client CONTRACT-IT.
+    Vérifie que l’utilisateur demandé est bien un client (is_client = True).
+
+    🔗 Accessible depuis une page de projet ou de recherche.
 
     📌 Ce profil inclut :
-        - Ses informations publiques (nom, ville, spécialité…)
-        - Son portfolio (projets internes et externes)
+        - Informations générales (nom, ville, bio…)
+        - Statut de vérification
+        - Nombre de projets publiés
     """
+    try:
+        profile = CustomUser.objects.get(id=user_id, is_client=True)
+    except CustomUser.DoesNotExist:
+        raise Http404("Ce client n'existe pas ou n'est pas visible publiquement.")
 
-    # 🔎 On cherche l'utilisateur par ID ou on lève une 404
+    return render(request, "accounts/client_detail.html", {
+        "profile": profile
+    })
+
+
+# ---------------------------------------------------------------------
+# 🧾 Vue publique d’un entrepreneur — contractor_detail_view
+# ---------------------------------------------------------------------
+def contractor_detail_view(request, user_id):
+    """
+    Affiche le profil public d’un entrepreneur (accessible depuis la recherche).
+    Vérifie que l’utilisateur est bien un entrepreneur.
+    """
     try:
         profile = CustomUser.objects.get(id=user_id, is_contractor=True)
     except CustomUser.DoesNotExist:
         raise Http404("Cet entrepreneur n'existe pas ou n'est pas visible publiquement.")
 
-    # 📤 On envoie le profil à la page HTML (nom de variable = profile)
+    # ✅ Vérifie s’il existe des projets externes
+    external_has = profile.external_portfolio_items.exists()
+
+    # ✅ Prépare la liste des projets internes visibles
+    internal_visible_items = profile.internal_portfolio_items.filter(visible_in_portfolio=True)
+
+    # ✅ Vérifie s’il existe des projets internes visibles
+    internal_has = internal_visible_items.exists()
+
     return render(request, "accounts/contractor_detail.html", {
-        "profile": profile
+        "profile": profile,
+        "external_has": external_has,
+        "internal_visible_items": internal_visible_items,
+        "internal_has": internal_has,
     })
+

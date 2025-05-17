@@ -1,28 +1,23 @@
 # 📁 Fichier : accounts/models.py
 # 🧠 Ce fichier définit les modèles de données utilisés pour représenter les utilisateurs sur la plateforme CONTRACT-IT.
-# Plus précisément, il contient :
+# Il contient :
 #   - le modèle `CustomUser`, qui remplace le modèle utilisateur standard de Django,
-#   - un modèle `ExternalPortfolioItem` pour les projets réalisés en dehors de la plateforme,
-#   - un modèle `InternalPortfolioItem` pour les projets réalisés via CONTRACT-IT et liés à un projet publié.
+#   - ⚠️ les modèles `ExternalPortfolioItem` et `InternalPortfolioItem` sont annoncés mais pas encore définis.
 
-# 🔁 Import des modules de base pour les modèles Django
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseUserManager  # ⚙️ Authentification personnalisée
-from django.db import models                              # 📦 Outils pour définir des champs (CharField, BooleanField, etc.)
-from django.forms import ValidationError                  # ⚠️ Utilisé pour ajouter une règle de validation personnalisée
-from django.utils.translation import gettext_lazy as _    # 🌐 Pour rendre les textes traduisibles (multi-langues)
+from django.db import models                                # 📦 Définition des champs de modèle
+from django.utils.translation import gettext_lazy as _      # 🌐 Pour la traduction des textes (français/anglais)
 
 # ---------------------------------------------------------------------
 # 🌍 Choix de langues possibles pour l’interface utilisateur
-# On utilise une liste de tuples, chaque tuple = (valeur en base de données, label affiché)
 # ---------------------------------------------------------------------
 LANGUAGE_CHOICES = (
-    ('fr', _("Français")),  # Choix 1 : Français
-    ('en', _("Anglais")),   # Choix 2 : Anglais
+    ('fr', _("Français")),
+    ('en', _("Anglais")),
 )
 
 # ---------------------------------------------------------------------
-# ⚙️ CustomUserManager : gestionnaire d'utilisateurs sans username
-# Utilisé pour créer des utilisateurs avec uniquement l'email comme identifiant.
+# ⚙️ CustomUserManager : gestionnaire pour CustomUser sans champ username
 # ---------------------------------------------------------------------
 class CustomUserManager(BaseUserManager):
     def create_user(self, email, password=None, **extra_fields):
@@ -44,73 +39,64 @@ class CustomUserManager(BaseUserManager):
 
 # ---------------------------------------------------------------------
 # 👤 Modèle principal : CustomUser
-# Il remplace le modèle User de Django en y ajoutant des champs adaptés à CONTRACT-IT.
-# Chaque utilisateur peut être un client, un entrepreneur, ou les deux.
+# Authentification par email, gestion multirôle (client + entrepreneur), 
+# informations adaptées à chaque rôle CONTRACT-IT.
 # ---------------------------------------------------------------------
 class CustomUser(AbstractBaseUser, PermissionsMixin):
     """
-    Ce modèle hérite de AbstractBaseUser (au lieu de AbstractUser), ce qui :
-    - supprime totalement le champ `username`
-    - nous oblige à gérer les permissions avec PermissionsMixin
-    - permet d'utiliser l'email comme identifiant principal
-
-    ➤ Il supprime le champ `username`
-    ➤ Utilise `email` comme identifiant de connexion
-    ➤ Contient des champs supplémentaires pour les rôles CONTRACT-IT
+    Modèle principal des utilisateurs CONTRACT-IT :
+    - Remplace le modèle User par défaut
+    - Supprime le champ `username` → l'email devient l’identifiant
+    - Gère deux rôles : client et/ou entrepreneur
+    - Supporte des champs spécifiques (portfolio, disponibilité, etc.)
     """
 
-    # ✅ On utilise l’email comme champ de connexion
-    email = models.EmailField(unique=True, help_text="Adresse courriel utilisée pour se connecter à la plateforme.")
+    # 📨 Identifiant principal
+    email = models.EmailField(unique=True, help_text="Adresse courriel utilisée pour se connecter à la plateforme. Obligatoire.")
 
-    # ✅ Champs de nom à ajouter explicitement, car on a supprimé `username`
-    first_name = models.CharField(max_length=150, blank=True, help_text="Prénom de l'utilisateur (optionnel).")
-    last_name = models.CharField(max_length=150, blank=True, help_text="Nom de famille de l'utilisateur (optionnel).")
+    # 🧍 Informations générales
+    first_name = models.CharField(max_length=150, blank=True, help_text="Prénom de l'utilisateur. Optionnel.")
+    last_name = models.CharField(max_length=150, blank=True, help_text="Nom de famille de l'utilisateur. Optionnel.")
+    phone = models.CharField(max_length=15, blank=True, help_text="Numéro de téléphone. Optionnel.")
+    city = models.CharField(max_length=100, help_text="Ville de résidence de l'utilisateur. Obligatoire.")
+    language = models.CharField(max_length=10, choices=LANGUAGE_CHOICES, default='fr', help_text="Langue de l'interface utilisateur.")
 
-
-    # ----------------------------- Champs communs -----------------------------
-    phone = models.CharField(max_length=15, blank=True, help_text="Numéro de téléphone de l'utilisateur.")
     profile_picture = models.ImageField(
         upload_to='profiles/',
         blank=True,
         null=True,
-        default='core/images/default-avatar.jpg',  # 📌 Chemin relatif dans static/
-        help_text="Photo de profil affichée dans le profil public."
+        default='core/images/default-avatar.jpg',
+        help_text="Photo de profil affichée publiquement. Optionnel."
     )
-    bio = models.TextField(blank=True, help_text="Courte biographie affichée dans le profil public.")
-    city = models.CharField(max_length=100, help_text="Ville de résidence de l'utilisateur.")
-    language = models.CharField(max_length=10, choices=LANGUAGE_CHOICES, default='fr', help_text="Langue de l'interface utilisateur (français ou anglais).")
-    is_verified = models.BooleanField(default=False, help_text="Statut de vérification manuel par l'équipe CONTRACT-IT.")
-    date_joined = models.DateTimeField(auto_now_add=True, help_text="Date d'inscription de l'utilisateur.")
-    company_name = models.CharField(max_length=255, blank=True, help_text="Nom de l'entreprise ou identité professionnelle (optionnel).")
+    bio = models.TextField(blank=True, help_text="Courte biographie affichée publiquement. Optionnel.")
+    company_name = models.CharField(max_length=255, blank=True, help_text="Nom d'entreprise ou identité professionnelle. Optionnel.")
+    is_verified = models.BooleanField(default=False, help_text="Statut de vérification validé manuellement par l'équipe. Optionnel.")
+    date_joined = models.DateTimeField(auto_now_add=True, help_text="Date d'inscription de l'utilisateur. Générée automatiquement.")
 
-    # ----------------------------- Champs de rôle -----------------------------
-    is_client = models.BooleanField(default=False, help_text="Définit si l'utilisateur peut publier des projets (client).")
-    is_contractor = models.BooleanField(default=False, help_text="Définit si l'utilisateur peut proposer ses services (entrepreneur).")
+    # 🏷️ Rôles utilisateurs
+    is_client = models.BooleanField(default=False, help_text="L'utilisateur peut publier des projets (client).")
+    is_contractor = models.BooleanField(default=False, help_text="L'utilisateur peut proposer ses services (entrepreneur).")
 
-    # ---------------------- Champs spécifiques aux entrepreneurs ----------------------
-    specialties = models.CharField(max_length=255, blank=True, help_text="Spécialités professionnelles : plomberie, électricité, toiture, etc.")
-    hourly_rate = models.DecimalField(max_digits=8, decimal_places=2, null=True, blank=True, help_text="Tarif horaire proposé par l'entrepreneur (optionnel).")
+    # 🔧 Spécificités entrepreneur
+    specialties = models.CharField(max_length=255, blank=True, help_text="Spécialités : plomberie, électricité, toiture, etc.")
+    hourly_rate = models.DecimalField(max_digits=8, decimal_places=2, null=True, blank=True, help_text="Tarif horaire proposé. Optionnel.")
     availability = models.CharField(max_length=100, blank=True, help_text="Disponibilité actuelle (ex. : Disponible en juin).")
-    certifications = models.TextField(blank=True, help_text="Certifications détenues (ex. RBQ, ASP, etc.).")
+    certifications = models.TextField(blank=True, help_text="Certifications détenues (RBQ, ASP, etc.).")
 
-    # ---------------------- Champs spécifiques aux clients ----------------------
-    project_history_count = models.PositiveIntegerField(default=0, help_text="Nombre total de projets publiés par ce client.")
+    # 📊 Statistiques client
+    project_history_count = models.PositiveIntegerField(default=0, help_text="Nombre total de projets publiés.")
 
-    # ✅ Obligatoire pour AbstractBaseUser → on indique le champ qui sert d’identifiant
+    # 🔐 Champs requis pour le fonctionnement du système
     USERNAME_FIELD = 'email'
-    # ✅ Champs requis uniquement pour les superutilisateurs (ex. : via createsuperuser)
     REQUIRED_FIELDS = ['language']
-
-    # ✅ Manager personnalisé
     objects = CustomUserManager()
 
-    # ✅ Obligatoire pour que Django reconnaisse ce modèle comme utilisateur
-    is_active = models.BooleanField(default=True)
-    is_staff = models.BooleanField(default=False)
+    is_active = models.BooleanField(default=True, help_text="Statut actif du compte.")
+    is_staff = models.BooleanField(default=False, help_text="Autorisation d'accès à l’interface d’administration.")
 
     def __str__(self):
         """
-        Affichage dans l'admin : prénom + nom si disponibles, sinon email.
+        Affichage dans l'interface admin : prénom + nom ou email si vide.
         """
         if self.first_name or self.last_name:
             return f"{self.first_name} {self.last_name}".strip()
@@ -118,11 +104,21 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
 
     def get_display_name(self):
         """
-        Nom complet à afficher publiquement sur la plateforme (ex : profil public).
-        Peut être modifié plus tard pour intégrer un nom d’usage ou un slug.
+        Nom affiché publiquement (dans les profils, messages, etc.).
         """
         if self.first_name or self.last_name:
             return f"{self.first_name} {self.last_name}".strip()
         return self.email
 
-
+    def is_profile_complete(self):
+        """
+        Vérifie si le profil contient les informations de base.
+        Utile pour alerter ou bloquer certaines actions (soumission, réponse à projet…).
+        """
+        return all([
+            self.first_name,
+            self.last_name,
+            self.city,
+            self.profile_picture,
+            self.is_verified
+        ])

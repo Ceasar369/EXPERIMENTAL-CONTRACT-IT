@@ -3,6 +3,8 @@
 # Utilisé par Ahmad et Ceasar – Projet Django
 ##############################################
 
+python manage.py show_urls
+
 --------------------------
 📁 ENVIRONNEMENT VIRTUEL
 --------------------------

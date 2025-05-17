@@ -20,13 +20,18 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
+from django.utils.translation import gettext as _
+from django.http import Http404
+from django.core.exceptions import PermissionDenied
+from django.views.decorators.http import require_http_methods
 
 # ---------------------------------------------------------------------
 # 📦 IMPORTS INTERNES
 # ---------------------------------------------------------------------
-from .models import Project, Milestone
+from .models import Project, Milestone, ExternalPortfolioItem, ExternalPortfolioMedia, InternalPortfolioItem
 from bids.models import Bid  # Pour afficher les soumissions
 from accounts.models import CustomUser
+from accounts.permissions import contractor_required
 
 
 # ---------------------------------------------------------------------
@@ -35,7 +40,7 @@ from accounts.models import CustomUser
 from django.contrib import messages  # Pour afficher des messages de succès ou d'erreur
 
 @login_required
-def create_project_page(request):
+def create_project_page_view(request):
     """
     Vue permettant à un client de publier un projet avec jalons.
     - En GET : affiche le formulaire de création.
@@ -48,7 +53,7 @@ def create_project_page(request):
 
     # 🔒 Si ce n'est pas un client, on redirige vers la page d'accueil
     if not user.is_client:
-        return redirect("index")
+        return redirect("index_view")
 
     # -----------------------------------------------------------------
     # 🔁 CAS POST : l'utilisateur soumet le formulaire
@@ -102,11 +107,11 @@ def create_project_page(request):
         if round(total_milestone_budget, 2) != round(budget, 2):
             project.delete()  # 🔁 On supprime le projet pour éviter d'enregistrer une structure incohérente
             messages.error(request, "⚠️ La somme des jalons ne correspond pas au budget total.")
-            return redirect("create-project")
+            return redirect("create_project_view")
 
         # ✅ 5. Tout est bon → on redirige avec un message de confirmation
         messages.success(request, "🎉 Projet créé avec succès !")
-        return redirect("my_projects")
+        return redirect("my_projects_view")
 
     # -----------------------------------------------------------------
     # 👁️ CAS GET : afficher le formulaire vide
@@ -133,7 +138,7 @@ def find_jobs_view(request):
 
     # 🔒 Restriction d’accès : seulement les utilisateurs entrepreneurs
     if not request.user.is_contractor:
-        return redirect('index')
+        return redirect('index_view')
 
     # 🧱 Point de départ : projets publics et actifs
     projects = Project.objects.filter(is_public=True, status='active')
@@ -185,7 +190,7 @@ def find_jobs_view(request):
 # 3. 📄 Détail d’un projet (Client ou Entrepreneur)
 # ---------------------------------------------------------------------
 @login_required
-def project_detail_page(request, project_id):
+def project_detail_page_view(request, project_id):
     """
     Affiche la page de détail d’un projet spécifique.
     Si l’utilisateur est entrepreneur, on vérifie s’il a déjà soumis une proposition.
@@ -231,7 +236,7 @@ def my_projects_view(request):
 
     # 🔒 Vérifie que l'utilisateur est bien un client
     if not user.is_client:
-        return redirect("index")  # Redirige les non-clients
+        return redirect("index_view")  # Redirige les non-clients
 
     # 🔍 Récupère tous les projets créés par ce client
     projects = Project.objects.filter(client=user).order_by('-created_at')
@@ -269,7 +274,7 @@ def edit_project_view(request, project_id):
 
     # 🔒 Vérifie que l’utilisateur connecté est bien le client propriétaire
     if project.client != request.user:
-        return redirect("index")  # ❌ Refus d'accès
+        return redirect("index_view")  # ❌ Refus d'accès
 
     # 🔍 Récupère tous les jalons associés à ce projet
     milestones = project.milestones.all()
@@ -294,7 +299,7 @@ def edit_project_view(request, project_id):
             milestone.save()
 
         # ✅ Redirige vers la page "My Projects" après sauvegarde
-        return redirect("my_projects")
+        return redirect("my_projects_view")
 
     # 🧾 Affiche le formulaire HTML avec les valeurs préremplies
     return render(request, "projects/edit_project.html", {
@@ -318,7 +323,7 @@ def awarded_projects_view(request):
 
     # 🔒 Refuse l’accès aux utilisateurs qui ne sont pas des entrepreneurs
     if not request.user.is_contractor:
-        return redirect('index')
+        return redirect('index_view')
 
     # 🔍 Récupère les projets attribués (contractor = user connecté)
     awarded_projects = Project.objects.filter(contractor=request.user).order_by('-created_at')
@@ -332,16 +337,6 @@ def awarded_projects_view(request):
 # ---------------------------------------------------------------------
 # 📁 Section : Vues liées au portfolio de l’entrepreneur
 # ---------------------------------------------------------------------
-
-from django.utils.translation import gettext as _
-from django.http import Http404
-from .models import ExternalPortfolioItem, ExternalPortfolioMedia, InternalPortfolioItem
-from django.core.exceptions import PermissionDenied
-from django.views.decorators.http import require_http_methods
-from accounts.permissions import contractor_required
-from django.shortcuts import render
-from django.contrib.auth.decorators import login_required
-from accounts.permissions import contractor_required  # Assure-toi qu’il est importé
 
 # ---------------------------------------------------------------------
 # 1️⃣ Ajouter un projet externe (GET = formulaire / POST = enregistrement)
@@ -382,7 +377,7 @@ def add_external_portfolio_view(request):
 
         # ✅ Redirige vers le dashboard ou la page de portfolio
         messages.success(request, _("Le projet a été ajouté à votre portfolio."))
-        return redirect("contractor-dashboard")  # ou une future page "my-portfolio"
+        return redirect("contractor-dashboard_view")  # ou une future page "my-portfolio"
 
     # 🖼️ Affiche le formulaire d’ajout
     return render(request, "projects/portfolio/add_external_portfolio.html")
@@ -471,5 +466,5 @@ def toggle_internal_portfolio_view(request, project_id):
         item.save()
 
     # ✅ Redirige l’utilisateur vers la page des projets (ou tableau de bord plus tard)
-    return redirect("my_projects")  # ou contractor-dashboard
+    return redirect("my_projects_view")  # ou contractor-dashboard
 

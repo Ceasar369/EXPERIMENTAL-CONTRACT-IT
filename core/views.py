@@ -18,7 +18,7 @@ from django.shortcuts import render  # 🧱 Fonction native pour afficher un tem
 # ---------------------------------------------------------------------
 # 🌐 PAGE D’ACCUEIL — INDEX
 # ---------------------------------------------------------------------
-def index(request):
+def index_view(request):
     """
     Affiche la page d’accueil publique de CONTRACT-IT.
     C’est la page principale visible en accédant à `/`.
@@ -29,7 +29,7 @@ def index(request):
 # ---------------------------------------------------------------------
 # 🧑‍💼 PAGE : COMMENT EMBAUCHER UN ENTREPRENEUR
 # ---------------------------------------------------------------------
-def how_to_hire(request):
+def how_to_hire_view(request):
     """
     Page explicative à destination des clients.
     Contenu : comment fonctionne l'embauche sur la plateforme, les étapes, la sécurité.
@@ -39,7 +39,7 @@ def how_to_hire(request):
 # ---------------------------------------------------------------------
 # 🧑‍🔧 PAGE : TROUVER DES TALENTS
 # ---------------------------------------------------------------------
-def talent_marketplace(request):
+def talent_marketplace_view(request):
     """
     Page affichant les talents disponibles (ou leur catégorie).
     Elle pourra plus tard contenir une recherche ou un filtrage dynamique.
@@ -49,7 +49,7 @@ def talent_marketplace(request):
 # ---------------------------------------------------------------------
 # 📦 PAGE : CATALOGUE DE PROJETS
 # ---------------------------------------------------------------------
-def project_catalog(request):
+def project_catalog_view(request):
     """
     Page listant des exemples de projets réalisés.
     Objectif : inspirer les clients et leur montrer le type de services proposés.
@@ -59,7 +59,7 @@ def project_catalog(request):
 # ---------------------------------------------------------------------
 # 👷 PAGE : COMMENT TROUVER DU TRAVAIL (POUR ENTREPRENEURS)
 # ---------------------------------------------------------------------
-def how_to_find_work(request):
+def how_to_find_work_view(request):
     """
     Guide destiné aux entrepreneurs pour les aider à bien utiliser la plateforme :
     - comment postuler
@@ -71,7 +71,7 @@ def how_to_find_work(request):
 # ---------------------------------------------------------------------
 # 🆘 PAGE : AIDE / CENTRE DE SUPPORT
 # ---------------------------------------------------------------------
-def help_support(request):
+def help_support_view(request):
     """
     Page centrale regroupant les questions fréquentes (FAQ) et informations générales.
     Peut être enrichie plus tard avec une base de connaissances dynamique.
@@ -81,7 +81,7 @@ def help_support(request):
 # ---------------------------------------------------------------------
 # ✉️ PAGE : CONTACTEZ-NOUS
 # ---------------------------------------------------------------------
-def contact(request):
+def contact_view(request):
     """
     Page avec les coordonnées de contact ou formulaire simple de message.
     Peut inclure : adresse email, lien vers support, formulaire de contact plus tard.
@@ -91,7 +91,7 @@ def contact(request):
 # ---------------------------------------------------------------------
 # 🔒 PAGE : CONFIANCE ET SÉCURITÉ
 # ---------------------------------------------------------------------
-def trust_safety(request):
+def trust_safety_view(request):
     """
     Page expliquant les mesures de sécurité de CONTRACT-IT.
     Elle rassure les utilisateurs (clients et entrepreneurs) sur la confidentialité et la modération.
@@ -101,7 +101,7 @@ def trust_safety(request):
 # ---------------------------------------------------------------------
 # 🏢 PAGE : À PROPOS
 # ---------------------------------------------------------------------
-def about(request):
+def about_view(request):
     """
     Page de présentation de la plateforme, de l'équipe, ou de la mission de l’entreprise.
     Texte marketing + crédibilité.
@@ -111,7 +111,7 @@ def about(request):
 # ---------------------------------------------------------------------
 # ⚖️ PAGE : CONDITIONS D’UTILISATION
 # ---------------------------------------------------------------------
-def terms(request):
+def terms_view(request):
     """
     Conditions générales d’utilisation de la plateforme.
     Obligatoire pour la conformité juridique.
@@ -121,7 +121,7 @@ def terms(request):
 # ---------------------------------------------------------------------
 # 🔐 PAGE : POLITIQUE DE CONFIDENTIALITÉ
 # ---------------------------------------------------------------------
-def privacy(request):
+def privacy_view(request):
     """
     Politique expliquant comment les données personnelles sont traitées et protégées.
     Obligatoire pour être conforme au RGPD / Loi 25 (Québec).
@@ -131,7 +131,7 @@ def privacy(request):
 # ---------------------------------------------------------------------
 # 🍪 PAGE : COOKIES
 # ---------------------------------------------------------------------
-def cookies(request):
+def cookies_view(request):
     """
     Page expliquant le fonctionnement des cookies sur le site.
     Peut inclure la gestion du consentement ou les cookies tiers.
@@ -141,7 +141,7 @@ def cookies(request):
 # ---------------------------------------------------------------------
 # 🧏 PAGE : ACCESSIBILITÉ
 # ---------------------------------------------------------------------
-def accessibility(request):
+def accessibility_view(request):
     """
     Page expliquant l’engagement de CONTRACT-IT pour l’accessibilité du site.
     Exemples : compatibilité lecteurs d’écran, navigation clavier, contraste.
@@ -154,7 +154,7 @@ def accessibility(request):
 from django.http import HttpResponseRedirect
 from django.utils.translation import get_language
 
-def redirect_to_language_home(request):
+def redirect_to_language_home_view(request):
     """
     Redirige automatiquement l’utilisateur vers la langue courante détectée par Django.
 

@@ -1,43 +1,45 @@
 {% extends "core/useful/base2.html" %}
 {% load i18n %}
 
-{% comment %} {# ---------------------------------------------------------------------
+{% comment %}
+# ---------------------------------------------------------------------
 📄 Fichier : awarded_projects.html
 📂 Emplacement : projects/templates/projects/awarded_projects.html
 
-🎯 Cette page est affichée dans l’espace entrepreneur (contractor dashboard).
-Elle permet à l’entrepreneur connecté de visualiser tous les projets qui lui ont été attribués.
+🎯 Page affichée dans l’espace entrepreneur (contractor dashboard).
+    Elle permet à l’entrepreneur connecté de visualiser tous les projets qui lui ont été attribués.
 
-Chaque ligne du tableau affiche :
- - Le titre du projet
- - Le client qui a attribué le projet
- - Le budget et la date limite
- - Le statut (en cours, terminé, annulé…)
- - Un bouton "View" pour consulter les détails complets du projet
+📌 Données affichées pour chaque projet :
+    - Titre
+    - Client
+    - Budget
+    - Deadline
+    - Statut
+    - Bouton vers la page de détail
 
-Cette page est alimentée par la vue `awarded_projects_view()` dans views.py.
-Elle utilise la base2.html pour rester cohérente avec le layout minimal.
---------------------------------------------------------------------- #} {% endcomment %}
+✅ Vue utilisée : awarded_projects_view()
+✅ Layout : base2.html (interface sobre)
+# ---------------------------------------------------------------------
+{% endcomment %}
 
 {% block title %}{% trans "My Awarded Projects" %}{% endblock %}
 
 {% block content %}
-<!-- 🌐 Conteneur principal centré -->
+<!-- 🌐 Conteneur principal -->
 <div class="max-w-6xl mx-auto bg-white p-8 shadow-md rounded-md">
 
-    <!-- 🧭 Titre de la section -->
+    <!-- 🧭 Titre principal -->
     <h2 class="text-2xl font-bold text-center mb-6">
         {% trans "Projects Awarded to You" %}
     </h2>
 
-    <!-- 🗃️ Cas où aucun projet n’a été attribué -->
     {% if awarded_projects|length == 0 %}
+        <!-- ❌ Aucun projet attribué -->
         <p class="text-center text-gray-500">
             {% trans "You haven't been awarded any projects yet." %}
         </p>
-
-    <!-- ✅ Cas normal : projets affichés sous forme de tableau -->
     {% else %}
+        <!-- ✅ Affichage des projets attribués -->
         <table class="w-full table-auto border-collapse">
             <thead class="bg-gray-100 text-left text-sm uppercase tracking-wide">
                 <tr>
@@ -52,14 +54,27 @@ Elle utilise la base2.html pour rester cohérente avec le layout minimal.
             <tbody>
                 {% for project in awarded_projects %}
                 <tr class="border-b hover:bg-gray-50">
-                    <td class="px-4 py-3 text-green-700 font-semibold">{{ project.title }}</td>
+
+                    <!-- 🏷️ Titre du projet -->
+                    <td class="px-4 py-3 text-green-700 font-semibold">
+                        {{ project.title }}
+                    </td>
+
+                    <!-- 👤 Client -->
                     <td class="px-4 py-3">{{ project.client.username }}</td>
+
+                    <!-- 💰 Budget -->
                     <td class="px-4 py-3">{{ project.budget }}</td>
+
+                    <!-- 📅 Échéance -->
                     <td class="px-4 py-3">{{ project.deadline }}</td>
+
+                    <!-- 🧭 Statut -->
                     <td class="px-4 py-3">{{ project.get_status_display }}</td>
+
+                    <!-- 🔍 Lien vers détails -->
                     <td class="px-4 py-3 text-center">
-                        <!-- 🔗 Lien vers la page de détail du projet -->
-                        <a href="{% url 'project_detail_html' project.id %}" class="text-sm text-teal-600 hover:underline">
+                        <a href="{% url 'project_detail_page_view' project.id %}" class="text-sm text-teal-600 hover:underline">
                             {% trans "View" %}
                         </a>
                     </td>

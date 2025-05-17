@@ -10,7 +10,7 @@
    - Il n’affiche PAS les boutons Login ou Sign up, car ils seraient redondants ici.
 
    📌 STRUCTURE :
-   - Ce fichier est appelé par  extends "core/useful/base2.html"  dans les templates login/register
+   - Ce fichier est appelé par  `{% extends "core/useful/base2.html" %}` dans les templates login/register
    - Il inclut un `block content` central où le formulaire s’insère
    - Le footer global est inclus également à la fin
 
@@ -37,7 +37,7 @@
     <!-- 🔝 EN-TÊTE MINIMALISTE POUR FORMULAIRES -->
     <nav class="py-6 px-6 flex justify-between items-center border-b border-gray-200 bg-white shadow-sm">
         <!-- ⬅️ Logo Contract_it → clique = retour accueil -->
-        <a href="{% url 'index' %}"
+        <a href="{% url 'index_view' %}"
            class="text-xl font-bold text-gray-900 hover:text-gray-700 transition">
             Contract_it
         </a>
@@ -80,7 +80,7 @@
         document.getElementById("next-en").value = "/en" + stripLangPrefix(currentPath);
     </script>
 
-    <!-- 📦 Contenu principal de la page (formulaires) -->
+    <!-- 📦 Bloc principal où chaque page insère son contenu -->
     <main class="px-6 py-10">
         {% block content %}
         {% endblock %}

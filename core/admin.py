@@ -8,6 +8,8 @@
 #
 # 🔄 Plus tard, si tu ajoutes un modèle comme ContactMessage, FaqEntry, ou StaticPage dans core/models.py,
 #     tu pourras revenir ici et les enregistrer avec la fonction `admin.site.register(...)`.
+#     ➕ Et si ces modèles ont des vues associées (ex. : formulaire contact, page FAQ),
+#     utilise la convention `*_view` pour les noms des vues publiques.
 
 # ---------------------------------------------------------------------
 # 📦 IMPORTS
@@ -18,7 +20,7 @@ from django.contrib import admin  # 🔧 Import du module admin natif de Django
 # ---------------------------------------------------------------------
 # ✅ ENREGISTREMENT DES MODÈLES (optionnel)
 # ---------------------------------------------------------------------
-# Exemple à ajouter plus tard :
+# 📌 À ACTIVER PLUS TARD :
 #
 # from .models import ContactMessage
 # @admin.register(ContactMessage)

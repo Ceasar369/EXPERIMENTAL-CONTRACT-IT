@@ -10,6 +10,9 @@
 #     - un modèle `ContactMessage` (pour stocker les messages envoyés via la page Contact Us),
 #     - un modèle `FaqEntry` (pour des FAQ dynamiques modifiables depuis l’admin),
 #     - un modèle `StaticPage` (pour gérer des pages personnalisées éditables par l’admin).
+#
+# 🔁 Lors de la création de vues HTML associées à ces modèles, pense à utiliser la convention `*_view`
+#     (ex. : `contact_view`, `faq_list_view`, `static_page_view`) afin d'assurer une cohérence complète avec le projet.
 
 # ---------------------------------------------------------------------
 # 📦 IMPORTS
@@ -45,7 +48,21 @@ from django.db import models  # 🧱 Import du module de modélisation de Django
 #         return self.question
 
 # ---------------------------------------------------------------------
+# 📌 EXEMPLE DE MODÈLE FUTUR — Page statique personnalisée
+# ---------------------------------------------------------------------
+# class StaticPage(models.Model):
+#     """📄 Page statique personnalisée (Conditions d’utilisation, Politique de confidentialité, etc.)"""
+#     slug = models.SlugField(unique=True)          # 🔗 ex. : "terms-of-service"
+#     title = models.CharField(max_length=150)      # 🏷 Titre de la page
+#     content = models.TextField()                  # 📄 Contenu HTML / Markdown
+#     is_visible = models.BooleanField(default=True)
+#
+#     def __str__(self):
+#         return self.title
+
+# ---------------------------------------------------------------------
 # 📌 À SAVOIR :
 # - Chaque modèle défini ici crée une table dans ta base de données après migration (`makemigrations` + `migrate`)
 # - Tu pourras ensuite les enregistrer dans `admin.py` pour les voir dans l’interface admin Django
 # - Tu pourras aussi créer des formulaires, des vues et des templates pour afficher/traiter ces modèles
+# - 🔁 Et n’oublie pas : toutes les vues associées doivent se nommer avec le suffixe `_view` pour rester cohérent.

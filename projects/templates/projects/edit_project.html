@@ -1,17 +1,19 @@
 {% extends "core/useful/base2.html" %}
 {% load i18n %}
 
-{% comment %} {# ---------------------------------------------------------------------
-  📄 Fichier : edit_project.html
-  📂 Emplacement : projects/templates/projects/edit_project.html
-
-  🎯 Permet à un client de modifier un projet déjà publié.
-      - Formulaire identique à celui de création
-      - Champs pré-remplis avec les données existantes
-      - Possibilité de modifier les jalons associés
-
-  🔐 Cette page est accessible uniquement par le client propriétaire du projet.
---------------------------------------------------------------------- #} {% endcomment %}
+{% comment %}
+# ---------------------------------------------------------------------
+# 📄 Fichier : edit_project.html
+# 📂 Emplacement : projects/templates/projects/edit_project.html
+#
+# 🎯 Permet à un client de modifier un projet déjà publié.
+#     - Formulaire identique à celui de création
+#     - Champs pré-remplis avec les données existantes
+#     - Possibilité de modifier les jalons associés
+#
+# 🔐 Cette page est accessible uniquement par le client propriétaire du projet.
+# ---------------------------------------------------------------------
+{% endcomment %}
 
 {% block title %}{% trans "Edit Project" %}{% endblock %}
 
@@ -21,26 +23,26 @@
     <!-- 🧾 Titre principal -->
     <h1 class="text-2xl font-bold text-gray-800 mb-6">{% trans "Edit Your Project" %}</h1>
 
-    <!-- 📌 Formulaire de mise à jour -->
+    <!-- 📌 Formulaire de mise à jour (méthode POST) -->
     <form method="POST">
-        {% csrf_token %}
+        {% csrf_token %}  {# 🔐 Protection contre les attaques CSRF #}
 
         <!-- 🔤 Titre du projet -->
         <label for="title" class="block font-medium mb-1">{% trans "Title" %}</label>
         <input type="text" name="title" id="title" value="{{ project.title }}"
                class="w-full p-2 border rounded mb-4" required>
 
-        <!-- 📃 Description -->
+        <!-- 📃 Description du projet -->
         <label for="description" class="block font-medium mb-1">{% trans "Description" %}</label>
         <textarea name="description" id="description"
                   class="w-full p-2 border rounded mb-4" rows="5" required>{{ project.description }}</textarea>
 
-        <!-- 🔧 Catégorie -->
+        <!-- 🔧 Catégorie du projet -->
         <label for="category" class="block font-medium mb-1">{% trans "Category" %}</label>
         <input type="text" name="category" id="category" value="{{ project.category }}"
                class="w-full p-2 border rounded mb-4" required>
 
-        <!-- 📍 Lieu -->
+        <!-- 📍 Lieu du projet -->
         <label for="location" class="block font-medium mb-1">{% trans "Location" %}</label>
         <input type="text" name="location" id="location" value="{{ project.location }}"
                class="w-full p-2 border rounded mb-4" required>
@@ -50,23 +52,27 @@
         <input type="number" name="budget" id="budget" value="{{ project.budget }}"
                class="w-full p-2 border rounded mb-4" step="0.01" required>
 
-        <!-- 📆 Deadline -->
+        <!-- 📆 Échéance -->
         <label for="deadline" class="block font-medium mb-1">{% trans "Deadline" %}</label>
         <input type="date" name="deadline" id="deadline" value="{{ project.deadline }}"
                class="w-full p-2 border rounded mb-6" required>
 
-        <!-- 🧱 Liste des jalons -->
+        <!-- 🧱 Liste des jalons modifiables -->
         <h2 class="text-lg font-semibold mb-2">{% trans "Milestones" %}</h2>
+
         {% for milestone in milestones %}
             <div class="border p-4 mb-4 rounded bg-gray-50">
+                <!-- Titre du jalon -->
                 <label class="block font-medium mb-1">{% trans "Title" %}</label>
                 <input type="text" name="milestone_title_{{ forloop.counter }}" value="{{ milestone.title }}"
                        class="w-full p-2 border rounded mb-2" required>
 
+                <!-- Montant du jalon -->
                 <label class="block font-medium mb-1">{% trans "Amount" %}</label>
                 <input type="number" name="milestone_amount_{{ forloop.counter }}" value="{{ milestone.amount }}"
                        class="w-full p-2 border rounded mb-2" required>
 
+                <!-- Date d’échéance -->
                 <label class="block font-medium mb-1">{% trans "Due Date" %}</label>
                 <input type="date" name="milestone_due_{{ forloop.counter }}" value="{{ milestone.due_date }}"
                        class="w-full p-2 border rounded mb-2" required>
@@ -75,11 +81,15 @@
             <p class="text-sm text-gray-500">{% trans "No milestones defined yet." %}</p>
         {% endfor %}
 
-        <!-- 🔘 Boutons -->
+        <!-- 🔘 Boutons : Annuler ou Soumettre -->
         <div class="mt-6 flex justify-between">
-            <a href="{% url 'my_projects' %}" class="px-6 py-2 bg-gray-400 text-white rounded hover:bg-gray-500">
+
+            <!-- 🔙 Retour au dashboard client -->
+            <a href="{% url 'my_projects_view' %}" class="px-6 py-2 bg-gray-400 text-white rounded hover:bg-gray-500">
                 {% trans "Cancel" %}
             </a>
+
+            <!-- ✅ Sauvegarder les modifications -->
             <button type="submit" class="px-6 py-2 bg-teal-600 text-white rounded hover:bg-teal-700">
                 {% trans "Save Changes" %}
             </button>

@@ -21,10 +21,9 @@
 # ---------------------------------------------------------------------
 # 🔁 IMPORTS DJANGO
 # ---------------------------------------------------------------------
-from django.db import models               # 🧱 Modèles de base Django
-from django.conf import settings           # ⚙️ Pour référencer AUTH_USER_MODEL de façon générique
-from projects.models import Project        # 🔗 Import du modèle Project (chaque bid est lié à un projet)
-
+from django.db import models                  # 🧱 Base des modèles Django
+from django.conf import settings              # ⚙️ Pour utiliser AUTH_USER_MODEL
+from projects.models import Project           # 🔗 Pour lier un bid à un projet
 
 # ---------------------------------------------------------------------
 # 🧾 Modèle : Bid (Soumission d’un entrepreneur pour un projet)
@@ -32,45 +31,49 @@ from projects.models import Project        # 🔗 Import du modèle Project (cha
 class Bid(models.Model):
     """
     Représente une offre déposée par un entrepreneur (contractor)
-    pour répondre à un projet publié sur la plateforme.
+    pour répondre à un projet publié sur la plateforme CONTRACT-IT.
 
-    Elle contient un montant proposé, un message explicatif,
-    un statut de traitement (en attente, accepté, rejeté),
-    et une date de création.
+    Inclut :
+    - un lien vers le projet
+    - un lien vers l’entrepreneur
+    - un montant
+    - un message d’accompagnement
+    - un statut (pending, accepted, rejected)
+    - la date de création
     """
 
-    # 🔗 Utilisateur qui soumet l'offre (doit être un entrepreneur)
+    # 👤 L'entrepreneur qui soumet la bid
     contractor = models.ForeignKey(
-        settings.AUTH_USER_MODEL,           # 🧑 Utilisateur relié
-        on_delete=models.CASCADE,           # ❌ Si l'utilisateur est supprimé → bid supprimée
+        settings.AUTH_USER_MODEL,            # 🔗 Utilise le modèle utilisateur personnalisé
+        on_delete=models.CASCADE,            # ❌ Supprimer l'utilisateur supprime aussi ses offres
         help_text="Entrepreneur ayant soumis cette offre"
     )
 
-    # 🔗 Projet ciblé par la proposition
+    # 📦 Le projet concerné par la proposition
     project = models.ForeignKey(
-        Project,                            # 📦 Modèle Project lié
-        on_delete=models.CASCADE,          # ❌ Si le projet est supprimé → les offres aussi
-        related_name='bids',               # 🔁 Permet project.bids.all()
+        Project,                             # 🔗 Relation vers un projet
+        on_delete=models.CASCADE,           # ❌ Supprimer le projet supprime aussi les bids liées
+        related_name='bids',                # Permet project.bids.all()
         help_text="Projet pour lequel cette offre a été soumise"
     )
 
-    # 💰 Montant proposé par l’entrepreneur
+    # 💵 Le montant proposé par l’entrepreneur
     amount = models.DecimalField(
-        max_digits=10,                     # 💸 Ex: 9999999.99
+        max_digits=10,                      # Ex. : 9999999.99
         decimal_places=2,
         help_text="Montant total proposé pour réaliser le projet"
     )
 
-    # 📝 Message personnalisé accompagnant la proposition
+    # 📝 Message accompagnant l’offre
     message = models.TextField(
         help_text="Message explicatif du contracteur (motivation, délai, etc.)"
     )
 
-    # 🧭 Statut de traitement de la soumission
+    # 🧭 Statut de la soumission
     STATUS_CHOICES = [
-        ('pending', 'En attente'),         # 🕐 En attente de décision
-        ('accepted', 'Acceptée'),          # ✅ Sélectionnée
-        ('rejected', 'Rejetée'),           # ❌ Refusée
+        ('pending', 'En attente'),          # 🕐 En cours d'examen
+        ('accepted', 'Acceptée'),           # ✅ Sélectionnée par le client
+        ('rejected', 'Rejetée'),            # ❌ Refusée par le client
     ]
     status = models.CharField(
         max_length=10,
@@ -79,13 +82,13 @@ class Bid(models.Model):
         help_text="Statut actuel de la soumission"
     )
 
-    # 🕒 Date de soumission de l’offre (définie automatiquement)
+    # 🕓 Date de création
     created_at = models.DateTimeField(
-        auto_now_add=True,                # 🗓️ Date enregistrée automatiquement à la création
+        auto_now_add=True,                 # ⏱️ Automatiquement définie lors de la création
         help_text="Date à laquelle l’offre a été soumise"
     )
 
-    # 🔁 Affichage lisible dans l’interface admin
+    # 🔁 Représentation lisible dans l’interface admin ou en debug
     def __str__(self):
-        # 📄 Exemple : "Bid de ahmad pour Réfection de toiture"
+        # 📄 Exemple affiché : "Bid de ahmad pour Réfection de toiture"
         return f"Bid de {self.contractor} pour {self.project.title}"

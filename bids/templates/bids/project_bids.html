@@ -1,37 +1,35 @@
 {% extends "core/useful/base2.html" %}
 {% load i18n %}
-{% comment %} {# -----------------------------------------------------------------------------
-   📁 Fichier : bids/templates/bids/project_bids.html
 
-   🎯 Objectif :
-       Cette page affiche toutes les offres (bids) reçues pour un projet donné,
-       visible uniquement par le client propriétaire du projet.
-
-   🔐 Sécurité :
-       La view associée (project_bids_view) restreint l'accès aux seuls propriétaires
-       du projet, pour éviter que d'autres utilisateurs y accèdent.
-
-   📦 Contenu dynamique :
-       - Détails du projet en haut
-       - Liste des propositions reçues avec :
-           - Entrepreneur
-           - Montant proposé
-           - Message
-           - Statut (en attente, accepté, rejeté)
-           - Bouton "Accepter cette offre" s’il n’y a pas encore eu d’acceptation
-   ----------------------------------------------------------------------------- #} {% endcomment %}
+{% comment %}
+# -----------------------------------------------------------------------------
+# 📄 Fichier : bids/templates/bids/project_bids.html
+#
+# 🎯 Objectif :
+#     Affiche toutes les bids reçues pour un projet donné.
+#     Visible uniquement par le client propriétaire du projet.
+#
+# 🔒 Sécurité :
+#     Vue associée : project_bids_view (vérifie que request.user == project.client)
+#
+# 📦 Contenu :
+#     - Détails du projet en haut
+#     - Liste des bids : entrepreneur, montant, message, statut
+#     - Bouton d’acceptation affiché uniquement si la bid est en attente
+# -----------------------------------------------------------------------------
+{% endcomment %}
 
 {% block title %}{% trans "Bids Received" %}{% endblock %}
 
 {% block content %}
 <div class="max-w-4xl mx-auto mt-10 p-6 bg-white shadow-md rounded-md">
 
-    <!-- 🎯 Titre principal -->
+    <!-- 🧭 Titre de la page -->
     <h2 class="text-2xl font-bold mb-6">
         {% trans "Offers Received for Project:" %} "{{ project.title }}"
     </h2>
 
-    <!-- 📌 Détails du projet -->
+    <!-- 📌 Récapitulatif du projet -->
     <div class="mb-6 text-gray-700">
         <p><strong>{% trans "Category:" %}</strong> {{ project.category }}</p>
         <p><strong>{% trans "Location:" %}</strong> {{ project.location }}</p>
@@ -40,42 +38,53 @@
         <p><strong>{% trans "Status:" %}</strong> {{ project.status }}</p>
     </div>
 
-    <!-- 📋 Liste des bids reçues -->
+    <!-- 📬 Affichage des offres reçues -->
     {% if bids %}
         <div class="space-y-6">
             {% for bid in bids %}
-                <div class="p-4 border border-gray-300 rounded shadow-sm">
-                    <h3 class="text-lg font-semibold text-gray-800">
-                        {{ bid.contractor.first_name }} {{ bid.contractor.last_name }}
-                    </h3>
-                    <p class="text-sm text-gray-600 mt-1"><strong>{% trans "Amount:" %}</strong> {{ bid.amount }} $</p>
-                    <p class="text-sm mt-2"><strong>{% trans "Message:" %}</strong></p>
-                    <p class="text-gray-700 italic">{{ bid.message }}</p>
-                    <p class="mt-2 text-sm">
-                        <strong>{% trans "Status:" %}</strong>
-                        {% if bid.status == 'pending' %}
-                            <span class="text-yellow-600">{% trans "Pending" %}</span>
-                        {% elif bid.status == 'accepted' %}
-                            <span class="text-green-600 font-semibold">{% trans "Accepted" %}</span>
-                        {% elif bid.status == 'rejected' %}
-                            <span class="text-red-600">{% trans "Rejected" %}</span>
-                        {% endif %}
-                    </p>
+            <div class="p-4 border border-gray-300 rounded shadow-sm">
 
-                    <!-- ✅ Affiche le bouton d'acceptation uniquement si le projet est encore actif -->
-                    {% if project.status == 'active' and bid.status == 'pending' %}
-                        <form method="post" action="{% url 'accept-bid' bid.id %}">
-                            {% csrf_token %}
-                            <button type="submit"
-                                class="mt-4 bg-teal-600 text-white px-4 py-2 rounded hover:bg-teal-700 transition">
-                                {% trans "Accept this Proposal" %}
-                            </button>
-                        </form>
+                <!-- 👤 Informations sur l'entrepreneur -->
+                <h3 class="text-lg font-semibold text-gray-800">
+                    {{ bid.contractor.first_name }} {{ bid.contractor.last_name }}
+                </h3>
+
+                <!-- 💰 Montant proposé -->
+                <p class="text-sm text-gray-600 mt-1">
+                    <strong>{% trans "Amount:" %}</strong> {{ bid.amount }} $
+                </p>
+
+                <!-- 💬 Message du soumissionnaire -->
+                <p class="text-sm mt-2"><strong>{% trans "Message:" %}</strong></p>
+                <p class="text-gray-700 italic">{{ bid.message }}</p>
+
+                <!-- 📌 Statut de la bid -->
+                <p class="mt-2 text-sm">
+                    <strong>{% trans "Status:" %}</strong>
+                    {% if bid.status == 'pending' %}
+                        <span class="text-yellow-600">{% trans "Pending" %}</span>
+                    {% elif bid.status == 'accepted' %}
+                        <span class="text-green-600 font-semibold">{% trans "Accepted" %}</span>
+                    {% elif bid.status == 'rejected' %}
+                        <span class="text-red-600">{% trans "Rejected" %}</span>
                     {% endif %}
-                </div>
+                </p>
+
+                <!-- ✅ Bouton d'acceptation (si bid en attente et projet actif) -->
+                {% if project.status == 'active' and bid.status == 'pending' %}
+                <form method="post" action="{% url 'accept_bid_view' bid.id %}">
+                    {% csrf_token %}
+                    <button type="submit"
+                            class="mt-4 bg-teal-600 text-white px-4 py-2 rounded hover:bg-teal-700 transition">
+                        {% trans "Accept this Proposal" %}
+                    </button>
+                </form>
+                {% endif %}
+            </div>
             {% endfor %}
         </div>
     {% else %}
+        <!-- ❌ Aucun bid reçu -->
         <p class="text-gray-500 italic">{% trans "No bids received for this project yet." %}</p>
     {% endif %}
 

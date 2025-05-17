@@ -12,95 +12,103 @@
 # Chaque route est associée à une vue HTML, pensée pour les clients ou les entrepreneurs.
 # ---------------------------------------------------------------------
 
-# 🔁 Import standard de Django
+# ---------------------------------------------------------------------
+# 📦 IMPORTS DJANGO
+# ---------------------------------------------------------------------
 from django.urls import path
 
-# 🔁 Import des vues utilisées
+# ---------------------------------------------------------------------
+# 📦 IMPORTS DES VUES HTML DE L’APP PROJECTS
+# ---------------------------------------------------------------------
 from .views import (
-    create_project_page,            # Créer un nouveau projet
-    find_jobs_view,                 # Voir les projets disponibles (côté entrepreneur)
-    project_detail_page,           # Voir les détails d’un projet
-    my_projects_view,              # Voir les projets que j’ai publiés (client)
-    awarded_projects_view,      # Voir les projets qu’on m’a attribués (entrepreneur)
-    add_external_portfolio_view,
-    edit_project_view,             # Modifier un projet (client)
-    external_portfolio_detail_view,  # ✅ Détail public d’un projet externe
-    internal_portfolio_detail_view,  # ✅ Détail public d’un projet CONTRACT-IT
-    toggle_internal_portfolio_view,  # ✅ Switch pour rendre un projet visible ou non
+    create_project_page_view,             # ✅ Créer un nouveau projet (client)
+    find_jobs_view,                       # ✅ Voir les projets disponibles (entrepreneur)
+    project_detail_page_view,             # ✅ Voir les détails d’un projet
+    my_projects_view,                     # ✅ Voir mes projets publiés (client)
+    awarded_projects_view,                # ✅ Voir les projets qui m’ont été attribués (entrepreneur)
+    edit_project_view,                    # ✅ Modifier un projet déjà publié (client)
+    
+    # 📁 Portfolio externe (entrepreneur)
+    add_external_portfolio_view,          # ✅ Ajouter un projet externe au portfolio
+    external_portfolio_detail_view,       # ✅ Détail public d’un projet externe
+
+    # 📁 Portfolio interne (CONTRACT-IT)
+    internal_portfolio_detail_view,       # ✅ Détail public d’un projet interne (de la plateforme)
+    toggle_internal_portfolio_view        # ✅ Activer/désactiver un projet dans le portfolio
 )
 
 # ---------------------------------------------------------------------
-# 🌐 Liste des routes disponibles
+# 🌐 Liste des routes disponibles pour l’application `projects`
 # ---------------------------------------------------------------------
 urlpatterns = [
-    # -----------------------------------------------------------------
-    # 📝 1. Créer un nouveau projet (client)
-    # Ex : /projects/create/
-    # -----------------------------------------------------------------
-    path('create/', create_project_page, name='create-project'),
 
     # -----------------------------------------------------------------
-    # 🔍 2. Liste des projets disponibles à postuler (entrepreneurs)
-    # Ex : /projects/jobs/
-    # Affiche uniquement les projets actifs et publics
+    # 📝 1. Créer un nouveau projet (client connecté)
+    # URL : /projects/create/
+    # Vue : create_project_page_view
     # -----------------------------------------------------------------
-    path('jobs/', find_jobs_view, name='find_jobs'),
+    path('create/', create_project_page_view, name='create_project_view'),
 
     # -----------------------------------------------------------------
-    # 📄 3. Détails d’un projet spécifique (accessible à tous les connectés)
-    # Ex : /projects/details/12/
+    # 🔍 2. Afficher les projets publics disponibles (entrepreneurs)
+    # URL : /projects/jobs/
+    # Vue : find_jobs_view
     # -----------------------------------------------------------------
-    path("details/<int:project_id>/", project_detail_page, name="project-details"),
+    path('jobs/', find_jobs_view, name='find_jobs_view'),
 
     # -----------------------------------------------------------------
-    # 📋 4. Liste de mes projets (client connecté)
-    # Ex : /projects/my-projects/
-    # Permet de gérer ses propres projets (éditer, suivre, supprimer…)
+    # 📄 3. Détails d’un projet donné
+    # URL : /projects/details/12/
+    # Vue : project_detail_page_view
     # -----------------------------------------------------------------
-    path('my-projects/', my_projects_view, name='my_projects'),
+    path('details/<int:project_id>/', project_detail_page_view, name='project_detail_page_view'),
 
     # -----------------------------------------------------------------
-    # 🛠️ 5. Liste des projets qu’on m’a attribués (entrepreneur connecté)
-    # Ex : /projects/awarded/
-    # Affiche tous les projets pour lesquels cet entrepreneur a été sélectionné.
-    # Permet de suivre l’avancement, les jalons, les documents…
+    # 📋 4. Mes projets (client connecté)
+    # URL : /projects/my-projects/
+    # Vue : my_projects_view
     # -----------------------------------------------------------------
-    path('awarded/', awarded_projects_view, name='awarded_projects'),
+    path('my-projects/', my_projects_view, name='my_projects_view'),
 
     # -----------------------------------------------------------------
-    # 🧱 6. Ajouter un projet EXTERNE au portfolio (entrepreneur)
-    # Ex : /projects/portfolio/add/
-    # Affiche un formulaire permettant à l’entrepreneur de créer manuellement
-    # un projet qu’il a réalisé en dehors de la plateforme CONTRACT-IT.
-    # Accessible uniquement aux utilisateurs avec is_contractor=True.
+    # 🛠️ 5. Projets attribués à un entrepreneur (dashboard entrepreneur)
+    # URL : /projects/awarded/
+    # Vue : awarded_projects_view
     # -----------------------------------------------------------------
-    path("portfolio/add/", add_external_portfolio_view, name="add_external_portfolio"),
+    path('awarded/', awarded_projects_view, name='awarded_projects_view'),
 
     # -----------------------------------------------------------------
-    # ✏️ 7. Modifier un projet existant (client seulement, projet non attribué)
-    # Ex : /projects/edit/12/
-    # Permet de modifier les détails d’un projet avant qu’il soit attribué.
+    # ✏️ 6. Modifier un projet existant (client uniquement)
+    # URL : /projects/edit/12/
+    # Vue : edit_project_view
     # -----------------------------------------------------------------
-    path("edit/<int:project_id>/", edit_project_view, name="edit-project"),
+    path('edit/<int:project_id>/', edit_project_view, name='edit_project_view'),
 
     # -----------------------------------------------------------------
-    # 🖼️ Portfolio public : projet externe
-    # Ex : /projects/portfolio/external/23/
+    # 🧱 7. Ajouter un projet externe au portfolio (entrepreneur)
+    # URL : /projects/portfolio/add/
+    # Vue : add_external_portfolio_view
     # -----------------------------------------------------------------
-    path("portfolio/external/<int:portfolio_id>/", external_portfolio_detail_view, name="portfolio_project_external"),
+    path('portfolio/add/', add_external_portfolio_view, name='add_external_portfolio_view'),
 
     # -----------------------------------------------------------------
-    # 🖼️ Portfolio public : projet interne CONTRACT-IT
-    # Ex : /projects/portfolio/internal/17/
+    # 🖼️ 8. Voir un projet EXTERNE dans le portfolio public
+    # URL : /projects/portfolio/external/23/
+    # Vue : external_portfolio_detail_view
     # -----------------------------------------------------------------
-    path("portfolio/internal/<int:project_id>/", internal_portfolio_detail_view, name="portfolio_project_internal"),
+    path('portfolio/external/<int:portfolio_id>/', external_portfolio_detail_view, name='external_portfolio_detail_view'),
 
     # -----------------------------------------------------------------
-    # 🔁 Ajouter/retirer un projet interne du portfolio
-    # Ex : /projects/portfolio/internal/toggle/17/
+    # 🖼️ 9. Voir un projet INTERNE CONTRACT-IT dans le portfolio public
+    # URL : /projects/portfolio/internal/17/
+    # Vue : internal_portfolio_detail_view
     # -----------------------------------------------------------------
-    path("portfolio/internal/toggle/<int:project_id>/", toggle_internal_portfolio_view, name="toggle_internal_portfolio"),
+    path('portfolio/internal/<int:project_id>/', internal_portfolio_detail_view, name='internal_portfolio_detail_view'),
 
-
+    # -----------------------------------------------------------------
+    # 🔁 10. Activer ou désactiver un projet dans le portfolio
+    # URL : /projects/portfolio/internal/toggle/17/
+    # Vue : toggle_internal_portfolio_view
+    # -----------------------------------------------------------------
+    path('portfolio/internal/toggle/<int:project_id>/', toggle_internal_portfolio_view, name='toggle_internal_portfolio_view'),
 ]
-

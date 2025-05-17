@@ -2,72 +2,76 @@
 # 📁 Fichier : bids/urls.py
 #
 # 🎯 Ce fichier définit les routes URL de l’application `bids`.
-# Chaque route correspond à une **vue HTML classique** (pas d’API ici).
+#     Chaque route correspond à une **vue HTML classique** (pas d’API ici).
 #
 # Ces vues permettent aux utilisateurs de :
 #     - soumettre une offre pour un projet (submit),
 #     - voir une page de confirmation après soumission,
 #     - consulter toutes les offres reçues pour un projet (client),
+#     - accepter une proposition,
+#     - voir ses propres bids.
 #
 # Les routes sont activées à travers l’inclusion dans `urls.py` principal.
 # ---------------------------------------------------------------------
 
-# 🔁 Import de la fonction path pour déclarer les routes
 from django.urls import path
-from . import views
-
-# 🔁 Import des vues associées
 from .views import (
     SubmitBidFormView,
+    bid_confirmation_view,
+    project_bids_view,
+    my_bids_view,
     accept_bid_view,
-    bid_accepted_confirmation,         # ✅ Vue GET/POST de soumission
-    bid_confirmation_view,     # ✅ Vue simple : message de confirmation
-    project_bids_view,         # ✅ Vue : voir toutes les bids d’un projet (client)
-    my_bids_view               # ✅ Vue : voir les bids soumises par l’entrepreneur
+    bid_accepted_confirmation_view
 )
-
 
 # ---------------------------------------------------------------------
 # 🔗 Liste des routes disponibles pour les soumissions (bids)
 # ---------------------------------------------------------------------
 urlpatterns = [
 
-    # 🔹 Soumettre une bid (formulaire GET + POST)
-    # 🧑‍🔧 Vue utilisée par un entrepreneur intéressé par un projet public
+    # 1️⃣ Soumettre une bid (formulaire GET + POST)
+    # 🔐 Accessible uniquement à un entrepreneur connecté
     path(
-        "submit/<int:project_id>/",           # Ex: /bids/submit/5/
+        "submit/<int:project_id>/",           # Exemple : /bids/submit/5/
         SubmitBidFormView.as_view(),
-        name="submit-bid"
+        name="submit_bid_view"
     ),
 
-    # 🔹 Confirmation visuelle après la soumission
-    # ✅ L’utilisateur est redirigé ici après avoir soumis une offre
+    # 2️⃣ Confirmation après soumission
+    # ✅ Redirigé ici après POST réussi
     path(
         "confirmation/",
         bid_confirmation_view,
-        name="bid-confirmation"
+        name="bid_confirmation_view"
     ),
 
-    # 🔹 Voir toutes les offres reçues pour un projet donné
-    # 👤 Accessible uniquement au client qui a publié ce projet
+    # 3️⃣ Voir toutes les offres reçues pour un projet (côté client)
+    # 🔐 Seul le client propriétaire peut y accéder
     path(
-        "view-bids/<int:project_id>/",        # Ex: /bids/view-bids/5/
+        "view_bids/<int:project_id>/",        # Exemple : /bids/view_bids/5/
         project_bids_view,
-        name="view-project-bids"
+        name="project_bids_view"
     ),
 
-    # 🔹 Voir toutes les bids soumises par l’entrepreneur connecté
-    # 🧑‍🔧 Accessible depuis le dashboard contractor
+    # 4️⃣ Voir toutes les bids soumises par l’entrepreneur connecté
+    # 🔐 Accessible depuis le tableau de bord contractor
     path(
-        "my-bids/",
+        "my_bids/",
         my_bids_view,
-        name="my-bids"
+        name="my_bids_view"
     ),
 
-    # 🔹 Accepter une proposition
-    path("accept/<int:bid_id>/", accept_bid_view, name="accept-bid"),
+    # 5️⃣ Accepter une bid spécifique (côté client)
+    path(
+        "accept/<int:bid_id>/",
+        accept_bid_view,
+        name="accept_bid_view"
+    ),
 
-    # 🔹 Page temporaire de confirmation après acceptation
-    path("accepted/confirmation/", bid_accepted_confirmation, name="bid-accepted-confirmation"),
-
+    # 6️⃣ Confirmation après acceptation d'une bid
+    path(
+        "accepted/confirmation/",
+        bid_accepted_confirmation_view,
+        name="bid_accepted_confirmation_view"
+    ),
 ]

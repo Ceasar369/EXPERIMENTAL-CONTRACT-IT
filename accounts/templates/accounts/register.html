@@ -128,9 +128,10 @@
             <!-- 🔗 Déjà inscrit ? -->
             <div class="text-center mt-6 text-sm text-gray-600">
                 {% trans "Already have an account?" %}
-                <a href="{% url 'login' %}" class="text-teal-600 font-semibold hover:underline">
+                <a href="{% url 'login_view' %}" class="text-teal-600 font-semibold hover:underline">
                     {% trans "Log in" %}
                 </a>
+                {# 🔁 Nom ajusté ici pour respecter la convention _view (corriger urls.py si besoin) #}
             </div>
         </div>
     </div>

@@ -1,42 +1,48 @@
 {% extends "core/useful/base2.html" %}
 {% load i18n %}
-{% comment %} {# -----------------------------------------------------------------------------
-   📁 Fichier : bids/templates/bids/bid_confirmation.html
 
-   🎯 Objectif :
-       Cette page de confirmation est affichée après la soumission d’un bid (offre).
-       Elle permet de :
-         - confirmer le succès de l'action,
-         - guider l’entrepreneur vers les prochaines actions possibles.
-
-   ⚠️ Cette page utilise `base2.html` pour un entête minimaliste (logo + langue).
-   Elle ne contient pas de footer car ce n’est pas une page publique.
-   ----------------------------------------------------------------------------- #} {% endcomment %}
+{% comment %}
+# -----------------------------------------------------------------------------
+# 📄 Fichier : bids/templates/bids/bid_confirmation.html
+#
+# 🎯 Objectif :
+#     Cette page est affichée juste après qu’un entrepreneur ait soumis une bid.
+#     Elle confirme que l’action a été enregistrée, et offre des liens utiles.
+#
+# 🔒 Page privée (accessible uniquement après une action POST).
+# ✅ Layout utilisé : base2.html (minimaliste, sans footer).
+# -----------------------------------------------------------------------------
+{% endcomment %}
 
 {% block title %}{% trans "Bid Submitted" %}{% endblock %}
 
 {% block content %}
 <div class="max-w-xl mx-auto mt-20 bg-white shadow-md rounded-lg p-10 text-center">
 
-    <!-- ✅ Icône de succès -->
+    <!-- ✅ Icône visuelle de succès -->
     <div class="text-green-500 text-6xl mb-6">✔️</div>
 
-    <!-- ✅ Message de confirmation -->
-    <h2 class="text-2xl font-bold text-gray-800 mb-4">{% trans "Your proposal has been submitted!" %}</h2>
+    <!-- 🧾 Message principal -->
+    <h2 class="text-2xl font-bold text-gray-800 mb-4">
+        {% trans "Your proposal has been submitted!" %}
+    </h2>
+
+    <!-- 💬 Message secondaire -->
     <p class="text-gray-600 mb-8">
         {% trans "Thank you for applying to this project. The client will review your proposal shortly." %}
     </p>
 
-    <!-- 🔗 Boutons de redirection -->
+    <!-- 🔗 Boutons de navigation utiles -->
     <div class="flex justify-center space-x-4">
-        <!-- 🔙 Retour au tableau de bord -->
-        <a href="{% url 'contractor-dashboard' %}" 
+
+        <!-- 🔙 Bouton retour tableau de bord entrepreneur -->
+        <a href="{% url 'contractor_dashboard_view' %}"
            class="bg-teal-600 text-white px-6 py-3 rounded hover:bg-teal-700 transition">
             {% trans "Back to Dashboard" %}
         </a>
 
-        <!-- 🔎 Voir d'autres projets -->
-        <a href="{% url 'find_jobs' %}" 
+        <!-- 🔎 Bouton vers d'autres projets disponibles -->
+        <a href="{% url 'find_jobs_view' %}"
            class="border border-gray-400 text-gray-800 px-6 py-3 rounded hover:bg-gray-100 transition">
             {% trans "Find More Projects" %}
         </a>

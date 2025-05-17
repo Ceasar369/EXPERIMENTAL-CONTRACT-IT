@@ -13,7 +13,7 @@ from .models import CustomUser                            # 👤 Modèle utilisa
 
 # --------------------------------------------------------------------------------
 # 🔎 Fonction utilitaire pour détecter un double rôle (client + entrepreneur)
-# Elle sera utilisée dans les 2 interfaces : client et entrepreneur
+# Elle sera utilisée dans l’interface admin pour repérer les utilisateurs hybrides
 # --------------------------------------------------------------------------------
 def is_dual_user(obj):
     """Affiche True si l'utilisateur est à la fois client ET entrepreneur"""
@@ -35,20 +35,31 @@ is_dual_user.short_description = "Client + Entrepreneur"
 
 @admin.register(CustomUser)
 class CustomUserAdmin(UserAdmin):
-    # ✍️ Correction IMPORTANTE : liste explicite sans le champ 'username' (qui a été supprimé du modèle)
-    list_display = ('email', 'first_name', 'last_name', 'is_client', 'is_contractor', 'is_staff')
+    # ✅ Liste personnalisée (sans 'username' qui a été supprimé)
+    list_display = (
+        'email', 'first_name', 'last_name',
+        'is_client', 'is_contractor', 'is_verified', 'is_active',
+        'is_staff', is_dual_user  # ➕ Colonne booléenne personnalisée
+    )
 
+    # ✅ Ajout de filtres dans la barre latérale pour trier rapidement
+    list_filter = (
+        'is_client', 'is_contractor', 'is_verified', 'is_active'
+    )
+
+    # 🕓 Champs affichés en lecture seule
     readonly_fields = ('date_joined',)
 
-    # 🔍 Barre de recherche dans l’admin
+    # 🔍 Barre de recherche dans l’interface admin
     search_fields = ('email', 'city')
-    # 🧭 Tri par défaut
+
+    # 🧭 Tri par défaut dans la liste des utilisateurs
     ordering = ('email',)
 
     def get_queryset(self, request):
         """
         🔁 Récupère tous les utilisateurs pour affichage.
-        On ne filtre pas à ce stade : la logique de filtre sera appliquée dans les méthodes d'affichage.
+        Triés par adresse courriel, sans filtrage particulier.
         """
         return super().get_queryset(request).order_by('email')
 

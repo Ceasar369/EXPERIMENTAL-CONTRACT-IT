@@ -1,37 +1,41 @@
 {% extends "core/useful/base2.html" %}
 {% load i18n %}
 
-{% comment %} {# ---------------------------------------------------------------------
-  📄 Fichier : my_projects.html
-  📂 Emplacement : projects/templates/projects/my_projects.html
-
-  🎯 Affiche la liste complète des projets créés par un client.
-      Pour chaque projet :
-        - titre, budget, statut, deadline
-        - nombre de soumissions reçues
-        - bouton vers la page de détail
-        - bouton vers la page de modification (à venir)
-
-  📌 Ce fichier est utilisé dans la vue `my_projects_view()` côté client.
---------------------------------------------------------------------- #} {% endcomment %}
+{% comment %}
+# ---------------------------------------------------------------------
+# 📄 Fichier : my_projects.html
+# 📂 Emplacement : projects/templates/projects/my_projects.html
+#
+# 🎯 Affiche la liste complète des projets créés par un client.
+#     Pour chaque projet :
+#       - titre, budget, statut, deadline
+#       - nombre de soumissions reçues
+#       - bouton vers la page de détail
+#       - bouton vers la page de modification
+#
+# 📌 Ce fichier est utilisé dans la vue `my_projects_view()` côté client.
+# ---------------------------------------------------------------------
+{% endcomment %}
 
 {% block title %}{% trans "My Projects" %}{% endblock %}
 
 {% block content %}
 <div class="max-w-6xl mx-auto bg-white p-8 shadow-md rounded-md">
 
-    <!-- 🧭 Titre de la page -->
+    <!-- 🧭 Titre principal -->
     <h2 class="text-2xl font-bold mb-6 text-center">{% trans "Your Posted Projects" %}</h2>
 
     {% if projects_with_bids|length == 0 %}
+        <!-- ❌ Aucun projet publié encore -->
         <p class="text-center text-gray-500">{% trans "You haven't posted any projects yet." %}</p>
 
-        <a href="{% url 'create-project' %}" class="inline-block px-5 py-3 bg-indigo-600 text-white rounded-lg font-semibold hover:bg-indigo-700 transition">
+        <!-- ➕ Lien vers la publication d’un premier projet -->
+        <a href="{% url 'create_project_view' %}" class="inline-block px-5 py-3 bg-indigo-600 text-white rounded-lg font-semibold hover:bg-indigo-700 transition">
             {% trans "Post your first project" %}
         </a>
 
     {% else %}
-        <!-- ✅ Affichage tableau de tous les projets -->
+        <!-- ✅ Tableau des projets avec soumissions -->
         <table class="w-full table-auto border-collapse">
             <thead class="bg-gray-100 text-left text-sm uppercase tracking-wide">
                 <tr>
@@ -47,27 +51,45 @@
                 {% for entry in projects_with_bids %}
                     {% with project=entry.project bids_count=entry.bids_count %}
                     <tr class="border-b hover:bg-gray-50">
+                        <!-- 🏷️ Titre du projet -->
                         <td class="px-4 py-3 font-medium text-green-800">{{ project.title }}</td>
-                        <td class="px-4 py-3 text-gray-600">{{ project.get_status_display }}</td>
-                        <td class="px-4 py-3 text-gray-600">{{ project.budget }}</td>
-                        <td class="px-4 py-3 text-gray-600">{{ project.deadline }}</td>
-                        <td class="px-4 py-3 text-center text-gray-800 font-semibold">{{ bids_count }}</td>
-                        <td class="text-center whitespace-nowrap">
-                        <div class="flex items-center justify-center space-x-4">
-                            <a href="{% url 'project-details' project.id %}" class="text-green-600 hover:underline">
-                                {% trans "View Details" %}
-                            </a>
-                            <span class="text-gray-400">|</span>
-                            <a href="{% url 'edit-project' project.id %}" class="text-yellow-600 hover:underline">
-                                {% trans "Edit" %}
-                            </a>
-                            <span class="text-gray-400">|</span>
-                            <a href="{% url 'view-project-bids' project.id %}" class="text-blue-600 hover:underline">
-                                {% trans "View Proposals" %}
-                            </a>
-                        </div>
-                    </td>
 
+                        <!-- 🏁 Statut -->
+                        <td class="px-4 py-3 text-gray-600">{{ project.get_status_display }}</td>
+
+                        <!-- 💰 Budget -->
+                        <td class="px-4 py-3 text-gray-600">{{ project.budget }}</td>
+
+                        <!-- 📅 Date limite -->
+                        <td class="px-4 py-3 text-gray-600">{{ project.deadline }}</td>
+
+                        <!-- 📦 Nombre de soumissions -->
+                        <td class="px-4 py-3 text-center text-gray-800 font-semibold">{{ bids_count }}</td>
+
+                        <!-- 🧭 Actions disponibles -->
+                        <td class="text-center whitespace-nowrap">
+                            <div class="flex items-center justify-center space-x-4">
+
+                                <!-- 🔍 Lien vers détails du projet -->
+                                <a href="{% url 'project_detail_page_view' project.id %}" class="text-green-600 hover:underline">
+                                    {% trans "View Details" %}
+                                </a>
+
+                                <span class="text-gray-400">|</span>
+
+                                <!-- ✏️ Modifier le projet -->
+                                <a href="{% url 'edit_project_view' project.id %}" class="text-yellow-600 hover:underline">
+                                    {% trans "Edit" %}
+                                </a>
+
+                                <span class="text-gray-400">|</span>
+
+                                <!-- 📑 Voir les propositions reçues -->
+                                <a href="{% url 'view_project_bids_view' project.id %}" class="text-blue-600 hover:underline">
+                                    {% trans "View Proposals" %}
+                                </a>
+                            </div>
+                        </td>
                     </tr>
                     {% endwith %}
                 {% endfor %}

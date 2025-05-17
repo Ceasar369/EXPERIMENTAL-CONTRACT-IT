@@ -37,32 +37,24 @@
                 <div>
                     <p class="uppercase text-gray-400 text-xs mt-6 mb-1">{% trans "Activity" %}</p>
 
-                    <!-- 🔗 Projets publics disponibles pour postuler -->
-                    <a href="{% url 'find_jobs' %}" class="block py-2 px-3 hover:bg-gray-700 rounded">
+                    <a href="{% url 'find_jobs_view' %}" class="block py-2 px-3 hover:bg-gray-700 rounded">
                         {% trans "Available Projects" %}
                     </a>
-
-                    <!-- 🧰 Projets attribués à cet entrepreneur -->
-                    <a href="{% url 'awarded_projects' %}" class="block py-2 px-3 hover:bg-gray-700 rounded">
+                    <a href="{% url 'awarded_projects_view' %}" class="block py-2 px-3 hover:bg-gray-700 rounded">
                         {% trans "My Missions" %}
                     </a>
-
-                    <!-- 📝 Toutes les offres déjà soumises -->
-                    <a href="{% url 'my-bids' %}" class="block py-2 px-3 hover:bg-gray-700 rounded">
+                    <a href="{% url 'my_bids_view' %}" class="block py-2 px-3 hover:bg-gray-700 rounded">
                         {% trans "My Bids" %}
                     </a>
-
-                    <!-- 📄 Gestion des documents contractuels ou factures -->
                     <a href="#" class="block py-2 px-3 hover:bg-gray-700 rounded">
                         {% trans "Documents" %}
                     </a>
                 </div>
 
-
                 <!-- 3️⃣ Profil et compte -->
                 <div>
                     <p class="uppercase text-gray-400 text-xs mt-6 mb-1">{% trans "Account" %}</p>
-                    <a href="#" class="block py-2 px-3 hover:bg-gray-700 rounded">{% trans "My Profile" %}</a>
+                    <a href="{% url 'contractor_detail_view' user.id %}" class="block py-2 px-3 hover:bg-gray-700 rounded">{% trans "My Profile" %}</a>
                     <a href="#" class="block py-2 px-3 hover:bg-gray-700 rounded">{% trans "My Card / Payment" %}</a>
                     <a href="#" class="block py-2 px-3 hover:bg-gray-700 rounded">{% trans "Settings" %}</a>
                 </div>
@@ -72,7 +64,7 @@
                     <p class="uppercase text-gray-400 text-xs mt-6 mb-1">{% trans "Support" %}</p>
                     <a href="#" class="block py-2 px-3 hover:bg-gray-700 rounded">{% trans "Help" %}</a>
                     <a href="#" class="block py-2 px-3 hover:bg-gray-700 rounded">{% trans "Contact Us" %}</a>
-                    <a href="{% url 'logout' %}" class="block py-2 px-3 hover:bg-gray-700 rounded">{% trans "Logout" %}</a>
+                    <a href="{% url 'logout_view' %}" class="block py-2 px-3 hover:bg-gray-700 rounded">{% trans "Logout" %}</a>
                 </div>
             </nav>
         </div>
@@ -98,19 +90,20 @@
 
             <!-- 👤 Photo de profil à droite -->
             <div class="text-right">
-                <a href="#" class="inline-block">
+                <a href="{% url 'contractor_detail_view' user.id %}" class="inline-block">
                     <img src="{{ user.profile_picture.url }}" alt="{% trans 'Profile picture' %}"
-                         class="w-12 h-12 rounded-full shadow">
+                        class="w-12 h-12 rounded-full shadow">
                     <p class="mt-1 text-sm font-medium text-gray-800">
                         {{ user.first_name }} {{ user.last_name }}
                     </p>
                 </a>
 
-                <!-- 🔁 Bouton de bascule entre rôles (visible seulement si utilisateur hybride) -->
+
                 {% if user.is_client and user.is_contractor %}
-                    <a href="{% url 'client-dashboard' %}" class="inline-block mt-2 ml-2 px-4 py-2 bg-teal-500 text-white text-sm rounded hover:bg-teal-600 transition">
+                    <a href="{% url 'client_dashboard_view' %}" class="inline-block mt-2 ml-2 px-4 py-2 bg-teal-500 text-white text-sm rounded hover:bg-teal-600 transition">
                         {% trans "Switch to Client mode" %}
                     </a>
+                    {% comment %} 🔁 Redirection vers le dashboard client (nom corrigé avec _view) {% endcomment %}
                 {% endif %}
             </div>
         </div>
@@ -118,59 +111,35 @@
         <!-- 📦 Bloc 1 : Projets disponibles -->
         <section class="mb-10">
             <h3 class="text-xl font-semibold mb-4">{% trans "Available Projects" %}</h3>
-            <!-- 🔽 SECTION À REMPLIR DYNAMIQUEMENT PLUS TARD
-                 ➤ Tu devras afficher ici tous les projets ouverts à la soumission,
-                 filtrés par les spécialités de l’entrepreneur.
-                 ➤ Pour chaque projet, tu pourras afficher :
-                   - Le titre
-                   - Le budget estimé
-                   - La date limite
-                   - Un bouton "Submit a bid"
-            -->
+            <!-- 🔽 SECTION À REMPLIR DYNAMIQUEMENT PLUS TARD -->
         </section>
 
         <!-- 🛠 Bloc 2 : Missions en cours -->
         <section class="mb-10">
             <h3 class="text-xl font-semibold mb-4">{% trans "My Active Missions" %}</h3>
-            <!-- 🔽 SECTION À DYNAMISER PLUS TARD
-                 ➤ Tu afficheras ici les projets attribués à l’entrepreneur.
-                 ➤ Pour chaque mission :
-                   - Nom du client
-                   - Échéancier
-                   - Statut des jalons
-                   - Bouton "Upload document" ou "Mark as completed"
-            -->
+            <!-- 🔽 SECTION À DYNAMISER PLUS TARD -->
         </section>
 
         <!-- 📁 Bloc 3 : Documents -->
         <section class="mb-10">
             <h3 class="text-xl font-semibold mb-4">{% trans "Project Documents" %}</h3>
-            <!-- 🔽 BLOC DOCUMENTAIRE
-                 ➤ Liste des documents liés aux missions (plans, contrats, photos)
-                 ➤ Option de téléversement / téléchargement
-            -->
+            <!-- 🔽 BLOC DOCUMENTAIRE -->
         </section>
 
         <!-- 💰 Bloc 4 : Paiements -->
         <section>
             <h3 class="text-xl font-semibold mb-4">{% trans "Recent Payments" %}</h3>
-            <!-- 🔽 À COMPLÉTER LORS DE L’INTÉGRATION AVEC STRIPE / BASE DE DONNÉES
-                 ➤ Liste des paiements reçus
-                 ➤ Projets associés, dates et montants
-                 ➤ Filtrable par date ou statut (payé / en attente)
-            -->
+            <!-- 🔽 À COMPLÉTER LORS DE L’INTÉGRATION AVEC STRIPE -->
         </section>
 
         <!-- 🖼️ Bloc 5 : Portfolio -->
         <section class="mt-12">
             <h3 class="text-xl font-semibold mb-4">{% trans "My Portfolio Projects" %}</h3>
 
-            <!-- ➕ Bouton d’ajout d’un projet externe -->
-            <a href="{% url 'add_external_portfolio' %}" class="inline-block mb-6 px-4 py-2 bg-teal-600 text-white rounded hover:bg-teal-700">
+            <a href="{% url 'add_external_portfolio_view' %}" class="inline-block mb-6 px-4 py-2 bg-teal-600 text-white rounded hover:bg-teal-700">
                 {% trans "Add External Project" %}
             </a>
 
-            <!-- ✅ Projets externes -->
             {% if user.external_portfolio_items.all %}
                 <h4 class="text-lg font-medium mb-2">{% trans "External Projects" %}</h4>
                 <ul class="space-y-2 mb-8">
@@ -181,7 +150,7 @@
                                     <p class="font-bold text-gray-800">{{ item.title }}</p>
                                     <p class="text-sm text-gray-500">{{ item.date }} — ${{ item.price }}</p>
                                 </div>
-                                <a href="{% url 'portfolio_project_external' item.id %}" class="text-sm text-teal-600 hover:underline">
+                                <a href="{% url 'external_portfolio_detail_view' item.id %}" class="text-sm text-teal-600 hover:underline">
                                     {% trans "View Public Page" %}
                                 </a>
                             </div>
@@ -190,7 +159,6 @@
                 </ul>
             {% endif %}
 
-            <!-- ✅ Projets internes -->
             {% if user.internal_portfolio_items.all %}
                 <h4 class="text-lg font-medium mb-2">{% trans "Internal Projects (via CONTRACT-IT)" %}</h4>
                 <ul class="space-y-2">
@@ -202,11 +170,10 @@
                                     <p class="text-sm text-gray-500">{{ item.project.location }} — {{ item.project.deadline }}</p>
                                 </div>
                                 <div class="text-right">
-                                    <a href="{% url 'portfolio_project_internal' item.project.id %}" class="text-sm text-teal-600 hover:underline block mb-2">
+                                    <a href="{% url 'portfolio_project_internal_view' item.project.id %}" class="text-sm text-teal-600 hover:underline block mb-2">
                                         {% trans "View Public Page" %}
                                     </a>
-                                    <!-- 🔘 Switch de visibilité (formulaire POST) -->
-                                    <form method="POST" action="{% url 'toggle_internal_portfolio' item.project.id %}">
+                                    <form method="POST" action="{% url 'toggle_internal_portfolio_view' item.project.id %}">
                                         {% csrf_token %}
                                         <button type="submit" class="text-xs bg-gray-200 px-3 py-1 rounded hover:bg-gray-300">
                                             {% if item.visible_in_portfolio %}
@@ -223,7 +190,6 @@
                 </ul>
             {% endif %}
 
-            <!-- 🚫 Aucun projet dans le portfolio -->
             {% if not user.internal_portfolio_items.all and not user.external_portfolio_items.all %}
                 <p class="text-sm text-gray-500 mt-4">{% trans "You haven't added any projects to your portfolio yet." %}</p>
             {% endif %}

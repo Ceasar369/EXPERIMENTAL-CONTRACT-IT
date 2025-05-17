@@ -1,32 +1,34 @@
 {% extends "core/useful/base2.html" %}
 {% load i18n %}
 
-{% comment %} {# ---------------------------------------------------------------------
-  📄 Fichier : project_list.html
-  📂 Emplacement : projects/templates/projects/project_list.html
-
-  🎯 Affiche tous les projets publics disponibles pour les entrepreneurs.
-     Possibilité de filtrer les projets selon :
-        - le budget minimum / maximum
-        - la localisation (ville)
-        - la catégorie (type de travaux)
-
-  📬 Les filtres sont envoyés via GET → l’URL sera enrichie de ?budget_min=...&location=...
-  🧠 Les filtres sélectionnés restent visibles dans le formulaire après soumission.
---------------------------------------------------------------------- #} {% endcomment %}
+{% comment %}
+# ---------------------------------------------------------------------
+# 📄 Fichier : project_list.html
+# 📂 Emplacement : projects/templates/projects/project_list.html
+#
+# 🎯 Affiche tous les projets publics disponibles pour les entrepreneurs.
+#     Possibilité de filtrer selon :
+#         - budget min/max
+#         - localisation
+#         - catégorie
+#
+# 📬 Filtres transmis via GET → persistants grâce à value="{{ request.GET.xxx }}"
+# 📌 Vue utilisée : find_jobs_view()
+# ---------------------------------------------------------------------
+{% endcomment %}
 
 {% block title %}{% trans "Available Projects" %}{% endblock %}
 
 {% block content %}
 <div class="flex flex-col lg:flex-row max-w-7xl mx-auto gap-6">
-    
+
     <!-- ======================= 🧩 COLONNE DE FILTRES ======================= -->
     <aside class="lg:w-1/4 w-full bg-white p-6 shadow rounded-md border border-gray-200">
 
-        <!-- 🔍 Titre section filtres -->
+        <!-- 🔍 Titre des filtres -->
         <h3 class="text-lg font-bold mb-4">{% trans "Filter Projects" %}</h3>
 
-        <!-- 🔽 FORMULAIRE DE FILTRAGE -->
+        <!-- 🔽 Formulaire de filtrage (GET) -->
         <form method="get" action="">
 
             <!-- 💰 Budget minimum -->
@@ -39,7 +41,7 @@
             <input type="number" step="0.01" name="budget_max" id="budget_max" class="w-full p-2 border rounded mb-4"
                 value="{{ request.GET.budget_max }}">
 
-            <!-- 🌍 Lieu -->
+            <!-- 🌍 Ville -->
             <label for="location" class="block text-sm font-medium mb-1">{% trans "Location" %}</label>
             <input type="text" name="location" id="location" class="w-full p-2 border rounded mb-4"
                 value="{{ request.GET.location }}">
@@ -49,7 +51,7 @@
             <input type="text" name="category" id="category" class="w-full p-2 border rounded mb-6"
                 value="{{ request.GET.category }}">
 
-            <!-- ✅ Bouton appliquer -->
+            <!-- ✅ Bouton de soumission -->
             <button type="submit" class="w-full bg-teal-600 text-white py-2 rounded hover:bg-teal-700">
                 {% trans "Apply Filters" %}
             </button>
@@ -62,11 +64,11 @@
         <!-- 🧭 Titre principal -->
         <h2 class="text-2xl font-bold mb-6 text-center">{% trans "Open Projects to Bid On" %}</h2>
 
-        <!-- ❌ Aucun projet -->
         {% if projects|length == 0 %}
+            <!-- ❌ Aucun projet correspondant -->
             <p class="text-center text-gray-500">{% trans "No active projects match your filters." %}</p>
         {% else %}
-            <!-- ✅ Tableau de projets -->
+            <!-- ✅ Tableau listant les projets -->
             <table class="w-full table-auto border-collapse">
                 <thead>
                     <tr class="bg-gray-100 text-left text-sm uppercase tracking-wide">
@@ -80,12 +82,22 @@
                 <tbody>
                     {% for project in projects %}
                     <tr class="border-b hover:bg-gray-50">
+
+                        <!-- 🔤 Titre du projet -->
                         <td class="px-4 py-3 font-medium text-green-800">{{ project.title }}</td>
+
+                        <!-- 👤 Nom du client -->
                         <td class="px-4 py-3 text-gray-700">{{ project.client.username }}</td>
+
+                        <!-- 🌍 Lieu -->
                         <td class="px-4 py-3 text-gray-600">{{ project.location }}</td>
+
+                        <!-- 💵 Budget -->
                         <td class="px-4 py-3 text-gray-600">{{ project.budget }}</td>
+
+                        <!-- 🔍 Bouton d’accès au détail -->
                         <td class="px-4 py-3 text-center">
-                            <a href="{% url 'project-details' project.id %}" class="text-sm text-teal-600 hover:underline">
+                            <a href="{% url 'project_detail_page_view' project.id %}" class="text-sm text-teal-600 hover:underline">
                                 {% trans "View Details" %}
                             </a>
                         </td>

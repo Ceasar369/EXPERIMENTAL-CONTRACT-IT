@@ -24,27 +24,42 @@ from .models import Bid
 
 
 # ---------------------------------------------------------------------
-# ⚙️ Configuration personnalisée pour le modèle Bid dans l’admin
+# ⚙️ Configuration personnalisée pour le modèle Bid dans l’interface Django Admin
 # ---------------------------------------------------------------------
 @admin.register(Bid)
 class BidAdmin(admin.ModelAdmin):
     """
     Interface Django Admin pour le modèle Bid.
 
-    Affiche les offres dans l’administration avec :
-    - les colonnes importantes dans la liste,
-    - des filtres par statut ou par projet,
-    - un champ de recherche.
+    🧾 Affiche les offres (bids) dans l’administration avec :
+        - colonnes personnalisées dans la vue liste (`list_display`)
+        - filtres utiles dans la barre latérale (`list_filter`)
+        - barre de recherche sur plusieurs champs (`search_fields`)
+        - tri par défaut sur la date de création (le plus récent en premier)
     """
 
-    # ✅ Champs visibles dans la vue liste (tableau de tous les bids)
-    list_display = ('project', 'contractor', 'amount', 'status', 'created_at')
+    # ✅ Colonnes visibles dans la vue tableau admin
+    list_display = (
+        'project',       # 🔗 Projet concerné
+        'contractor',    # 👤 Entrepreneur ayant soumis l'offre
+        'amount',        # 💰 Montant proposé
+        'status',        # 📌 Statut (en attente, accepté, refusé...)
+        'created_at'     # 🗓️ Date de soumission
+    )
 
-    # 🔍 Filtres disponibles dans la sidebar de l’admin
-    list_filter = ('status', 'created_at', 'project')
+    # 🔍 Filtres rapides dans la sidebar
+    list_filter = (
+        'status',        # Statut de la bid (filtrage rapide)
+        'created_at',    # Mois/année de création
+        'project'        # Nom du projet
+    )
 
-    # 🔎 Champs sur lesquels la barre de recherche admin peut s’appliquer
-    search_fields = ('project__title', 'contractor__username', 'message')
+    # 🔎 Champs accessibles par la barre de recherche admin
+    search_fields = (
+        'project__title',        # Recherche par titre de projet
+        'contractor__username',  # Recherche par nom d’utilisateur de l’entrepreneur
+        'message'                # Recherche par contenu de l’offre
+    )
 
-    # 📅 Tri par défaut (les plus récents d’abord)
+    # 📅 Tri automatique : les plus récentes en haut
     ordering = ('-created_at',)

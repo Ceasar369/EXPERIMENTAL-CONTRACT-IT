@@ -38,13 +38,13 @@
                 <div>
                     <p class="uppercase text-gray-400 text-xs mt-6 mb-1">{% trans "Activity" %}</p>
 
-                    <!-- 🔗 Redirige vers la vue my_projects_view (my_projects.html) -->
-                    <a href="{% url 'my_projects' %}" class="block py-2 px-3 hover:bg-gray-700 rounded">
+                    <!-- 🔗 Redirige vers la vue my_projects_view -->
+                    <a href="{% url 'my_projects_view' %}" class="block py-2 px-3 hover:bg-gray-700 rounded">
                         {% trans "My Projects" %}
                     </a>
 
                     <!-- 🔨 Bouton de création de projet -->
-                    <a href="{% url 'create-project' %}" class="block py-2 px-3 hover:bg-gray-700 rounded">
+                    <a href="{% url 'create_project_view' %}" class="block py-2 px-3 hover:bg-gray-700 rounded">
                         {% trans "Post a New Project" %}
                     </a>
 
@@ -53,11 +53,10 @@
                     <a href="#" class="block py-2 px-3 hover:bg-gray-700 rounded">{% trans "Messages" %}</a>
                 </div>
 
-
                 <!-- 3️⃣ Groupe : Compte utilisateur -->
                 <div>
                     <p class="uppercase text-gray-400 text-xs mt-6 mb-1">{% trans "Account" %}</p>
-                    <a href="#" class="block py-2 px-3 hover:bg-gray-700 rounded">{% trans "My Profile" %}</a>
+                    <a href="{% url 'client_detail_view' user.id %}" class="block py-2 px-3 hover:bg-gray-700 rounded">{% trans "My Profile" %}</a>
                     <a href="#" class="block py-2 px-3 hover:bg-gray-700 rounded">{% trans "My Card / Payment" %}</a>
                     <a href="#" class="block py-2 px-3 hover:bg-gray-700 rounded">{% trans "Settings" %}</a>
                 </div>
@@ -67,7 +66,7 @@
                     <p class="uppercase text-gray-400 text-xs mt-6 mb-1">{% trans "Support" %}</p>
                     <a href="#" class="block py-2 px-3 hover:bg-gray-700 rounded">{% trans "Help" %}</a>
                     <a href="#" class="block py-2 px-3 hover:bg-gray-700 rounded">{% trans "Contact Us" %}</a>
-                    <a href="{% url 'logout' %}" class="block py-2 px-3 hover:bg-gray-700 rounded">{% trans "Logout" %}</a>
+                    <a href="{% url 'logout_view' %}" class="block py-2 px-3 hover:bg-gray-700 rounded">{% trans "Logout" %}</a>
                 </div>
             </nav>
         </div>
@@ -93,20 +92,20 @@
 
             <!-- 👤 Affichage de la photo de profil à droite -->
             <div class="text-right">
-                <a href="#" class="inline-block">
+                <a href="{% url 'client_detail_view' user.id %}" class="inline-block">
                     <img src="{{ user.profile_picture.url }}" alt="{% trans 'Profile picture' %}"
-                         class="w-12 h-12 rounded-full shadow">
+                        class="w-12 h-12 rounded-full shadow">
                     <p class="mt-1 text-sm font-medium text-gray-800">
                         {{ user.first_name }} {{ user.last_name }}
                     </p>
                 </a>
 
-                
-                <!-- 🔁 Bouton de bascule entre rôles (visible seulement si utilisateur hybride) -->
+                <!-- 🔁 Bascule de rôle si utilisateur hybride -->
                 {% if user.is_client and user.is_contractor %}
-                    <a href="{% url 'contractor-dashboard' %}" class="inline-block mt-2 ml-2 px-4 py-2 bg-indigo-500 text-white text-sm rounded hover:bg-indigo-600 transition">
+                    <a href="{% url 'contractor_dashboard_view' %}" class="inline-block mt-2 ml-2 px-4 py-2 bg-indigo-500 text-white text-sm rounded hover:bg-indigo-600 transition">
                         {% trans "Switch to Contractor mode" %}
                     </a>
+                    {% comment %} 🔁 Nom de la vue corrigé avec _view pour correspondre aux conventions Django internes {% endcomment %}
                 {% endif %}
             </div>
         </div>
@@ -120,7 +119,7 @@
                     <p class="text-sm text-gray-600">{{ project.status }} — {{ project.deadline }}</p>
 
                     <!-- 🔗 Lien vers les bids reçus -->
-                    <a href="{% url 'view-project-bids' project.id %}" 
+                    <a href="{% url 'view_project_bids_view' project.id %}" 
                     class="text-sm text-teal-600 hover:underline mt-2 inline-block">
                         {% trans "View Proposals" %}
                     </a>
@@ -131,31 +130,19 @@
         <!-- 💰 BLOC 2 : Paiements récents -->
         <section class="mb-10">
             <h3 class="text-xl font-semibold mb-4">{% trans "Latest Payments" %}</h3>
-            <!-- 🔽 IMPORTANT : Ceci est une section à remplir dynamiquement.
-                 À terme, tu devras afficher ici les paiements associés aux jalons validés par le client.
-                 Pour chaque paiement :
-                 - Projet concerné
-                 - Montant payé
-                 - Date de paiement
-                 - Nom de l’entrepreneur -->
+            <!-- 🔽 SECTION À REMPLIR LORS DE L'INTÉGRATION DE STRIPE -->
         </section>
 
         <!-- ⭐ BLOC 3 : Évaluations à laisser -->
         <section class="mb-10">
             <h3 class="text-xl font-semibold mb-4">{% trans "Pending Reviews" %}</h3>
-            <!-- 🔽 IMPORTANT : Ceci est une section temporairement vide.
-                 Plus tard, tu afficheras ici tous les projets terminés pour lesquels le client
-                 n’a pas encore laissé d’évaluation.
-                 Tu peux y insérer un bouton "Leave a review" qui redirige vers une page d’évaluation. -->
+            <!-- 🔽 SECTION À REMPLIR POUR LA FONCTION D'ÉVALUATION -->
         </section>
 
         <!-- 💬 BLOC 4 : Derniers messages reçus -->
         <section>
             <h3 class="text-xl font-semibold mb-4">{% trans "Recent Messages" %}</h3>
-            <!-- 🔽 IMPORTANT : Ceci est un placeholder.
-                 Tu devras afficher ici les dernières conversations entre le client et les entrepreneurs,
-                 triées par date de dernier message.
-                 Affiche le nom de l’entrepreneur, l’aperçu du message, et un lien "Open Chat". -->
+            <!-- 🔽 SECTION POUR LA MESSAGERIE ENTRE CLIENT ET ENTREPRENEUR -->
         </section>
     </main>
 </div>
