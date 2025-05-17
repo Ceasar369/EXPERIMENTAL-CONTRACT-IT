@@ -327,3 +327,149 @@ def awarded_projects_view(request):
     return render(request, 'projects/awarded_projects.html', {
         'awarded_projects': awarded_projects
     })
+
+
+# ---------------------------------------------------------------------
+# 📁 Section : Vues liées au portfolio de l’entrepreneur
+# ---------------------------------------------------------------------
+
+from django.utils.translation import gettext as _
+from django.http import Http404
+from .models import ExternalPortfolioItem, ExternalPortfolioMedia, InternalPortfolioItem
+from django.core.exceptions import PermissionDenied
+from django.views.decorators.http import require_http_methods
+from accounts.permissions import contractor_required
+from django.shortcuts import render
+from django.contrib.auth.decorators import login_required
+from accounts.permissions import contractor_required  # Assure-toi qu’il est importé
+
+# ---------------------------------------------------------------------
+# 1️⃣ Ajouter un projet externe (GET = formulaire / POST = enregistrement)
+# ---------------------------------------------------------------------
+@login_required
+@contractor_required
+def add_external_portfolio_view(request):
+    """
+    Permet à un entrepreneur d’ajouter manuellement un projet externe à son portfolio.
+
+    Affiche un formulaire vide (GET) ou enregistre le projet + ses images (POST).
+    """
+    if request.method == "POST":
+        # 🔁 Récupère les données du formulaire
+        title = request.POST.get("title")
+        description = request.POST.get("description", "")
+        date = request.POST.get("date")
+        duration = request.POST.get("duration")
+        price = request.POST.get("price")
+
+        # ✅ Crée l'objet ExternalPortfolioItem
+        portfolio_item = ExternalPortfolioItem.objects.create(
+            user=request.user,
+            title=title,
+            description=description,
+            date=date,
+            duration=duration,
+            price=price,
+            visible_in_portfolio=True
+        )
+
+        # 🔁 Enregistre les images si présentes
+        for uploaded_file in request.FILES.getlist("images"):
+            ExternalPortfolioMedia.objects.create(
+                portfolio_item=portfolio_item,
+                image=uploaded_file
+            )
+
+        # ✅ Redirige vers le dashboard ou la page de portfolio
+        messages.success(request, _("Le projet a été ajouté à votre portfolio."))
+        return redirect("contractor-dashboard")  # ou une future page "my-portfolio"
+
+    # 🖼️ Affiche le formulaire d’ajout
+    return render(request, "projects/portfolio/add_external_portfolio.html")
+
+# ---------------------------------------------------------------------
+# 2️⃣ Détail public d’un projet externe
+# ---------------------------------------------------------------------
+def external_portfolio_detail_view(request, portfolio_id):
+    """
+    Affiche une page publique avec les détails d’un projet externe,
+    visible uniquement si le projet est marqué visible_in_portfolio=True.
+    """
+
+    # 🔍 Tente de récupérer le projet externe en base de données selon l’ID passé dans l’URL
+    item = get_object_or_404(ExternalPortfolioItem, id=portfolio_id)
+
+    # 🔒 Vérifie que le projet est bien autorisé à être visible publiquement
+    if not item.visible_in_portfolio:
+        raise Http404("Ce projet n'est pas disponible publiquement.")
+
+    return render(request, "projects/portfolio/portfolio_project_external.html", {
+        "item": item
+    })
+
+# ---------------------------------------------------------------------
+# 3️⃣ Détail public d’un projet CONTRACT-IT (interne)
+# ---------------------------------------------------------------------
+def internal_portfolio_detail_view(request, project_id):
+    """
+    Affiche la page publique d’un projet interne CONTRACT-IT,
+    uniquement s’il est bien dans le portfolio de l’entrepreneur.
+    """
+    # 🔍 Recherche l’entrée du portfolio interne correspondant au projet CONTRACT-IT
+    try:
+        item = InternalPortfolioItem.objects.select_related("project").get(project__id=project_id)
+    except InternalPortfolioItem.DoesNotExist:
+        raise Http404("Ce projet n’est pas dans le portfolio.")
+
+    # 🔒 Vérifie que le projet a bien été marqué comme visible dans le portfolio
+    if not item.visible_in_portfolio:
+        raise Http404("Ce projet est privé.")
+
+    return render(request, "projects/portfolio/portfolio_project_internal.html", {
+        "item": item
+    })
+
+# ---------------------------------------------------------------------
+# 4️⃣ Ajouter / Retirer un projet interne du portfolio (switch)
+# ---------------------------------------------------------------------
+@login_required
+@contractor_required
+@require_http_methods(["POST"])
+def toggle_internal_portfolio_view(request, project_id):
+    """
+    Active ou désactive un projet CONTRACT-IT dans le portfolio de l’entrepreneur.
+
+    🔄 Si aucun `InternalPortfolioItem` n'existe :
+        → on le crée (uniquement si le projet est terminé).
+
+    🔁 Sinon :
+        → on inverse le champ `visible_in_portfolio` (True ↔ False).
+
+    🔐 Accessible uniquement aux utilisateurs entrepreneurs.
+    """
+    # 🔍 Récupère le projet CONTRACT-IT à partir de son ID (lien vers InternalPortfolioItem)
+    project = get_object_or_404(Project, id=project_id)
+
+    # 🔒 Vérifie que l'utilisateur est bien le contractor attitré du projet
+    if project.contractor != request.user:
+        raise PermissionDenied("Vous ne pouvez modifier ce projet.")
+
+    # 🔒 Vérifie que le projet est terminé avant d’autoriser l’ajout au portfolio
+    if project.status != "completed":
+        raise PermissionDenied("Seuls les projets terminés peuvent être affichés dans le portfolio.")
+
+    # 🔁 Crée un item portfolio si inexistant, ou récupère-le (lié à ce projet et à cet utilisateur)
+    item, created = InternalPortfolioItem.objects.get_or_create(
+        project=project,
+        user=request.user,
+        defaults={"visible_in_portfolio": True}
+    )
+
+    # 🔁 Si déjà existant → on inverse le statut de visibilité
+    if not created:
+        item.visible_in_portfolio = not item.visible_in_portfolio
+        item.save()
+
+    # ✅ Redirige l’utilisateur vers la page des projets (ou tableau de bord plus tard)
+    return redirect("my_projects")  # ou contractor-dashboard
+

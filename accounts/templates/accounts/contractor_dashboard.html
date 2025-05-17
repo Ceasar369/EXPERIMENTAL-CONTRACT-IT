@@ -160,6 +160,75 @@
                  ➤ Filtrable par date ou statut (payé / en attente)
             -->
         </section>
+
+        <!-- 🖼️ Bloc 5 : Portfolio -->
+        <section class="mt-12">
+            <h3 class="text-xl font-semibold mb-4">{% trans "My Portfolio Projects" %}</h3>
+
+            <!-- ➕ Bouton d’ajout d’un projet externe -->
+            <a href="{% url 'add_external_portfolio' %}" class="inline-block mb-6 px-4 py-2 bg-teal-600 text-white rounded hover:bg-teal-700">
+                {% trans "Add External Project" %}
+            </a>
+
+            <!-- ✅ Projets externes -->
+            {% if user.external_portfolio_items.all %}
+                <h4 class="text-lg font-medium mb-2">{% trans "External Projects" %}</h4>
+                <ul class="space-y-2 mb-8">
+                    {% for item in user.external_portfolio_items.all %}
+                        <li class="border p-4 rounded bg-gray-50">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <p class="font-bold text-gray-800">{{ item.title }}</p>
+                                    <p class="text-sm text-gray-500">{{ item.date }} — ${{ item.price }}</p>
+                                </div>
+                                <a href="{% url 'portfolio_project_external' item.id %}" class="text-sm text-teal-600 hover:underline">
+                                    {% trans "View Public Page" %}
+                                </a>
+                            </div>
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+
+            <!-- ✅ Projets internes -->
+            {% if user.internal_portfolio_items.all %}
+                <h4 class="text-lg font-medium mb-2">{% trans "Internal Projects (via CONTRACT-IT)" %}</h4>
+                <ul class="space-y-2">
+                    {% for item in user.internal_portfolio_items.all %}
+                        <li class="border p-4 rounded bg-white shadow-sm">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <p class="font-bold text-gray-800">{{ item.project.title }}</p>
+                                    <p class="text-sm text-gray-500">{{ item.project.location }} — {{ item.project.deadline }}</p>
+                                </div>
+                                <div class="text-right">
+                                    <a href="{% url 'portfolio_project_internal' item.project.id %}" class="text-sm text-teal-600 hover:underline block mb-2">
+                                        {% trans "View Public Page" %}
+                                    </a>
+                                    <!-- 🔘 Switch de visibilité (formulaire POST) -->
+                                    <form method="POST" action="{% url 'toggle_internal_portfolio' item.project.id %}">
+                                        {% csrf_token %}
+                                        <button type="submit" class="text-xs bg-gray-200 px-3 py-1 rounded hover:bg-gray-300">
+                                            {% if item.visible_in_portfolio %}
+                                                {% trans "Remove from portfolio" %}
+                                            {% else %}
+                                                {% trans "Add to portfolio" %}
+                                            {% endif %}
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+
+            <!-- 🚫 Aucun projet dans le portfolio -->
+            {% if not user.internal_portfolio_items.all and not user.external_portfolio_items.all %}
+                <p class="text-sm text-gray-500 mt-4">{% trans "You haven't added any projects to your portfolio yet." %}</p>
+            {% endif %}
+        </section>
+
     </main>
 </div>
 {% endblock %}
