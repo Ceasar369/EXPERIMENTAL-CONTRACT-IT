@@ -1,0 +1,162 @@
+{% extends "core/useful/base2.html" %}
+{% load i18n %}
+{% load static %}
+{% comment %} {# 📁 Fichier : accounts/templates/accounts/client_dashboard.html
+   🧭 Cette page HTML représente le tableau de bord d’un utilisateur de type CLIENT.
+   Elle est divisée en deux grandes zones :
+   - Une colonne latérale gauche (navigation)
+   - Un contenu principal à droite (résumé et actions personnalisées)
+   Elle utilise les blocs et styles modernes, est multilingue, et prête à être connectée à la base de données.
+#} {% endcomment %}
+
+{% block title %}{% trans "Client Dashboard" %}{% endblock %}
+
+{% block content %}
+<!-- 🌐 Conteneur principal avec flex pour disposer la sidebar et le contenu côte à côte -->
+<div class="flex min-h-screen bg-gray-100">
+
+    <!-- 🔵 SIDEBAR GAUCHE (Navigation principale du dashboard) -->
+    <aside class="w-64 bg-gray-800 text-white flex flex-col justify-between">
+        
+        <!-- 🟦 Zone supérieure du menu -->
+        <div>
+            <!-- 🧩 Logo principal de la plateforme -->
+            <div class="px-6 py-5 text-center border-b border-gray-700">
+                <h1 class="text-xl font-bold tracking-wide uppercase text-white">CONTRACT-IT</h1>
+            </div>
+
+            <!-- 🧭 Menu de navigation latéral, divisé en groupes logiques -->
+            <nav class="mt-6 px-4 space-y-4 text-sm">
+                
+                <!-- 1️⃣ Groupe : Accès rapide -->
+                <div>
+                    <p class="uppercase text-gray-400 text-xs mb-1">{% trans "Quick Access" %}</p>
+                    <a href="#" class="block py-2 px-3 bg-gray-700 rounded">{% trans "Dashboard" %}</a>
+                </div>
+
+                <!-- 2️⃣ Groupe : Activités principales du client -->
+                <div>
+                    <p class="uppercase text-gray-400 text-xs mt-6 mb-1">{% trans "Activity" %}</p>
+
+                    <!-- 🔗 Redirige vers la vue my_projects_view (my_projects.html) -->
+                    <a href="{% url 'my_projects' %}" class="block py-2 px-3 hover:bg-gray-700 rounded">
+                        {% trans "My Projects" %}
+                    </a>
+
+                    <!-- 🔨 Bouton de création de projet -->
+                    <a href="{% url 'create-project' %}" class="block py-2 px-3 hover:bg-gray-700 rounded">
+                        {% trans "Post a New Project" %}
+                    </a>
+
+                    <!-- 🔧 À relier plus tard -->
+                    <a href="#" class="block py-2 px-3 hover:bg-gray-700 rounded">{% trans "Notifications" %}</a>
+                    <a href="#" class="block py-2 px-3 hover:bg-gray-700 rounded">{% trans "Messages" %}</a>
+                </div>
+
+
+                <!-- 3️⃣ Groupe : Compte utilisateur -->
+                <div>
+                    <p class="uppercase text-gray-400 text-xs mt-6 mb-1">{% trans "Account" %}</p>
+                    <a href="#" class="block py-2 px-3 hover:bg-gray-700 rounded">{% trans "My Profile" %}</a>
+                    <a href="#" class="block py-2 px-3 hover:bg-gray-700 rounded">{% trans "My Card / Payment" %}</a>
+                    <a href="#" class="block py-2 px-3 hover:bg-gray-700 rounded">{% trans "Settings" %}</a>
+                </div>
+
+                <!-- 4️⃣ Groupe : Aide et déconnexion -->
+                <div>
+                    <p class="uppercase text-gray-400 text-xs mt-6 mb-1">{% trans "Support" %}</p>
+                    <a href="#" class="block py-2 px-3 hover:bg-gray-700 rounded">{% trans "Help" %}</a>
+                    <a href="#" class="block py-2 px-3 hover:bg-gray-700 rounded">{% trans "Contact Us" %}</a>
+                    <a href="{% url 'logout' %}" class="block py-2 px-3 hover:bg-gray-700 rounded">{% trans "Logout" %}</a>
+                </div>
+            </nav>
+        </div>
+
+        <!-- 🌐 Sélecteur de langue en bas du menu -->
+        <div class="px-6 py-4 border-t border-gray-700 text-sm flex justify-between">
+            <a href="/en/" class="hover:underline text-white">{% trans "English" %}</a>
+            <a href="/fr/" class="hover:underline text-white">{% trans "Français" %}</a>
+        </div>
+    </aside>
+
+    <!-- 🧾 CONTENU PRINCIPAL À DROITE -->
+    <main class="flex-1 p-8">
+        
+        <!-- 🧭 En-tête personnalisé du dashboard -->
+        <div class="flex justify-between items-center mb-8">
+            <div>
+                <h2 class="text-2xl font-bold">
+                    {% trans "Welcome to your dashboard" %}, {{ user.first_name }} {{ user.last_name }} 👋
+                </h2>
+                <p class="text-gray-600 mt-1">{% trans "We're glad to see you. Here's a summary of your activity." %}</p>
+            </div>
+
+            <!-- 👤 Affichage de la photo de profil à droite -->
+            <div class="text-right">
+                <a href="#" class="inline-block">
+                    <img src="{{ user.profile_picture.url }}" alt="{% trans 'Profile picture' %}"
+                         class="w-12 h-12 rounded-full shadow">
+                    <p class="mt-1 text-sm font-medium text-gray-800">
+                        {{ user.first_name }} {{ user.last_name }}
+                    </p>
+                </a>
+
+                
+                <!-- 🔁 Bouton de bascule entre rôles (visible seulement si utilisateur hybride) -->
+                {% if user.is_client and user.is_contractor %}
+                    <a href="{% url 'contractor-dashboard' %}" class="inline-block mt-2 ml-2 px-4 py-2 bg-indigo-500 text-white text-sm rounded hover:bg-indigo-600 transition">
+                        {% trans "Switch to Contractor mode" %}
+                    </a>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- 📋 BLOC 1 : Projets récents du client -->
+        <section class="mb-10">
+            <h3 class="text-xl font-semibold mb-4">{% trans "Recent Projects" %}</h3>
+            {% for project in recent_projects %}
+                <div class="border rounded p-4 shadow mb-4">
+                    <h4 class="font-bold text-gray-800">{{ project.title }}</h4>
+                    <p class="text-sm text-gray-600">{{ project.status }} — {{ project.deadline }}</p>
+
+                    <!-- 🔗 Lien vers les bids reçus -->
+                    <a href="{% url 'view-project-bids' project.id %}" 
+                    class="text-sm text-teal-600 hover:underline mt-2 inline-block">
+                        {% trans "View Proposals" %}
+                    </a>
+                </div>
+            {% endfor %}
+        </section>
+
+        <!-- 💰 BLOC 2 : Paiements récents -->
+        <section class="mb-10">
+            <h3 class="text-xl font-semibold mb-4">{% trans "Latest Payments" %}</h3>
+            <!-- 🔽 IMPORTANT : Ceci est une section à remplir dynamiquement.
+                 À terme, tu devras afficher ici les paiements associés aux jalons validés par le client.
+                 Pour chaque paiement :
+                 - Projet concerné
+                 - Montant payé
+                 - Date de paiement
+                 - Nom de l’entrepreneur -->
+        </section>
+
+        <!-- ⭐ BLOC 3 : Évaluations à laisser -->
+        <section class="mb-10">
+            <h3 class="text-xl font-semibold mb-4">{% trans "Pending Reviews" %}</h3>
+            <!-- 🔽 IMPORTANT : Ceci est une section temporairement vide.
+                 Plus tard, tu afficheras ici tous les projets terminés pour lesquels le client
+                 n’a pas encore laissé d’évaluation.
+                 Tu peux y insérer un bouton "Leave a review" qui redirige vers une page d’évaluation. -->
+        </section>
+
+        <!-- 💬 BLOC 4 : Derniers messages reçus -->
+        <section>
+            <h3 class="text-xl font-semibold mb-4">{% trans "Recent Messages" %}</h3>
+            <!-- 🔽 IMPORTANT : Ceci est un placeholder.
+                 Tu devras afficher ici les dernières conversations entre le client et les entrepreneurs,
+                 triées par date de dernier message.
+                 Affiche le nom de l’entrepreneur, l’aperçu du message, et un lien "Open Chat". -->
+        </section>
+    </main>
+</div>
+{% endblock %}

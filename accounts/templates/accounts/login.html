@@ -1,0 +1,83 @@
+{% extends "core/useful/base2.html" %}
+{% load i18n %}
+{% load static %}
+{% comment %} {# 📁 Fichier : accounts/templates/accounts/login.html
+   🧩 Ce fichier est le template HTML pour la page de connexion à la plateforme CONTRACT-IT.
+   Il hérite du layout global base2.html (logo, langue, etc.).
+   On divise la page en deux colonnes : à gauche une image, à droite un formulaire de connexion.
+   Le texte est en anglais par défaut, avec le système de traduction activé pour le Québec.
+#} {% endcomment %}
+
+{% block title %}{% trans "Log in" %}{% endblock %}
+
+{% block content %}
+<!-- 🧱 Structure principale : deux colonnes côte à côte -->
+<div class="min-h-screen flex">
+    
+    <!-- 🎨 Colonne gauche : image d’illustration pleine hauteur (visible sur écran large uniquement) -->
+    <div class="hidden lg:flex w-1/2 bg-cover bg-center"
+         style="background-image: url('{% static 'accounts/images/login-side.jpg' %}');">
+        {% comment %} {# 📷 Cette image est une illustration statique (ex. entrepreneur ou chantier).
+           Elle est stockée dans accounts/static/accounts/images/login-side.jpg
+           Elle ne s’affiche que sur écrans larges (classe `lg:flex`), sinon elle est cachée. #} {% endcomment %}
+    </div>
+
+    <!-- 📄 Colonne droite : zone du formulaire -->
+    <div class="flex w-full lg:w-1/2 justify-center items-center bg-gray-100">
+        
+        <!-- 📦 Boîte contenant le formulaire, avec fond blanc, ombrage et arrondis -->
+        <div class="w-full max-w-md p-8 bg-white shadow-md rounded-md">
+            
+            <!-- 🧭 Titre principal -->
+            <h2 class="text-2xl font-bold mb-6 text-center">
+                {% trans "Log in to CONTRACT-IT" %}
+            </h2>
+
+            <!-- 📝 Formulaire de connexion : méthode POST, géré par la vue login_view -->
+            <form method="POST">
+                {% csrf_token %}
+                {% comment %} {# 🔐 Jeton de sécurité obligatoire pour les formulaires POST dans Django. Protège contre les attaques CSRF. #} {% endcomment %}
+
+                <!-- ✉️ Champ : identifiant (email) -->
+                <label for="email" class="block mb-2 font-medium">
+                    {% trans "Email address" %}
+                </label>
+                <input type="email" name="email" id="email" required
+                    class="w-full p-3 border rounded mb-4"
+                    placeholder="{% trans 'e.g. ceasar@email.com' %}">
+                {% comment %} {# 🎯 Ce champ sert à entrer l'identifiant de l'utilisateur (email dans ton cas) #} {% endcomment %}
+
+                <!-- 🔐 Champ : mot de passe -->
+                <label for="password" class="block mb-2 font-medium">
+                    {% trans "Password" %}
+                </label>
+                <input type="password" name="password" id="password" required
+                       class="w-full p-3 border rounded mb-6"
+                       placeholder="••••••••">
+                {% comment %} {# 🔐 Ce champ masque les caractères tapés et est requis pour valider l'identité #} {% endcomment %}
+
+                <!-- 🔘 Bouton pour envoyer le formulaire -->
+                <button type="submit"
+                        class="w-full bg-teal-500 text-white py-3 rounded hover:bg-teal-600 transition duration-200">
+                    {% trans "Log in" %}
+                </button>
+            </form>
+
+            <!-- ⚠️ Message d'erreur renvoyé par la vue si les identifiants sont invalides -->
+            {% if error %}
+                <p class="mt-4 text-center text-red-600 font-semibold">
+                    {{ error }}
+                </p>
+            {% endif %}
+
+            <!-- 🔗 Lien vers la page d’inscription si l’utilisateur n’a pas encore de compte -->
+            <div class="text-center mt-6 text-sm text-gray-600">
+                {% trans "Don't have an account?" %}
+                <a href="{% url 'register' %}" class="text-teal-600 font-semibold hover:underline">
+                    {% trans "Sign up" %}
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

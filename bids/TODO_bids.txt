@@ -1,0 +1,45 @@
+# ---------------------------------------------------------------------
+# 📌 NOTES POUR LA SUITE — APP BIDS
+#
+# ✅ L’application bids couvre désormais les fonctions essentielles :
+#    - soumission d'une offre (formulaire entrepreneur),
+#    - affichage de confirmation post-soumission,
+#    - vue des offres reçues (client propriétaire du projet),
+#    - vue de toutes les offres soumises (entrepreneur connecté).
+#
+# 🔧 Ce qu’il reste à implémenter ou améliorer plus tard :
+#
+# 1. 🎯 Amélioration du processus de sélection
+#    - Ajouter un bouton "Accepter l’offre" dans `project_bids.html` (client)
+#    - Lorsqu’un bid est accepté :
+#        - marquer les autres bids comme rejetées
+#        - associer le contractor au projet
+#        - changer le statut du projet → "in_progress"
+#        - rendre le projet privé (`is_public = False`)
+#
+# 2. 📬 Notifications & messagerie
+#    - Envoyer une alerte (message ou email) au contractor sélectionné
+#    - Ajouter un bouton "Contacter" à côté de chaque bid dans `project_bids.html`
+
+# 3. 🔍 Ajout de filtres dans la vue `my_bids`
+#    - Filtrer les bids selon le statut (pending, accepted, rejected)
+#    - Ajouter un affichage coloré ou une icône pour chaque statut
+
+# 4. 🛡️ Sécurité & permissions
+#    - Vérifier que seuls les entrepreneurs accèdent à `submit_bid_form` et `my_bids`
+#    - Vérifier que seuls les clients voient `project_bids` de leurs propres projets
+#    - Ajouter des erreurs 403 explicites en cas d’accès non autorisé
+
+# 5. 🧾 Affichage des informations liées au projet
+#    - Ajouter le nom du client et la date limite du projet dans la liste `my_bids`
+#    - Ajouter une option pour supprimer ou modifier un bid (si toujours `pending`)
+
+# 6. 📦 Préparation pour API (plus tard)
+#    - Garder en tête les futures versions DRF :
+#        - POST de bid via API
+#        - Acceptation / refus via POST sécurisé
+#        - Notifications et redirections via front React
+
+# 💡 Ce fichier servira de guide pour reprendre facilement le développement
+#    de l’application bids après la finalisation des autres modules.
+# ---------------------------------------------------------------------

@@ -1,42 +1,22 @@
-{% extends 'core/base.html' %}
+{% extends "core/useful/base1.html" %}
 {% load i18n %}
-{% block title %}{% trans "How to Hire" %}{% endblock %}
+
+{% block title %}
+    {% trans "Page Title" %}
+{% endblock %}
 
 {% block content %}
-<div class="max-w-3xl mx-auto py-12 px-6">
-  <h1 class="text-3xl font-bold mb-6">{% trans "How to Hire on Contract_it" %}</h1>
+    <!-- 🧭 Titre principal de la page -->
+    <h1 class="text-2xl font-bold mb-4 px-6 py-4">{% trans "Page Title" %}</h1>
 
-  <p class="text-gray-700 mb-4">
-    {% trans "Hiring the right professional for your construction or renovation project has never been easier. On Contract_it, we connect you with verified, qualified entrepreneurs ready to bring your vision to life." %}
-  </p>
-
-  <h2 class="text-2xl font-semibold mt-8 mb-4">{% trans "1. Post Your Project" %}</h2>
-  <p class="text-gray-700 mb-4">
-    {% trans "Use our smart assistant to describe your project in detail. Select the type of work, your preferred budget, deadlines, and any special requirements." %}
-  </p>
-
-  <h2 class="text-2xl font-semibold mt-8 mb-4">{% trans "2. Receive Proposals" %}</h2>
-  <p class="text-gray-700 mb-4">
-    {% trans "Contractors will review your posting and send you tailored offers. Compare their profiles, reviews, pricing, and estimated timelines—all in one place." %}
-  </p>
-
-  <h2 class="text-2xl font-semibold mt-8 mb-4">{% trans "3. Hire and Track Progress" %}</h2>
-  <p class="text-gray-700 mb-4">
-    {% trans "Once you've selected a contractor, the project begins! Use our dashboard to track milestones, approve work, and communicate via secure messaging." %}
-  </p>
-
-  <h2 class="text-2xl font-semibold mt-8 mb-4">{% trans "4. Pay with Confidence" %}</h2>
-  <p class="text-gray-700 mb-4">
-    {% trans "Payments are released only after you approve each milestone. You can pay in full or use Klarna for installment options." %}
-  </p>
-
-  <h2 class="text-2xl font-semibold mt-8 mb-4">{% trans "5. Rate and Review" %}</h2>
-  <p class="text-gray-700 mb-4">
-    {% trans "At the end of the project, leave a review to help others make informed decisions. Your feedback builds trust within the community." %}
-  </p>
-
-  <p class="text-gray-700 mt-10 italic">
-    {% trans "Need help getting started?" %} <a href="{% url 'help' %}" class="underline text-green-500 hover:text-green-700">{% trans "Help Center" %}</a> {% trans "or" %} <a href="{% url 'contact' %}" class="underline text-green-500 hover:text-green-700">{% trans "contact us" %}</a>.
-  </p>
-</div>
+    <!-- 💬 Contenu placeholder à remplacer plus tard -->
+    <div class="px-6 pb-8">
+        <p class="text-gray-700">
+            {% trans "This page is currently under construction. Content will be added soon." %}
+        </p>
+    </div>
 {% endblock %}
+
+{% comment %}
+✅ Le footer est déjà inclus automatiquement par base1.html — pas besoin de le rajouter ici
+{% endcomment %}

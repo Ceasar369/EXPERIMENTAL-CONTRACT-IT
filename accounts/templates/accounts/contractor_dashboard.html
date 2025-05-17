@@ -1,0 +1,165 @@
+{% extends "core/useful/base2.html" %}
+{% load i18n %}
+{% load static %}
+{% comment %} {# 📁 Fichier : accounts/templates/accounts/contractor_dashboard.html
+   🛠️ Ce fichier HTML représente le tableau de bord d’un utilisateur de type ENTREPRENEUR.
+   Il suit la même structure que le dashboard client :
+   - Une sidebar de navigation à gauche
+   - Un contenu principal à droite
+   Il est 100 % compatible avec les traductions et prêt pour la future intégration dynamique.
+#} {% endcomment %}
+
+{% block title %}{% trans "Contractor Dashboard" %}{% endblock %}
+
+{% block content %}
+<!-- 🧱 Conteneur principal avec disposition en deux colonnes -->
+<div class="flex min-h-screen bg-gray-100">
+
+    <!-- 🔵 SIDEBAR À GAUCHE -->
+    <aside class="w-64 bg-gray-800 text-white flex flex-col justify-between">
+        <!-- 🔹 Logo + Navigation -->
+        <div>
+            <!-- 📛 Logo -->
+            <div class="px-6 py-5 text-center border-b border-gray-700">
+                <h1 class="text-xl font-bold tracking-wide uppercase text-white">CONTRACT-IT</h1>
+            </div>
+
+            <!-- 🧭 Menu latéral -->
+            <nav class="mt-6 px-4 space-y-4 text-sm">
+                
+                <!-- 1️⃣ Accès rapide -->
+                <div>
+                    <p class="uppercase text-gray-400 text-xs mb-1">{% trans "Quick Access" %}</p>
+                    <a href="#" class="block py-2 px-3 bg-gray-700 rounded">{% trans "Dashboard" %}</a>
+                </div>
+
+                <!-- 2️⃣ Activités professionnelles -->
+                <div>
+                    <p class="uppercase text-gray-400 text-xs mt-6 mb-1">{% trans "Activity" %}</p>
+
+                    <!-- 🔗 Projets publics disponibles pour postuler -->
+                    <a href="{% url 'find_jobs' %}" class="block py-2 px-3 hover:bg-gray-700 rounded">
+                        {% trans "Available Projects" %}
+                    </a>
+
+                    <!-- 🧰 Projets attribués à cet entrepreneur -->
+                    <a href="{% url 'awarded_projects' %}" class="block py-2 px-3 hover:bg-gray-700 rounded">
+                        {% trans "My Missions" %}
+                    </a>
+
+                    <!-- 📝 Toutes les offres déjà soumises -->
+                    <a href="{% url 'my-bids' %}" class="block py-2 px-3 hover:bg-gray-700 rounded">
+                        {% trans "My Bids" %}
+                    </a>
+
+                    <!-- 📄 Gestion des documents contractuels ou factures -->
+                    <a href="#" class="block py-2 px-3 hover:bg-gray-700 rounded">
+                        {% trans "Documents" %}
+                    </a>
+                </div>
+
+
+                <!-- 3️⃣ Profil et compte -->
+                <div>
+                    <p class="uppercase text-gray-400 text-xs mt-6 mb-1">{% trans "Account" %}</p>
+                    <a href="#" class="block py-2 px-3 hover:bg-gray-700 rounded">{% trans "My Profile" %}</a>
+                    <a href="#" class="block py-2 px-3 hover:bg-gray-700 rounded">{% trans "My Card / Payment" %}</a>
+                    <a href="#" class="block py-2 px-3 hover:bg-gray-700 rounded">{% trans "Settings" %}</a>
+                </div>
+
+                <!-- 4️⃣ Support et sortie -->
+                <div>
+                    <p class="uppercase text-gray-400 text-xs mt-6 mb-1">{% trans "Support" %}</p>
+                    <a href="#" class="block py-2 px-3 hover:bg-gray-700 rounded">{% trans "Help" %}</a>
+                    <a href="#" class="block py-2 px-3 hover:bg-gray-700 rounded">{% trans "Contact Us" %}</a>
+                    <a href="{% url 'logout' %}" class="block py-2 px-3 hover:bg-gray-700 rounded">{% trans "Logout" %}</a>
+                </div>
+            </nav>
+        </div>
+
+        <!-- 🌐 Sélecteur de langue -->
+        <div class="px-6 py-4 border-t border-gray-700 text-sm flex justify-between">
+            <a href="/en/" class="hover:underline text-white">{% trans "English" %}</a>
+            <a href="/fr/" class="hover:underline text-white">{% trans "Français" %}</a>
+        </div>
+    </aside>
+
+    <!-- 🧾 CONTENU PRINCIPAL À DROITE -->
+    <main class="flex-1 p-8">
+        
+        <!-- 🎉 En-tête de bienvenue -->
+        <div class="flex justify-between items-center mb-8">
+            <div>
+                <h2 class="text-2xl font-bold">
+                    {% trans "Welcome to your contractor dashboard" %}, {{ user.first_name }} {{ user.last_name }} 👷
+                </h2>
+                <p class="text-gray-600 mt-1">{% trans "Manage your projects, missions and payments in one place." %}</p>
+            </div>
+
+            <!-- 👤 Photo de profil à droite -->
+            <div class="text-right">
+                <a href="#" class="inline-block">
+                    <img src="{{ user.profile_picture.url }}" alt="{% trans 'Profile picture' %}"
+                         class="w-12 h-12 rounded-full shadow">
+                    <p class="mt-1 text-sm font-medium text-gray-800">
+                        {{ user.first_name }} {{ user.last_name }}
+                    </p>
+                </a>
+
+                <!-- 🔁 Bouton de bascule entre rôles (visible seulement si utilisateur hybride) -->
+                {% if user.is_client and user.is_contractor %}
+                    <a href="{% url 'client-dashboard' %}" class="inline-block mt-2 ml-2 px-4 py-2 bg-teal-500 text-white text-sm rounded hover:bg-teal-600 transition">
+                        {% trans "Switch to Client mode" %}
+                    </a>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- 📦 Bloc 1 : Projets disponibles -->
+        <section class="mb-10">
+            <h3 class="text-xl font-semibold mb-4">{% trans "Available Projects" %}</h3>
+            <!-- 🔽 SECTION À REMPLIR DYNAMIQUEMENT PLUS TARD
+                 ➤ Tu devras afficher ici tous les projets ouverts à la soumission,
+                 filtrés par les spécialités de l’entrepreneur.
+                 ➤ Pour chaque projet, tu pourras afficher :
+                   - Le titre
+                   - Le budget estimé
+                   - La date limite
+                   - Un bouton "Submit a bid"
+            -->
+        </section>
+
+        <!-- 🛠 Bloc 2 : Missions en cours -->
+        <section class="mb-10">
+            <h3 class="text-xl font-semibold mb-4">{% trans "My Active Missions" %}</h3>
+            <!-- 🔽 SECTION À DYNAMISER PLUS TARD
+                 ➤ Tu afficheras ici les projets attribués à l’entrepreneur.
+                 ➤ Pour chaque mission :
+                   - Nom du client
+                   - Échéancier
+                   - Statut des jalons
+                   - Bouton "Upload document" ou "Mark as completed"
+            -->
+        </section>
+
+        <!-- 📁 Bloc 3 : Documents -->
+        <section class="mb-10">
+            <h3 class="text-xl font-semibold mb-4">{% trans "Project Documents" %}</h3>
+            <!-- 🔽 BLOC DOCUMENTAIRE
+                 ➤ Liste des documents liés aux missions (plans, contrats, photos)
+                 ➤ Option de téléversement / téléchargement
+            -->
+        </section>
+
+        <!-- 💰 Bloc 4 : Paiements -->
+        <section>
+            <h3 class="text-xl font-semibold mb-4">{% trans "Recent Payments" %}</h3>
+            <!-- 🔽 À COMPLÉTER LORS DE L’INTÉGRATION AVEC STRIPE / BASE DE DONNÉES
+                 ➤ Liste des paiements reçus
+                 ➤ Projets associés, dates et montants
+                 ➤ Filtrable par date ou statut (payé / en attente)
+            -->
+        </section>
+    </main>
+</div>
+{% endblock %}

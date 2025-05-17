@@ -1,0 +1,92 @@
+{% load i18n %}
+{% comment %} {# 📁 Fichier : core/templates/core/useful/base2.html
+   🧱 CE FICHIER EST UNE BASE MINIMALE POUR LES PAGES DE CONNEXION ET D’INSCRIPTION
+
+   📌 UTILISATION :
+   - Utilisé pour les pages : login, register, mot de passe oublié…
+   - Il contient uniquement :
+       - le logo de la plateforme (cliquable vers `/`)
+       - un sélecteur de langue (Fr / En)
+   - Il n’affiche PAS les boutons Login ou Sign up, car ils seraient redondants ici.
+
+   📌 STRUCTURE :
+   - Ce fichier est appelé par  extends "core/useful/base2.html"  dans les templates login/register
+   - Il inclut un `block content` central où le formulaire s’insère
+   - Le footer global est inclus également à la fin
+
+   📌 STYLE :
+   - Design simple et épuré avec TailwindCSS
+   - Parfait pour les formulaires sans distraction
+#} {% endcomment %}
+
+<!doctype html>
+<html lang="{{ LANGUAGE_CODE }}">
+<head>
+    <!-- 🧠 Configuration de base : encodage, responsive -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- 🎨 Intégration de TailwindCSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- 🏷️ Titre de l’onglet -->
+    <title>{% block title %}{% endblock %} | CONTRACT-IT</title>
+</head>
+
+<body>
+    <!-- 🔝 EN-TÊTE MINIMALISTE POUR FORMULAIRES -->
+    <nav class="py-6 px-6 flex justify-between items-center border-b border-gray-200 bg-white shadow-sm">
+        <!-- ⬅️ Logo Contract_it → clique = retour accueil -->
+        <a href="{% url 'index' %}"
+           class="text-xl font-bold text-gray-900 hover:text-gray-700 transition">
+            Contract_it
+        </a>
+
+        <!-- 🌐 Sélecteur de langue à droite -->
+        <div class="flex items-center space-x-3">
+            <!-- 🇫🇷 Français -->
+            <form id="lang-fr" action="{% url 'set_language' %}" method="post">
+                {% csrf_token %}
+                <input type="hidden" name="language" value="fr">
+                <input type="hidden" name="next" id="next-fr">
+                <button type="submit"
+                        class="px-3 py-1 text-sm font-medium border rounded
+                               hover:bg-gray-100 transition
+                               {% if LANGUAGE_CODE == 'fr' %}bg-gray-300{% endif %}">
+                    Français
+                </button>
+            </form>
+
+            <!-- 🇬🇧 English -->
+            <form id="lang-en" action="{% url 'set_language' %}" method="post">
+                {% csrf_token %}
+                <input type="hidden" name="language" value="en">
+                <input type="hidden" name="next" id="next-en">
+                <button type="submit"
+                        class="px-3 py-1 text-sm font-medium border rounded
+                               hover:bg-gray-100 transition
+                               {% if LANGUAGE_CODE == 'en' %}bg-gray-300{% endif %}">
+                    English
+                </button>
+            </form>
+        </div>
+    </nav>
+
+    <!-- 🌍 Script JS pour conserver la page actuelle après changement de langue -->
+    <script>
+        const currentPath = window.location.pathname;
+        const stripLangPrefix = (path) => path.replace(/^\/(fr|en)(\/|$)/, "/");
+        document.getElementById("next-fr").value = "/fr" + stripLangPrefix(currentPath);
+        document.getElementById("next-en").value = "/en" + stripLangPrefix(currentPath);
+    </script>
+
+    <!-- 📦 Contenu principal de la page (formulaires) -->
+    <main class="px-6 py-10">
+        {% block content %}
+        {% endblock %}
+    </main>
+
+    <!-- 📎 Footer partagé (même que les pages publiques) -->
+    {% include "core/useful/footer.html" %}
+</body>
+</html>

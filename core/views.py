@@ -1,116 +1,169 @@
-# core/views.py
-from django.utils.translation import gettext as _
-from django.shortcuts import render, redirect
-from django.contrib.auth import authenticate, login
-from accounts.models import CustomUser  # 🔁 Pour recharger l'utilisateur avec is_client/is_contractor
+# 📁 Fichier : core/views.py
+# 🎯 Ce fichier contient toutes les vues publiques de l’application `core`.
+# Chaque vue correspond à une page statique ou semi-dynamique visible par tous les utilisateurs :
+#    - page d’accueil (index)
+#    - pages d’information (how-to-hire, about, help, etc.)
+#
+# 👉 Ces vues sont appelées via les routes définies dans `core/urls.py`.
+# 👉 Elles utilisent `render()` pour retourner un fichier HTML à afficher dans le navigateur.
+# 👉 Aucune logique d’authentification, de JWT ou de sessions complexes ici.
+# 👉 Toutes les pages utilisent des templates HTML situés dans : `core/templates/core/` ou ses sous-dossiers.
 
+# ---------------------------------------------------------------------
+# 📦 IMPORTS DJANGO
+# ---------------------------------------------------------------------
+from django.shortcuts import render  # 🧱 Fonction native pour afficher un template HTML
+# ❌ Pas besoin ici de login, authenticate ou redirect — ce n’est pas une app d’authentification
 
+# ---------------------------------------------------------------------
+# 🌐 PAGE D’ACCUEIL — INDEX
+# ---------------------------------------------------------------------
 def index(request):
-    return render(request, 'core/index.html')  # Nouvelle landing publique
+    """
+    Affiche la page d’accueil publique de CONTRACT-IT.
+    C’est la page principale visible en accédant à `/`.
+    Elle peut contenir : section hero, témoignages, CTA, boutons d’inscription.
+    """
+    return render(request, 'core/index.html')
 
+# ---------------------------------------------------------------------
+# 🧑‍💼 PAGE : COMMENT EMBAUCHER UN ENTREPRENEUR
+# ---------------------------------------------------------------------
 def how_to_hire(request):
-    return render(request, 'core/in_footer/how_to_hire.html')  # Page explicative pour les clients : comment embaucher
+    """
+    Page explicative à destination des clients.
+    Contenu : comment fonctionne l'embauche sur la plateforme, les étapes, la sécurité.
+    """
+    return render(request, 'core/in_footer/how_to_hire.html')
 
+# ---------------------------------------------------------------------
+# 🧑‍🔧 PAGE : TROUVER DES TALENTS
+# ---------------------------------------------------------------------
 def talent_marketplace(request):
-    return render(request, 'core/in_footer/talent_marketplace.html')  # Présentation des talents disponibles
+    """
+    Page affichant les talents disponibles (ou leur catégorie).
+    Elle pourra plus tard contenir une recherche ou un filtrage dynamique.
+    """
+    return render(request, 'core/in_footer/talent_marketplace.html')
 
+# ---------------------------------------------------------------------
+# 📦 PAGE : CATALOGUE DE PROJETS
+# ---------------------------------------------------------------------
 def project_catalog(request):
-    return render(request, 'core/in_footer/project_catalog.html')  # Catalogue de projets ou d'exemples inspirants
+    """
+    Page listant des exemples de projets réalisés.
+    Objectif : inspirer les clients et leur montrer le type de services proposés.
+    """
+    return render(request, 'core/in_footer/project_catalog.html')
 
+# ---------------------------------------------------------------------
+# 👷 PAGE : COMMENT TROUVER DU TRAVAIL (POUR ENTREPRENEURS)
+# ---------------------------------------------------------------------
 def how_to_find_work(request):
-    return render(request, 'core/in_footer/how_to_find_work.html')  # Aide pour les entrepreneurs : comment trouver du travail
+    """
+    Guide destiné aux entrepreneurs pour les aider à bien utiliser la plateforme :
+    - comment postuler
+    - comment se démarquer
+    - comment gérer les jalons
+    """
+    return render(request, 'core/in_footer/how_to_find_work.html')
 
+# ---------------------------------------------------------------------
+# 🆘 PAGE : AIDE / CENTRE DE SUPPORT
+# ---------------------------------------------------------------------
 def help_support(request):
-    return render(request, 'core/in_footer/help.html')  # Centre d'aide ou FAQ
+    """
+    Page centrale regroupant les questions fréquentes (FAQ) et informations générales.
+    Peut être enrichie plus tard avec une base de connaissances dynamique.
+    """
+    return render(request, 'core/in_footer/help.html')
 
+# ---------------------------------------------------------------------
+# ✉️ PAGE : CONTACTEZ-NOUS
+# ---------------------------------------------------------------------
 def contact(request):
-    return render(request, 'core/in_footer/contact.html')  # Page de contact général (ou lien vers support)
+    """
+    Page avec les coordonnées de contact ou formulaire simple de message.
+    Peut inclure : adresse email, lien vers support, formulaire de contact plus tard.
+    """
+    return render(request, 'core/in_footer/contact.html')
 
+# ---------------------------------------------------------------------
+# 🔒 PAGE : CONFIANCE ET SÉCURITÉ
+# ---------------------------------------------------------------------
 def trust_safety(request):
-    return render(request, 'core/in_footer/trust_safety.html')  # Règles de sécurité, politique de confiance
+    """
+    Page expliquant les mesures de sécurité de CONTRACT-IT.
+    Elle rassure les utilisateurs (clients et entrepreneurs) sur la confidentialité et la modération.
+    """
+    return render(request, 'core/in_footer/trust_safety.html')
 
+# ---------------------------------------------------------------------
+# 🏢 PAGE : À PROPOS
+# ---------------------------------------------------------------------
 def about(request):
-    return render(request, 'core/in_footer/about.html')  # Page "À propos" de la compagnie
+    """
+    Page de présentation de la plateforme, de l'équipe, ou de la mission de l’entreprise.
+    Texte marketing + crédibilité.
+    """
+    return render(request, 'core/in_footer/about.html')
 
+# ---------------------------------------------------------------------
+# ⚖️ PAGE : CONDITIONS D’UTILISATION
+# ---------------------------------------------------------------------
 def terms(request):
-    return render(request, 'core/in_footer/terms.html')  # Conditions d'utilisation de la plateforme
+    """
+    Conditions générales d’utilisation de la plateforme.
+    Obligatoire pour la conformité juridique.
+    """
+    return render(request, 'core/in_footer/terms.html')
 
+# ---------------------------------------------------------------------
+# 🔐 PAGE : POLITIQUE DE CONFIDENTIALITÉ
+# ---------------------------------------------------------------------
 def privacy(request):
-    return render(request, 'core/in_footer/privacy.html')  # Politique de confidentialité
+    """
+    Politique expliquant comment les données personnelles sont traitées et protégées.
+    Obligatoire pour être conforme au RGPD / Loi 25 (Québec).
+    """
+    return render(request, 'core/in_footer/privacy.html')
 
+# ---------------------------------------------------------------------
+# 🍪 PAGE : COOKIES
+# ---------------------------------------------------------------------
 def cookies(request):
-    return render(request, 'core/in_footer/cookies.html')  # Paramètres ou politique sur les cookies
+    """
+    Page expliquant le fonctionnement des cookies sur le site.
+    Peut inclure la gestion du consentement ou les cookies tiers.
+    """
+    return render(request, 'core/in_footer/cookies.html')
 
+# ---------------------------------------------------------------------
+# 🧏 PAGE : ACCESSIBILITÉ
+# ---------------------------------------------------------------------
 def accessibility(request):
-    return render(request, 'core/in_footer/accessibility.html')  # Accessibilité du site pour tous les utilisateurs
+    """
+    Page expliquant l’engagement de CONTRACT-IT pour l’accessibilité du site.
+    Exemples : compatibilité lecteurs d’écran, navigation clavier, contraste.
+    """
+    return render(request, 'core/in_footer/accessibility.html')
 
-def signup(request):
-    return render(request, 'core/signup.html')
+# ---------------------------------------------------------------------
+# 🌍 REDIRECTION AUTOMATIQUE VERS LA LANGUE PAR DÉFAUT
+# ---------------------------------------------------------------------
+from django.http import HttpResponseRedirect
+from django.utils.translation import get_language
 
-def login_view(request):
-    # 👤 Si l'utilisateur soumet le formulaire (méthode POST)
-    if request.method == "POST":
-        # 🔐 Récupère les données du formulaire
-        username = request.POST.get("username")
-        password = request.POST.get("password")
+def redirect_to_language_home(request):
+    """
+    Redirige automatiquement l’utilisateur vers la langue courante détectée par Django.
 
-        # 🔍 Authentifie l'utilisateur (renvoie None si mauvais identifiants)
-        user = authenticate(request, username=username, password=password)
+    ➤ Exemple :
+        - Si la langue par défaut est le français → redirige vers `/fr/`
+        - Si l’utilisateur a sélectionné l’anglais → redirige vers `/en/`
 
-        if user is not None:
-            # ✅ Recharge l'objet CustomUser avec tous les champs (is_client, is_contractor, etc.)
-            user = CustomUser.objects.get(pk=user.pk)
-
-            # 🔐 Connecte l'utilisateur via session Django
-            login(request, user)
-
-            # 🎯 Redirige automatiquement selon le rôle
-            if user.is_client:
-                return redirect('/dashboard/client/')
-            elif user.is_contractor:
-                return redirect('/dashboard/contractor/')
-            else:
-                return redirect('/')  # Fallback si pas de rôle (admin ?)
-
-        else:
-            # ❌ Si l'authentification échoue, on affiche une erreur
-            return render(request, 'core/login.html', {
-                'error': "Identifiants invalides. Veuillez réessayer."
-            })
-
-    # 👁️ Affiche simplement le formulaire si GET
-    return render(request, 'core/login.html')
-
-# 💼 Dashboard HTML pour les entrepreneurs (non-API)
-def contractor_dashboard(request):
-    return render(request, 'core/contractor_dashboard.html', {
-        'user': request.user  # ✅ Passe l'objet CustomUser au template
-    })
-
-from django.shortcuts import render
-from django.contrib.auth.decorators import login_required
-from projects.models import Project
-from bids.models import Bid
-
-# ✅ Dashboard HTML pour client
-@login_required
-def client_dashboard(request):
-    user = request.user
-
-    # 🔍 Récupère les projets publiés par le client
-    projects = Project.objects.filter(client=user)
-
-    # 🧮 Prépare la liste avec le nombre de bids
-    project_data = []
-    for project in projects:
-        bids_count = Bid.objects.filter(project=project).count()
-        project_data.append({
-            'project': project,
-            'bids_count': bids_count,
-        })
-
-    return render(request, 'core/client_dashboard.html', {
-        'projects_with_bids': project_data
-    })
-
-
+    Cette vue est utilisée à la racine `/` pour éviter une erreur 404
+    et orienter vers la bonne version localisée du site.
+    """
+    language = get_language() or "fr"  # Par défaut : français
+    return HttpResponseRedirect(f"/{language}/")

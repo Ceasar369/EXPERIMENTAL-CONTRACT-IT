@@ -1,0 +1,39 @@
+# ---------------------------------------------------------------------
+# 📌 NOTES POUR LA SUITE — APP ACCOUNTS
+#
+# ✅ L’application accounts couvre maintenant l’essentiel :
+#    - inscription client / entrepreneur (avec champs dynamiques),
+#    - connexion sécurisée,
+#    - redirection automatique selon rôle,
+#    - dashboards HTML personnalisés pour chaque rôle,
+#    - sidebar fonctionnelle avec changement de langue et navigation claire,
+#    - bouton de bascule pour utilisateurs hybrides (client + entrepreneur).
+#
+# 🔧 Ce qu’il reste à implémenter plus tard :
+#
+# 1. 🔐 Intégration de l’authentification OAuth (Google, Apple, Facebook, LinkedIn)
+#    - Ajouter les boutons sur la page login / register
+#    - Configurer redirections OAuth + callbacks
+#
+# 2. 🖼️ Gestion de la photo de profil
+#    - Ajouter un champ "Upload profile picture" dans le formulaire d’inscription
+#    - Utiliser une image par défaut si aucune photo n’est fournie
+#
+# 3. 🔁 Redirections internes du dashboard
+#    - Connecter tous les liens de la sidebar à des vraies pages
+#    - Créer les vues associées (notifications, messages, carte de paiement, settings, etc.)
+#
+# 4. 🧩 Pages communes à plusieurs rôles
+#    - Pages comme Help, Contact Us peuvent être placées dans `core/` pour être accessibles par tous
+#    - Ajouter des routes partagées dans `core/urls.py` ou un futur `support/views.py`
+#
+# 5. 🌐 Gestion complète des préférences utilisateurs
+#    - Modifier la langue par défaut (stockée en base)
+#    - Choix du dashboard par défaut pour les utilisateurs hybrides
+#
+# 6. 📬 Notifications et messagerie
+#    - Activer plus tard l’onglet "Messages"
+#    - Ajouter alertes visuelles et système de notification
+
+# 💡 Ce bloc sert de rappel pour reprendre intelligemment l’application accounts
+#    une fois que core, bids et projects auront été structurés.

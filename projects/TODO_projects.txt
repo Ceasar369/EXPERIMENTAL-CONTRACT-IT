@@ -1,0 +1,45 @@
+# ---------------------------------------------------------------------
+# 📌 NOTES POUR LA SUITE — APP PROJECTS
+#
+# ✅ L’application projects couvre désormais les fonctions de base :
+#    - création d’un projet (formulaire client),
+#    - affichage public des projets pour entrepreneurs,
+#    - affichage détaillé d’un projet,
+#    - liste personnelle des projets publiés (client),
+#    - page d’édition des projets existants,
+#    - vue des projets attribués (côté entrepreneur),
+#    - affichage des jalons liés à chaque projet.
+#
+# 🔧 Ce qu’il reste à implémenter ou améliorer plus tard :
+#
+# 1. 🧩 Améliorer la gestion des jalons
+#    - Ajouter la possibilité de créer/supprimer dynamiquement des jalons via JavaScript
+#    - Ajouter une validation JavaScript côté client (ex : somme des jalons = budget)
+#    - Permettre à un client de marquer un jalon comme complété ou validé
+#    - Préparer la logique pour lier les paiements aux jalons
+
+# 2. 💬 Ajouter la messagerie liée à chaque projet
+#    - Activer la messagerie dans la page `project_detail.html`
+#    - Permettre à un entrepreneur de poser des questions au client
+
+# 3. 📄 Ajouter les documents
+#    - Permettre au client d’ajouter des fichiers ou PDF (plans, photos)
+#    - Ajouter un champ `documents` dans le modèle `Project`
+#    - Créer une section "Documents" visible par le client et l’entrepreneur
+
+# 4. 🧠 Intégration IA (plus tard)
+#    - Intégrer GPT pour suggestion automatique de jalons, description
+#    - Ajout d’un bouton "Aide à la rédaction" dans le formulaire
+
+# 5. 🔍 Recherche et filtres avancés
+#    - Ajouter des filtres supplémentaires dans `project_list.html`
+#    - Par statut, fourchette de budget, spécialité, etc.
+#    - Ajouter pagination si plus de 10 projets
+
+# 6. 🔐 Permissions renforcées
+#    - Vérifier que seuls les clients voient `my_projects` et peuvent modifier
+#    - Vérifier que seuls les entrepreneurs accèdent à `find_jobs` et `awarded_projects`
+
+# 💡 Ce fichier sert à reprendre intelligemment le développement de l'app projects,
+#    une fois les apps core, accounts et bids complétées.
+# ---------------------------------------------------------------------

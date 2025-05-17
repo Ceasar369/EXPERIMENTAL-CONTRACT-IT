@@ -1,109 +1,231 @@
-# projects/models.py
+# ---------------------------------------------------------------------
+# 📁 Fichier : projects/models.py
+#
+# 🏗️ Modèles liés aux projets CONTRACT-IT
+#
+# Ce fichier contient deux classes de modèles :
+#
+# 1. 🔹 `Project` :
+#    Représente un projet publié par un client (ex : rénovation salle de bain).
+#    Contient toutes les informations nécessaires à sa création, sa gestion
+#    et son suivi : client, entrepreneur, budget, deadline, statut, etc.
+#
+# 2. 🔹 `Milestone` :
+#    Représente une étape (jalon) dans un projet.
+#    Chaque jalon correspond à une tâche spécifique (ex : démolition, carrelage),
+#    avec son propre budget, échéance et statut de validation.
+#    Le paiement d’un projet peut être conditionné à l’approbation de ses jalons.
+#
+# Ces deux modèles sont utilisés :
+#    - dans l’interface admin,
+#    - dans les vues HTML classiques (liste, création, détail),
+#    - plus tard, dans les APIs REST si activées.
+# ---------------------------------------------------------------------
 
-
+# 🔁 Imports Django
 from django.db import models
-from accounts.models import CustomUser  # On utilise le modèle utilisateur personnalisé
 
-# 🏗️ Modèle représentant un projet publié sur CONTRACT-IT
+# 🔁 Import du modèle utilisateur personnalisé
+from accounts.models import CustomUser
+
+
+# ---------------------------------------------------------------------
+# 🧱 Modèle principal : Project
+# ---------------------------------------------------------------------
 class Project(models.Model):
-    # 🏷️ Liste des statuts possibles pour un projet
+    """
+    Représente un projet publié par un client sur la plateforme CONTRACT-IT.
+    Un projet peut être visible publiquement, ou attribué à un entrepreneur
+    pour suivi et gestion. Il évolue dans le temps selon son statut.
+    """
+
+    # -----------------------------------------------------------------
+    # 🔁 Statuts possibles pour un projet (menu déroulant dans l’admin)
+    # -----------------------------------------------------------------
     STATUS_CHOICES = [
-        ('active', 'Actif'),         # Projet visible et ouvert aux offres
-        ('in_progress', 'En cours'), # Projet attribué à un entrepreneur
-        ('completed', 'Terminé'),    # Projet terminé
-        ('cancelled', 'Annulé'),     # Projet annulé
+        ('active', 'Actif'),          # Projet publié, ouvert aux offres
+        ('in_progress', 'En cours'),  # Projet attribué à un entrepreneur
+        ('completed', 'Terminé'),     # Projet complété
+        ('cancelled', 'Annulé'),      # Projet annulé ou retiré
     ]
 
-    # 🔒 Détermine si le projet est visible publiquement ou restreint au client + contractor
+    # -----------------------------------------------------------------
+    # 🔒 Champ : visibilité publique ou privée
+    # -----------------------------------------------------------------
     is_public = models.BooleanField(
         default=True,
-        help_text="Le projet est-il visible par tous (True) ou privé (False)"
+        help_text="Le projet est-il visible publiquement ? (True = tous les entrepreneurs peuvent le voir)"
     )
 
-
-    # 👤 Le client qui a créé ce projet (doit être un utilisateur avec is_client = True)
+    # -----------------------------------------------------------------
+    # 👤 Client qui a publié le projet
+    # -----------------------------------------------------------------
     client = models.ForeignKey(
         CustomUser,
-        on_delete=models.SET_NULL,  # Si le client est supprimé, on garde le projet mais client devient NULL
-        related_name='projects_posted',  # Permet de faire client.projects_posted.all()
-        limit_choices_to={'is_client': True},
-        null=True,  # ✅ Important pour que SET_NULL soit autorisé
-        blank=True,  # ✅ Pour le support dans les formulaires admin
-        help_text="Client qui a publié ce projet"
-    )
-
-    # 👷 L'entrepreneur sélectionné pour ce projet (optionnel au début)
-    contractor = models.ForeignKey(
-        CustomUser,
-        on_delete=models.SET_NULL,  # Si l'entrepreneur est supprimé, on garde le projet mais contractor devient NULL
+        on_delete=models.SET_NULL,          # Si le client est supprimé → champ devient NULL
         null=True,
         blank=True,
-        related_name='projects_awarded',  # Permet de faire contractor.projects_awarded.all()
-        limit_choices_to={'is_contractor': True},
-        help_text="Entrepreneur engagé pour ce projet (facultatif)"
+        related_name='projects_posted',     # Permet d’appeler client.projects_posted.all()
+        limit_choices_to={'is_client': True},  # Restreint aux utilisateurs clients
+        help_text="Utilisateur (client) qui a publié ce projet"
     )
 
-    # 📝 Titre court du projet (visible dans les listes)
+    # -----------------------------------------------------------------
+    # 👷 Entrepreneur sélectionné (facultatif au début)
+    # -----------------------------------------------------------------
+    contractor = models.ForeignKey(
+        CustomUser,
+        on_delete=models.SET_NULL,          # Si le contractor est supprimé → champ devient NULL
+        null=True,
+        blank=True,
+        related_name='projects_awarded',    # Permet d’appeler contractor.projects_awarded.all()
+        limit_choices_to={'is_contractor': True},  # Restreint aux utilisateurs entrepreneurs
+        help_text="Utilisateur (entrepreneur) sélectionné pour ce projet (facultatif)"
+    )
+
+    # -----------------------------------------------------------------
+    # 📌 Informations principales du projet
+    # -----------------------------------------------------------------
+
+    # 🏷️ Titre du projet
     title = models.CharField(
         max_length=255,
-        help_text="Titre du projet (ex. : Rénovation cuisine)"
+        help_text="Titre clair et court du projet (ex. : Rénovation salle de bain)"
     )
 
-    # 📄 Description complète des travaux à effectuer
+    # 📄 Description détaillée
     description = models.TextField(
-        help_text="Détails complets fournis par le client"
+        help_text="Description complète des travaux à réaliser"
     )
 
-    # 🛠️ Type ou catégorie de projet (ex. : toiture, peinture…)
+    # 🔧 Catégorie ou type de service (ex : toiture, plomberie…)
     category = models.CharField(
         max_length=100,
-        help_text="Spécialité demandée ou domaine du projet"
+        help_text="Type de projet ou domaine requis (ex : Électricité, Peinture)"
     )
 
-    # 📍 Lieu où le projet doit être réalisé
+    # 📍 Localisation du chantier (ville, quartier ou adresse partielle)
     location = models.CharField(
         max_length=255,
-        help_text="Adresse, ville ou région du chantier"
+        help_text="Lieu d'exécution des travaux (ville, région, etc.)"
     )
 
-    # 💰 Budget prévu par le client (en dollars)
+    # 💰 Budget estimé (peut être une fourchette future)
     budget = models.DecimalField(
-        max_digits=10,
+        max_digits=10,  # Jusqu’à 9 999 999.99
         decimal_places=2,
-        help_text="Budget estimé pour la réalisation"
+        help_text="Budget estimé ou alloué pour le projet (en dollars CAD)"
     )
 
-    # 📆 Date limite souhaitée pour la fin du projet
+    # 📆 Échéance souhaitée
     deadline = models.DateField(
-        help_text="Date à laquelle le projet doit idéalement être terminé"
+        help_text="Date limite souhaitée pour l’achèvement du projet"
     )
 
-    # 🔄 Statut du projet (actif, en cours, terminé ou annulé)
+    # -----------------------------------------------------------------
+    # 🔄 Suivi du cycle de vie
+    # -----------------------------------------------------------------
     status = models.CharField(
         max_length=20,
         choices=STATUS_CHOICES,
         default='active',
-        help_text="État actuel du projet dans le cycle de vie"
+        help_text="Statut actuel du projet (actif, en cours, terminé ou annulé)"
     )
 
-    # 🤖 Indique si l'IA a aidé à rédiger ce projet
+    # 🤖 Généré par IA ?
     ai_drafted = models.BooleanField(
         default=False,
-        help_text="Généré automatiquement par l'assistant IA ?"
+        help_text="Ce projet a-t-il été rédigé automatiquement par l’assistant IA ?"
     )
 
-    # 🕒 Date de création automatique du projet
+    # 🕒 Date de publication initiale (création)
     created_at = models.DateTimeField(
         auto_now_add=True,
-        help_text="Date à laquelle le projet a été publié"
+        help_text="Date de création automatique lors de la publication"
     )
 
-    # ✏️ Mise à jour automatique à chaque modification
+    # ✏️ Date de dernière mise à jour
     updated_at = models.DateTimeField(
         auto_now=True,
-        help_text="Dernière mise à jour des informations du projet"
+        help_text="Mise à jour automatique à chaque modification"
     )
 
+    # -----------------------------------------------------------------
+    # 🔁 Représentation lisible d’un projet
+    # -----------------------------------------------------------------
     def __str__(self):
-        # 🔁 Représentation lisible du projet
+        # Affiche le titre + statut dans l’admin ou en debug
         return f"{self.title} ({self.status})"
+
+    # -----------------------------------------------------------------
+    # ✅ Nombre total de jalons associés (utile dans l'admin ou pour tri)
+    # -----------------------------------------------------------------
+    @property
+    def milestone_count(self):
+        """
+        Retourne le nombre de jalons liés à ce projet.
+        Pratique pour affichage dans l’admin ou les templates HTML.
+        """
+        return self.milestones.count()
+
+
+# 📁 Fichier : projects/models.py (ou un fichier milestones.py si séparé)
+class Milestone(models.Model):
+    """
+    Représente un jalon (étape) dans un projet CONTRACT-IT.
+    Chaque jalon peut être validé, payé et documenté indépendamment.
+    """
+
+    # 🔗 Projet associé à ce jalon
+    project = models.ForeignKey(
+        Project,
+        on_delete=models.CASCADE,  # Si le projet est supprimé → tous ses jalons aussi
+        related_name='milestones',
+        help_text="Projet auquel ce jalon est rattaché"
+    )
+
+    # 🏷️ Nom ou titre du jalon (ex : Démolition, Installation électrique…)
+    title = models.CharField(
+        max_length=255,
+        help_text="Titre du jalon"
+    )
+
+    # 📝 Détails du jalon
+    description = models.TextField(
+        blank=True,
+        help_text="Détails précis sur les travaux associés à ce jalon"
+    )
+
+    # 💰 Montant prévu pour ce jalon
+    amount = models.DecimalField(
+        max_digits=10,
+        decimal_places=2,
+        help_text="Montant à verser à la complétion de ce jalon"
+    )
+
+    # 📅 Date prévue de livraison
+    due_date = models.DateField(
+        help_text="Date limite souhaitée pour compléter ce jalon"
+    )
+
+    # ✅ Statut du jalon
+    STATUS_CHOICES = [
+        ('pending', 'En attente'),
+        ('in_progress', 'En cours'),
+        ('completed', 'Terminé'),
+        ('approved', 'Approuvé'),
+        ('paid', 'Payé'),
+    ]
+    status = models.CharField(
+        max_length=20,
+        choices=STATUS_CHOICES,
+        default='pending',
+        help_text="Statut actuel du jalon"
+    )
+
+    # 🕒 Suivi des dates
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f"{self.title} — {self.project.title}"

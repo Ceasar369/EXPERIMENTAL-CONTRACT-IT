@@ -1,94 +1,63 @@
-# bids/views.py
+# ---------------------------------------------------------------------
+# 📁 Fichier : bids/views.py
+#
+# 🎯 Ce fichier regroupe toutes les vues HTML liées aux offres (bids)
+#     soumises par les entrepreneurs sur des projets CONTRACT-IT.
+#
+# Les vues permettent :
+#   - de soumettre une bid via un formulaire (SubmitBidFormView),
+#   - d’afficher une page de confirmation après soumission,
+#   - de voir les bids reçues pour un projet donné (client),
+#   - de voir toutes les bids soumises par un entrepreneur connecté.
+#
+# Aucune API, aucun JWT : uniquement du Django HTML classique.
+# ---------------------------------------------------------------------
 
-from rest_framework import generics, permissions, status
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from .models import Bid
-from .serializers import BidSerializer
-from .permissions import IsContractor, IsProjectOwner
-
-
-# ✅ Vue pour soumettre une bid (uniquement les entrepreneurs)
-class SubmitBidView(generics.CreateAPIView):
-    serializer_class = BidSerializer
-    permission_classes = [permissions.IsAuthenticated, IsContractor]
-
-    def perform_create(self, serializer):
-        # 🔒 On s'assure que le contracteur est bien l'utilisateur connecté
-        serializer.save(contractor=self.request.user)
-
-
-# ✅ Vue pour lister les bids reçus sur un projet donné (visible uniquement par le client propriétaire)
-class BidsReceivedView(generics.ListAPIView):
-    serializer_class = BidSerializer
-    permission_classes = [permissions.IsAuthenticated, IsProjectOwner]
-
-    def get_queryset(self):
-        # 🔍 On récupère les offres (bids) liées à un projet spécifique
-        project_id = self.kwargs.get('project_id')
-        return Bid.objects.filter(project__id=project_id)
+# ---------------------------------------------------------------------
+# 🔁 IMPORTS DJANGO
+# ---------------------------------------------------------------------
+from django.contrib.auth.decorators import login_required             # ✅ Pour protéger les vues
+from django.utils.decorators import method_decorator                 # ✅ Pour protéger les classes-based views
+from django.shortcuts import render, redirect, get_object_or_404     # 🔧 Fonctions de base
+from django.views import View                                        # 🧱 Vue générique classique
+from django.http import HttpResponseForbidden
 
 
-# ✅ Vue pour accepter une offre (bid) – client seulement
-class AcceptBidView(APIView):
-    permission_classes = [permissions.IsAuthenticated, IsProjectOwner]
-
-    def post(self, request, bid_id):
-        try:
-            # 🔍 On récupère le bid à partir de son ID
-            bid = Bid.objects.get(id=bid_id)
-            project = bid.project
-
-            # 🔒 On vérifie que l'utilisateur est bien le client propriétaire du projet
-            if project.client != request.user:
-                return Response({'detail': 'Unauthorized'}, status=status.HTTP_403_FORBIDDEN)
-
-            # ✅ Marquer le bid comme accepté
-            bid.status = 'accepted'
-            bid.save()
-
-            # ❌ Marquer tous les autres bids comme rejetés (sauf celui accepté)
-            Bid.objects.filter(project=project).exclude(id=bid_id).update(status='rejected')
-
-            # 🔁 Mise à jour du projet : assigner le contracteur, changer le statut, rendre privé
-            project.contractor = bid.contractor
-            project.status = 'in_progress'
-            project.is_public = False
-            project.save()
-
-            return Response({'detail': 'Bid accepted and project updated.'}, status=status.HTTP_200_OK)
-
-        except Bid.DoesNotExist:
-            return Response({'detail': 'Bid not found.'}, status=status.HTTP_404_NOT_FOUND)
+# ---------------------------------------------------------------------
+# 🔁 IMPORTS INTERNES
+# ---------------------------------------------------------------------
+from .models import Bid                                              # 📦 Modèle Bid
+from projects.models import Project                                  # 🔗 Modèle Project
 
 
-# ✅ Vue complète GET + POST pour soumettre une bid
-from django.views import View
-from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib.auth.decorators import login_required
-from django.utils.decorators import method_decorator
-from .models import Bid
-from projects.models import Project
-
+# ---------------------------------------------------------------------
+# 1️⃣ SubmitBidFormView (Vue class-based) : GET + POST
+# ---------------------------------------------------------------------
 @method_decorator(login_required, name='dispatch')
 class SubmitBidFormView(View):
+    """
+    Vue de soumission de bid, accessible uniquement aux entrepreneurs connectés.
+
+    - GET : affiche le formulaire de proposition pour un projet donné.
+    - POST : enregistre les données et redirige vers confirmation.
+    """
+
     def get(self, request, project_id):
-        # 🔍 On récupère le projet public actif correspondant
+        # 🔎 On récupère le projet actif et public ciblé
         project = get_object_or_404(Project, id=project_id, is_public=True, status='active')
+
+        # 🧾 On affiche la page avec les détails du projet pour soumission
         return render(request, 'bids/submit_bid_form.html', {'project': project})
 
     def post(self, request, project_id):
-        # 🔁 Même logique de récupération du projet
+        # 🔍 On récupère le même projet (validation sécurité)
         project = get_object_or_404(Project, id=project_id, is_public=True, status='active')
 
-        # 🧾 Données récupérées depuis le formulaire POST
-        title = request.POST.get("title")
-        description = request.POST.get("description")
+        # 📤 Données envoyées via le formulaire HTML
         amount = request.POST.get("amount")
-        deadline = request.POST.get("deadline")
         message = request.POST.get("message")
 
-        # ✅ Création de la proposition
+        # ✅ On crée une nouvelle bid en base de données
         Bid.objects.create(
             project=project,
             contractor=request.user,
@@ -96,35 +65,104 @@ class SubmitBidFormView(View):
             message=message
         )
 
-        # 🚀 Redirection vers la page de confirmation
+        # 🚀 Redirection vers page de confirmation
         return redirect('bid-confirmation')
 
 
-# ✅ Vue HTML simple de confirmation après soumission d'une bid
+# ---------------------------------------------------------------------
+# 2️⃣ bid_confirmation_view : vue simple
+# ---------------------------------------------------------------------
+@login_required
 def bid_confirmation_view(request):
+    """
+    Affiche un message de confirmation après avoir soumis une bid.
+    """
     return render(request, 'bids/bid_confirmation.html')
 
-# bids/views.py
 
-from django.contrib.auth.decorators import login_required
-from django.shortcuts import render, get_object_or_404
-from .models import Bid
-from projects.models import Project
-
-# ✅ Vue HTML pour afficher tous les bids reçus sur un projet spécifique
+# ---------------------------------------------------------------------
+# 3️⃣ project_bids_view : liste des bids reçues pour un projet donné
+# ---------------------------------------------------------------------
 @login_required
 def project_bids_view(request, project_id):
-    # 🧱 On récupère le projet ou on renvoie 404 si introuvable
+    """
+    Permet au client propriétaire d’un projet de voir toutes les bids reçues.
+    """
+
+    # 🔍 On récupère le projet ciblé ou erreur 404
     project = get_object_or_404(Project, pk=project_id)
 
-    # 🔐 Sécurité : seul le client owner peut voir les bids de ce projet
+    # 🔐 Vérification : seul le client propriétaire peut voir les bids
     if request.user != project.client:
         return render(request, "core/403.html", status=403)
 
-    # 📦 On récupère tous les bids associés à ce projet
+    # 📦 On récupère toutes les bids associées
     bids = Bid.objects.filter(project=project).order_by('-created_at')
 
+    # 📄 On envoie les données au template HTML
     return render(request, 'bids/project_bids.html', {
         'project': project,
         'bids': bids,
     })
+
+
+# ---------------------------------------------------------------------
+# 4️⃣ my_bids_view : toutes les bids de l’entrepreneur connecté
+# ---------------------------------------------------------------------
+
+from django.contrib.auth.decorators import login_required
+from django.utils.translation import gettext as _
+from django.shortcuts import render
+from .models import Bid
+
+@login_required
+def my_bids_view(request):
+    """
+    Affiche tous les bids soumis par l'utilisateur connecté
+    (doit être un entrepreneur). Liste triée du plus récent au plus ancien.
+    """
+
+    # 🔒 Vérifie que l’utilisateur est bien un entrepreneur
+    if not request.user.is_contractor:
+        return render(request, "core/403.html", status=403)
+
+    # 🔍 Récupère toutes les bids liées à cet entrepreneur
+    bids = Bid.objects.filter(contractor=request.user).order_by('-created_at')
+
+    # 📄 Affiche la page avec les données
+    return render(request, 'bids/my_bids.html', {
+        'bids': bids
+    })
+
+
+# ---------------------------------------------------------------------
+# ---------------------------------------------------------------------
+@login_required
+def accept_bid_view(request, bid_id):
+    """
+    Permet au client d'accepter une proposition d'un entrepreneur.
+    Change le statut de la bid de 'pending' à 'accepted', puis redirige
+    vers une page de confirmation temporaire.
+    """
+
+    bid = get_object_or_404(Bid, id=bid_id)
+
+    # 🔒 Vérifie que c’est bien le client propriétaire du projet
+    if bid.project.client != request.user:
+        return HttpResponseForbidden("⛔ Accès refusé.")
+
+    # 🔁 Change le statut de la bid
+    bid.status = 'accepted'
+    bid.save()
+
+    # 📨 (plus tard) une logique ici pour activer une messagerie
+
+    # ✅ Redirige vers une page de confirmation
+    return redirect('bid-accepted-confirmation')
+
+@login_required
+def bid_accepted_confirmation(request):
+    """
+    Affiche une simple page de confirmation que la bid a été acceptée.
+    """
+    return render(request, 'bids/bid_accepted_confirmation.html')

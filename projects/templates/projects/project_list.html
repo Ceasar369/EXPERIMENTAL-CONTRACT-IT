@@ -1,30 +1,99 @@
-{% extends 'core/base2.html' %}
+{% extends "core/useful/base2.html" %}
 {% load i18n %}
-{# projects/templates/projects/project_list.html #}
 
-{% block title %}{% trans "Find a Job" %}{% endblock %}
+{% comment %} {# ---------------------------------------------------------------------
+  📄 Fichier : project_list.html
+  📂 Emplacement : projects/templates/projects/project_list.html
+
+  🎯 Affiche tous les projets publics disponibles pour les entrepreneurs.
+     Possibilité de filtrer les projets selon :
+        - le budget minimum / maximum
+        - la localisation (ville)
+        - la catégorie (type de travaux)
+
+  📬 Les filtres sont envoyés via GET → l’URL sera enrichie de ?budget_min=...&location=...
+  🧠 Les filtres sélectionnés restent visibles dans le formulaire après soumission.
+--------------------------------------------------------------------- #} {% endcomment %}
+
+{% block title %}{% trans "Available Projects" %}{% endblock %}
 
 {% block content %}
-<h2 class="text-2xl font-bold mb-6 text-center">{% trans "Available Projects" %}</h2>
+<div class="flex flex-col lg:flex-row max-w-7xl mx-auto gap-6">
+    
+    <!-- ======================= 🧩 COLONNE DE FILTRES ======================= -->
+    <aside class="lg:w-1/4 w-full bg-white p-6 shadow rounded-md border border-gray-200">
 
-{% if projects %}
-    <ul class="space-y-4">
-        {% for project in projects %}
-        <li class="border p-4 rounded-md bg-white shadow-sm">
-            <h3 class="text-xl font-semibold">{{ project.title }}</h3>
-            <p class="text-sm text-gray-600">{{ project.description|truncatechars:100 }}</p>
-            <p class="text-sm"><strong>{% trans "Category" %}:</strong> {{ project.category }}</p>
-            <p class="text-sm"><strong>{% trans "Budget" %}:</strong> ${{ project.budget }}</p>
-            <p class="text-sm"><strong>{% trans "Location" %}:</strong> {{ project.location }}</p>
-            <p class="text-sm"><strong>{% trans "Deadline" %}:</strong> {{ project.deadline }}</p>
-            <a href="{% url 'project_detail_html' project.id %}" class="text-teal-600 hover:underline mt-2 inline-block">
-                {% trans "View Details" %}
-            </a>
+        <!-- 🔍 Titre section filtres -->
+        <h3 class="text-lg font-bold mb-4">{% trans "Filter Projects" %}</h3>
 
-        </li>
-        {% endfor %}
-    </ul>
-{% else %}
-    <p class="text-center text-gray-500">{% trans "No projects available at the moment." %}</p>
-{% endif %}
+        <!-- 🔽 FORMULAIRE DE FILTRAGE -->
+        <form method="get" action="">
+
+            <!-- 💰 Budget minimum -->
+            <label for="budget_min" class="block text-sm font-medium mb-1">{% trans "Min Budget ($)" %}</label>
+            <input type="number" step="0.01" name="budget_min" id="budget_min" class="w-full p-2 border rounded mb-4"
+                value="{{ request.GET.budget_min }}">
+
+            <!-- 💰 Budget maximum -->
+            <label for="budget_max" class="block text-sm font-medium mb-1">{% trans "Max Budget ($)" %}</label>
+            <input type="number" step="0.01" name="budget_max" id="budget_max" class="w-full p-2 border rounded mb-4"
+                value="{{ request.GET.budget_max }}">
+
+            <!-- 🌍 Lieu -->
+            <label for="location" class="block text-sm font-medium mb-1">{% trans "Location" %}</label>
+            <input type="text" name="location" id="location" class="w-full p-2 border rounded mb-4"
+                value="{{ request.GET.location }}">
+
+            <!-- 🛠️ Catégorie -->
+            <label for="category" class="block text-sm font-medium mb-1">{% trans "Category" %}</label>
+            <input type="text" name="category" id="category" class="w-full p-2 border rounded mb-6"
+                value="{{ request.GET.category }}">
+
+            <!-- ✅ Bouton appliquer -->
+            <button type="submit" class="w-full bg-teal-600 text-white py-2 rounded hover:bg-teal-700">
+                {% trans "Apply Filters" %}
+            </button>
+        </form>
+    </aside>
+
+    <!-- ======================= 📋 LISTE DES PROJETS ======================= -->
+    <section class="lg:w-3/4 w-full bg-white p-6 shadow rounded-md border border-gray-200">
+
+        <!-- 🧭 Titre principal -->
+        <h2 class="text-2xl font-bold mb-6 text-center">{% trans "Open Projects to Bid On" %}</h2>
+
+        <!-- ❌ Aucun projet -->
+        {% if projects|length == 0 %}
+            <p class="text-center text-gray-500">{% trans "No active projects match your filters." %}</p>
+        {% else %}
+            <!-- ✅ Tableau de projets -->
+            <table class="w-full table-auto border-collapse">
+                <thead>
+                    <tr class="bg-gray-100 text-left text-sm uppercase tracking-wide">
+                        <th class="px-4 py-3">{% trans "Title" %}</th>
+                        <th class="px-4 py-3">{% trans "Client" %}</th>
+                        <th class="px-4 py-3">{% trans "Location" %}</th>
+                        <th class="px-4 py-3">{% trans "Budget ($ CAD)" %}</th>
+                        <th class="px-4 py-3 text-center">{% trans "Actions" %}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for project in projects %}
+                    <tr class="border-b hover:bg-gray-50">
+                        <td class="px-4 py-3 font-medium text-green-800">{{ project.title }}</td>
+                        <td class="px-4 py-3 text-gray-700">{{ project.client.username }}</td>
+                        <td class="px-4 py-3 text-gray-600">{{ project.location }}</td>
+                        <td class="px-4 py-3 text-gray-600">{{ project.budget }}</td>
+                        <td class="px-4 py-3 text-center">
+                            <a href="{% url 'project-details' project.id %}" class="text-sm text-teal-600 hover:underline">
+                                {% trans "View Details" %}
+                            </a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% endif %}
+    </section>
+</div>
 {% endblock %}

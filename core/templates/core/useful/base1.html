@@ -1,0 +1,114 @@
+{% load i18n %}
+{% comment %} {# 📁 Fichier : core/templates/core/useful/base1.html
+   🧱 CE FICHIER EST UN TEMPLATE DE BASE POUR TOUTES LES PAGES PUBLIQUES
+
+   📌 UTILISATION :
+   - Ce fichier HTML sert de "layout général" (structure de base) pour les pages publiques du site CONTRACT-IT.
+   - Il est utilisé via l'instruction dans d'autres fichiers HTML.
+   - Il définit la structure commune :
+     - entête (nav)
+     - bloc de contenu 
+     - pied de page 
+
+   📌 EMPLACEMENT :
+   - Ce fichier est placé dans le dossier : `core/templates/core/useful/`
+   - Il est séparé des templates finaux (index, contact…) pour pouvoir être réutilisé facilement.
+
+   📌 CONTENU PRINCIPAL :
+   - Logo à gauche (cliquable vers la page d’accueil)
+   - Boutons Login et Register au centre
+   - Sélecteur de langue (Français / English) à droite
+   - Système TailwindCSS pour design rapide et responsive
+#} {% endcomment %}
+
+<!doctype html>
+<html lang="{{ LANGUAGE_CODE }}">
+<head>
+    <!-- 🧠 Encodage et responsive pour tous les appareils -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- 🎨 Inclusion de TailwindCSS via CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- 🧾 Titre de l’onglet du navigateur -->
+    <title>{% block title %}{% endblock %} | CONTRACT-IT</title>
+</head>
+
+<body>
+    <!-- 🔝 ENTÊTE PRINCIPAL (navbar du haut) -->
+    <nav class="py-6 px-6 flex justify-between items-center border-b border-gray-200 bg-white shadow-sm">
+        <!-- ⬅️ Logo Contract_it à gauche — renvoie vers la page d'accueil -->
+        <a href="{% url 'index' %}"
+           class="text-xl font-bold text-gray-900 hover:text-gray-700 transition">
+            Contract_it
+        </a>
+
+        <!-- 🟩 Boutons au centre :  register & Log in -->
+        <div class="flex items-center space-x-6">
+            <!-- ✅ Bouton pour aller à la page d'inscription -->
+            <a href="{% url 'register' %}"
+               class="px-5 py-2 rounded bg-teal-500 text-white text-sm font-semibold hover:bg-teal-600 transition">
+                {% trans "Register" %}
+            </a>
+
+            <!-- ✅ Bouton pour aller à la page de connexion -->
+            <a href="{% url 'login' %}"
+               class="px-5 py-2 rounded bg-gray-500 text-white text-sm font-semibold hover:bg-gray-700 transition">
+                {% trans "Log in" %}
+            </a>
+        </div>
+
+        <!-- 🌐 Sélecteur de langue à droite (Fr / En) -->
+        <div class="flex items-center space-x-3">
+            <!-- 🔁 Formulaire pour changer en Français -->
+            <form id="lang-fr" action="{% url 'set_language' %}" method="post">
+                {% csrf_token %}
+                <input type="hidden" name="language" value="fr">
+                <input type="hidden" name="next" id="next-fr">
+                <button type="submit"
+                        class="px-3 py-1 text-sm font-medium border rounded
+                               hover:bg-gray-100 transition
+                               {% if LANGUAGE_CODE == 'fr' %}bg-gray-300{% endif %}">
+                    Français
+                </button>
+            </form>
+
+            <!-- 🔁 Formulaire pour changer en English -->
+            <form id="lang-en" action="{% url 'set_language' %}" method="post">
+                {% csrf_token %}
+                <input type="hidden" name="language" value="en">
+                <input type="hidden" name="next" id="next-en">
+                <button type="submit"
+                        class="px-3 py-1 text-sm font-medium border rounded
+                               hover:bg-gray-100 transition
+                               {% if LANGUAGE_CODE == 'en' %}bg-gray-300{% endif %}">
+                    English
+                </button>
+            </form>
+        </div>
+    </nav>
+
+    <!-- 🧠 Script JavaScript : permet de rediriger vers la bonne page après changement de langue -->
+    <script>
+        // Récupère l'URL actuelle
+        const currentPath = window.location.pathname;
+
+        // Supprime le préfixe de langue (fr/en) s’il existe
+        const stripLangPrefix = (path) => path.replace(/^\/(fr|en)(\/|$)/, "/");
+
+        // Assigne l’URL corrigée à chaque bouton
+        document.getElementById("next-fr").value = "/fr" + stripLangPrefix(currentPath);
+        document.getElementById("next-en").value = "/en" + stripLangPrefix(currentPath);
+    </script>
+
+    <!-- 📦 Bloc de contenu dynamique : sera remplacé par chaque page qui hérite de ce layout -->
+    <main class="px-6 py-10">
+        {% block content %}
+        {% endblock %}
+    </main>
+
+    <!-- 📎 Footer partagé (même que les pages publiques) -->
+    {% include "core/useful/footer.html" %}
+</body>
+</html>

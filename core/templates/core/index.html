@@ -1,12 +1,38 @@
-{% extends 'core/base.html' %}
+{% extends "core/useful/base1.html" %}
 {% load i18n %}
-{# === Fichier principal de la landing page : index.html === #}
+{% comment %} {# 📁 Fichier : core/templates/core/index.html
+   🏠 PAGE D’ACCUEIL PUBLIQUE DE CONTRACT-IT
 
-{% block title %}{% trans "Home" %}{% endblock %}
+   📌 UTILISATION :
+   - Cette page représente la landing principale du site.
+   - Elle est visible par tous (utilisateurs connectés ou non).
+   - Elle est rendue par la vue `index(request)` définie dans `core/views.py`.
+
+   📌 STRUCTURE :
+   - Elle hérite du layout `base1.html`, qui inclut :
+       - l'entête avec logo, Login/Register, sélecteur de langue
+       - le footer commun à toutes les pages publiques
+   - Elle contient plusieurs sections marketing, inspirées des plateformes freelance :
+       1. Hero (bandeau principal)
+       2. Évaluations moyennes
+       3. Grille de catégories de métiers
+       4. Profils populaires (statique pour l’instant)
+       5. Explication du fonctionnement
+       6. Témoignage (💬 à ajuster plus tard selon retours réels)
+       7. Call-to-action final
+
+   ⚠️ Remarques importantes :
+   - Le contenu dynamique (profils, avis, etc.) est actuellement statique.
+   - Des balises `{# ... #}` sont ajoutées pour t’indiquer quoi améliorer plus tard.
+#} {% endcomment %}
+
+{% block title %}
+    {% trans "Home" %}
+{% endblock %}
 
 {% block content %}
 
-    {# === SECTION 1 : Bandeau principal (hero) === #}
+    <!-- ✅ SECTION 1 : Bandeau principal -->
     <section class="text-center py-20 bg-white">
         <div class="max-w-4xl mx-auto px-6">
             <h1 class="text-4xl md:text-5xl font-bold text-green-600 leading-tight">
@@ -21,7 +47,7 @@
         </div>
     </section>
 
-    {# === SECTION 2 : Note d'évaluation globale des talents === #}
+    <!-- ✅ SECTION 2 : Évaluation globale -->
     <section class="bg-white py-6 text-center">
         <div class="max-w-2xl mx-auto border rounded p-4 shadow">
             <span class="font-medium">{% trans "Clients rate talent" %}</span>
@@ -31,12 +57,12 @@
         </div>
     </section>
 
-    {# === SECTION 3 : Grille de catégories de métiers disponibles === #}
+    <!-- ✅ SECTION 3 : Grille de catégories -->
     <section class="py-12 bg-gray-50">
         <div class="max-w-6xl mx-auto px-6">
             <h2 class="text-2xl font-semibold mb-8">{% trans "Hire for anything, from quick to longer jobs" %}</h2>
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {# Chaque bloc représente une catégorie de métier #}
+                {% comment %} 💡 Catégories affichées statiquement pour le moment {% endcomment %}
                 <div class="bg-white p-6 rounded shadow">
                     <h3 class="text-lg font-bold text-green-800">{% trans "Development & IT" %}</h3>
                     <p class="text-sm text-gray-600">{% trans "⭐ 4.9/5 — +1,853 skills" %}</p>
@@ -68,12 +94,12 @@
         </div>
     </section>
 
-    {# === SECTION 4 : Profils populaires à engager === #}
+    <!-- ✅ SECTION 4 : Profils populaires (statique pour l’instant) -->
     <section class="py-12">
         <div class="max-w-7xl mx-auto px-6">
             <h2 class="text-2xl font-semibold mb-8">{% trans "Work with anyone. Anywhere." %}</h2>
             <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
-                {# Exemple de profils affichés dynamiquement #}
+                {% comment %} 🔁 À remplacer par une boucle dynamique plus tard {% endcomment %}
                 <div class="bg-white p-4 rounded shadow text-center">
                     <div class="w-24 h-24 rounded-full bg-gray-200 mx-auto mb-4"></div>
                     <h3 class="font-semibold">Ishan A.</h3>
@@ -81,7 +107,6 @@
                     <p class="text-green-600 font-semibold mt-2">{% trans "4.9/5 (66 jobs)" %}</p>
                     <a href="#" class="mt-4 inline-block bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">{% trans "See more" %}</a>
                 </div>
-                {# ... autres profils ... #}
             </div>
             <div class="text-center mt-8">
                 <a href="#" class="text-green-600 border border-green-600 px-4 py-2 rounded hover:bg-green-100 font-semibold">
@@ -91,7 +116,7 @@
         </div>
     </section>
 
-    {# === SECTION 5 : Explication du fonctionnement de la plateforme === #}
+    <!-- ✅ SECTION 5 : Fonctionnement -->
     <section class="py-16 bg-white">
         <div class="max-w-6xl mx-auto px-6 text-center">
             <h2 class="text-2xl font-semibold mb-12">{% trans "How to hire on Contract_it" %}</h2>
@@ -120,7 +145,7 @@
         </div>
     </section>
 
-    {# === SECTION 6 : Témoignage client === #}
+    <!-- ✅ SECTION 6 : Témoignage (🛑 Placeholder à adapter avec vrais avis) -->
     <section class="py-16 bg-teal-900 text-white">
         <div class="max-w-4xl mx-auto text-center px-6">
             <blockquote class="text-xl italic">
@@ -133,7 +158,7 @@
         </div>
     </section>
 
-    {# === SECTION 7 : Appel à l'action pour rejoindre la plateforme === #}
+    <!-- ✅ SECTION 7 : Call-to-action final -->
     <section class="py-20 bg-white text-center">
         <div class="max-w-xl mx-auto px-6">
             <div class="w-16 h-16 bg-green-100 rounded-full mx-auto mb-4"></div>
@@ -150,7 +175,8 @@
         </div>
     </section>
 
-    {# === SECTION 8 : Pied de page (footer complet) === #}
-    {# === DÉJA IMPORTER DANS LA BASE === #}
+    {% comment %}
+    ✅ Le footer est déjà inclus automatiquement par base1.html — pas besoin de le rajouter ici
+    {% endcomment %}
 
 {% endblock %}

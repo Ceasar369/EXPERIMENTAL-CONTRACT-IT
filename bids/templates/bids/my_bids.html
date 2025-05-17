@@ -1,0 +1,79 @@
+{% extends "core/useful/base2.html" %}
+{% load i18n %}
+{% load static %}
+
+{% comment %} {# ---------------------------------------------------------------------
+  📄 Fichier : bids/templates/bids/my_bids.html
+  🎯 Rôle : Affiche toutes les propositions (bids) soumises par l’entrepreneur connecté.
+  Chaque bid inclut :
+     - le projet concerné (titre, client, budget),
+     - le montant proposé,
+     - le message envoyé,
+     - le statut (en attente, accepté, refusé),
+     - la date de création.
+  Cette page est accessible uniquement aux utilisateurs is_contractor.
+--------------------------------------------------------------------- #} {% endcomment %}
+
+{% block title %}{% trans "My Submitted Bids" %}{% endblock %}
+
+{% block content %}
+<div class="max-w-5xl mx-auto p-6 bg-white shadow-md rounded-md">
+
+    <h2 class="text-2xl font-bold mb-6 text-gray-800 text-center">
+        {% trans "My Submitted Bids" %}
+    </h2>
+
+    {% if bids %}
+        <!-- Boucle sur chaque bid soumis -->
+        {% for bid in bids %}
+            <div class="border rounded-md p-4 mb-4 shadow-sm">
+
+                <!-- 🔗 Titre du projet + lien vers sa page -->
+                <h3 class="text-lg font-semibold text-green-800">
+                    {{ bid.project.title }}
+                </h3>
+
+                <!-- 👤 Infos projet -->
+                <p class="text-sm text-gray-700 mt-1">
+                    {% trans "Client" %}: {{ bid.project.client.username }} |
+                    {% trans "Location" %}: {{ bid.project.location }} |
+                    {% trans "Budget" %}: {{ bid.project.budget }}$
+                </p>
+
+                <!-- 💬 Message d’accompagnement -->
+                <p class="mt-2 text-sm text-gray-800">
+                    <strong>{% trans "Message" %}:</strong><br>
+                    {{ bid.message }}
+                </p>
+
+                <!-- 💲 Montant proposé + statut -->
+                <div class="mt-3 flex justify-between items-center text-sm">
+                    <p>
+                        <strong>{% trans "Proposed Amount" %}:</strong> {{ bid.amount }} $
+                    </p>
+
+                    <p>
+                        <strong>{% trans "Status" %}:</strong>
+                        {% if bid.status == "pending" %}
+                            <span class="text-yellow-600">{% trans "Pending" %}</span>
+                        {% elif bid.status == "accepted" %}
+                            <span class="text-green-600 font-semibold">{% trans "Accepted" %}</span>
+                        {% elif bid.status == "rejected" %}
+                            <span class="text-red-600 font-semibold">{% trans "Rejected" %}</span>
+                        {% endif %}
+                    </p>
+
+                    <p class="text-gray-500">
+                        <strong>{% trans "Submitted on" %}:</strong> {{ bid.created_at|date:"Y-m-d" }}
+                    </p>
+                </div>
+
+            </div>
+        {% endfor %}
+
+    {% else %}
+        <p class="text-center text-gray-600">{% trans "You haven't submitted any bids yet." %}</p>
+    {% endif %}
+
+</div>
+{% endblock %}

@@ -1,0 +1,50 @@
+# ---------------------------------------------------------------------
+# 📌 NOTES POUR LA SUITE — APP CORE
+#
+# ✅ L’application core contient désormais :
+#    - une landing page index.html complète avec sections claires,
+#    - 12 pages d'information accessibles via le footer (how_to_hire, contact, etc.),
+#    - deux layouts bien structurés : base1.html (pages publiques) et base2.html (login/register),
+#    - un footer global et centralisé, réutilisé automatiquement,
+#    - une organisation claire dans le dossier `core/in_footer/` pour les contenus statiques.
+#
+# 🔧 Ce qu’il reste à implémenter ou ajuster plus tard :
+
+# 1. 📝 Remplir toutes les pages statiques du footer
+#    - Pages déjà créées : how_to_hire.html, contact.html, privacy.html, etc.
+#    - Insérer du vrai contenu au lieu du squelette par défaut.
+#    - Valider le ton et le style avec la mission de CONTRACT-IT.
+
+# 2. 🧹 Ajuster la page d’accueil (index.html)
+#    - Sections actuelles (profils, témoignages, évaluations, catégories) sont statiques.
+#    - Remplacer progressivement :
+#        → Profils fictifs par des profils liés à la base de données
+#        → Témoignages génériques par des vrais avis clients
+#        → CTA redirigeant vers pages réelles (ex: post a job)
+
+# 3. 🔄 Ajouter un context processor pour données globales
+#    - Fichier suggéré : `core/context_processors.py` avec une fonction `global_info(request)`
+#    - Utilité :
+#        → Injecter automatiquement une bannière d’annonce (ex : maintenance)
+#        → Compteur de projets en ligne (live_project_count)
+#        → Messages globaux affichables sur toutes les pages publiques
+#
+#    Exemple :
+#        def global_info(request):
+#            return {
+#                "platform_alert": "🚧 Maintenance dimanche 21h",
+#                "live_project_count": 32,
+#            }
+#
+#    À activer dans `settings.py` :
+#        'core.context_processors.global_info',
+#
+#    À utiliser dans un template :
+#        {% if platform_alert %}
+#            <div class="bg-yellow-100 text-yellow-800 p-2 text-center text-sm">
+#                {{ platform_alert }}
+#            </div>
+#        {% endif %}
+
+# 💡 Ce fichier sert de guide pour reprendre l’enrichissement de l’app `core`
+#    une fois les apps `accounts`, `bids` et `projects` stabilisées.

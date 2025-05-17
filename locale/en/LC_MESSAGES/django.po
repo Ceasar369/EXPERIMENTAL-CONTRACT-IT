@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-05-15 15:20-0400\n"
+"POT-Creation-Date: 2025-05-17 00:14-0400\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,654 +18,818 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: .\accounts\models.py:10
+#: .\accounts\models.py:19
+#: .\accounts\templates\accounts\client_dashboard.html:73
+#: .\accounts\templates\accounts\contractor_dashboard.html:83
 msgid "Français"
 msgstr ""
 
-#: .\accounts\models.py:11
+#: .\accounts\models.py:20
 msgid "Anglais"
 msgstr ""
 
-#: .\accounts\models.py:25
-msgid "Langue d'affichage de l'interface"
+#: .\accounts\templates\accounts\client_dashboard.html:12
+msgid "Client Dashboard"
 msgstr ""
 
-#: .\bids\templates\bids\bids_received.html:6
-msgid "Bids Received"
+#: .\accounts\templates\accounts\client_dashboard.html:33
+#: .\accounts\templates\accounts\contractor_dashboard.html:32
+msgid "Quick Access"
 msgstr ""
 
-#: .\bids\templates\bids\bids_received.html:14
-msgid "Bid accepted successfully. This project is now private."
+#: .\accounts\templates\accounts\client_dashboard.html:34
+#: .\accounts\templates\accounts\contractor_dashboard.html:33
+msgid "Dashboard"
 msgstr ""
 
-#: .\bids\templates\bids\bids_received.html:18
-msgid "Bids Received for this Project"
+#: .\accounts\templates\accounts\client_dashboard.html:39
+#: .\accounts\templates\accounts\contractor_dashboard.html:38
+msgid "Activity"
 msgstr ""
 
-#: .\bids\templates\bids\bids_received.html:25
-msgid "Contractor"
+#: .\accounts\templates\accounts\client_dashboard.html:43
+#: .\projects\templates\projects\my_projects.html:18
+msgid "My Projects"
 msgstr ""
 
-#: .\bids\templates\bids\bids_received.html:28
-msgid "Amount"
+#: .\accounts\templates\accounts\client_dashboard.html:47
+msgid "Notifications"
 msgstr ""
 
-#: .\bids\templates\bids\bids_received.html:31
-#: .\projects\templates\projects\project_detail.html:14
-msgid "Status"
+#: .\accounts\templates\accounts\client_dashboard.html:48
+#: .\env\Lib\site-packages\django\contrib\messages\apps.py:15
+msgid "Messages"
 msgstr ""
 
-#: .\bids\templates\bids\bids_received.html:34
-msgid "Submitted on"
+#: .\accounts\templates\accounts\client_dashboard.html:54
+#: .\accounts\templates\accounts\contractor_dashboard.html:64
+msgid "Account"
 msgstr ""
 
-#: .\bids\templates\bids\bids_received.html:45
-msgid "Accept this Bid"
+#: .\accounts\templates\accounts\client_dashboard.html:55
+#: .\accounts\templates\accounts\contractor_dashboard.html:65
+msgid "My Profile"
 msgstr ""
 
-#: .\bids\templates\bids\bids_received.html:53
-msgid "No bids have been received for this project yet."
+#: .\accounts\templates\accounts\client_dashboard.html:56
+#: .\accounts\templates\accounts\contractor_dashboard.html:66
+msgid "My Card / Payment"
 msgstr ""
 
-#: .\bids\templates\bids\bids_received.html:60
-msgid "Are you sure you want to accept this bid? This action cannot be undone."
+#: .\accounts\templates\accounts\client_dashboard.html:57
+#: .\accounts\templates\accounts\contractor_dashboard.html:67
+msgid "Settings"
 msgstr ""
 
-#: .\bids\templates\bids\submit_bid.html:6
-#: .\projects\templates\projects\project_detail.html:21
-msgid "Submit a Bid"
+#: .\accounts\templates\accounts\client_dashboard.html:62
+#: .\accounts\templates\accounts\contractor_dashboard.html:72
+#: .\core\templates\core\useful\footer.html:52
+msgid "Support"
 msgstr ""
 
-#: .\bids\templates\bids\submit_bid.html:10
-msgid "Submit a Bid for this Project"
+#: .\accounts\templates\accounts\client_dashboard.html:63
+#: .\accounts\templates\accounts\contractor_dashboard.html:73
+msgid "Help"
 msgstr ""
 
-#: .\bids\templates\bids\submit_bid.html:16
-msgid "Project ID"
+#: .\accounts\templates\accounts\client_dashboard.html:64
+#: .\accounts\templates\accounts\contractor_dashboard.html:74
+#: .\core\templates\core\useful\footer.html:55
+msgid "Contact Us"
 msgstr ""
 
-#: .\bids\templates\bids\submit_bid.html:17
-msgid "e.g. 12"
+#: .\accounts\templates\accounts\client_dashboard.html:65
+#: .\accounts\templates\accounts\contractor_dashboard.html:75
+msgid "Logout"
 msgstr ""
 
-#: .\bids\templates\bids\submit_bid.html:20
-msgid "Proposed Amount ($)"
+#: .\accounts\templates\accounts\client_dashboard.html:72
+#: .\accounts\templates\accounts\contractor_dashboard.html:82
+msgid "English"
 msgstr ""
 
-#: .\bids\templates\bids\submit_bid.html:21
-msgid "e.g. 2500.00"
+#: .\accounts\templates\accounts\client_dashboard.html:84
+msgid "Welcome to your dashboard"
 msgstr ""
 
-#: .\bids\templates\bids\submit_bid.html:24
-msgid "Message to the Client"
+#: .\accounts\templates\accounts\client_dashboard.html:86
+msgid "We're glad to see you. Here's a summary of your activity."
 msgstr ""
 
-#: .\bids\templates\bids\submit_bid.html:25
-msgid "Write a short message about your proposal..."
-msgstr ""
-
-#: .\bids\templates\bids\submit_bid.html:29
-msgid "Submit Bid"
-msgstr ""
-
-#: .\core\templates\core\base.html:24
-msgid "New item"
-msgstr ""
-
-#: .\core\templates\core\base.html:25
-msgid "Browse"
-msgstr ""
-
-#: .\core\templates\core\base.html:27 .\core\templates\core\login.html:29
-#: .\core\templates\core\signup.html:5 .\core\templates\core\signup.html:42
-#: .\useful_commands_windows.txt:37
-msgid "Sign up"
-msgstr ""
-
-#: .\core\templates\core\base.html:28 .\core\templates\core\login.html:5
-#: .\core\templates\core\login.html:19
-msgid "Log in"
-msgstr ""
-
-#: .\core\templates\core\client_dashboard.html:6
-msgid "Dashboard Client"
-msgstr ""
-
-#: .\core\templates\core\client_dashboard.html:10
-msgid "Welcome Client"
-msgstr ""
-
-#: .\core\templates\core\client_dashboard.html:13
-#: .\core\templates\core\contractor_dashboard.html:13
+#: .\accounts\templates\accounts\client_dashboard.html:92
+#: .\accounts\templates\accounts\contractor_dashboard.html:102
 msgid "Profile picture"
 msgstr ""
 
-#: .\core\templates\core\client_dashboard.html:16
-#: .\core\templates\core\contractor_dashboard.html:16
-#: .\core\templates\core\login.html:12 .\core\templates\core\signup.html:12
-msgid "Username"
+#: .\accounts\templates\accounts\client_dashboard.html:103
+msgid "Switch to Contractor mode"
 msgstr ""
 
-#: .\core\templates\core\client_dashboard.html:17
-#: .\core\templates\core\signup.html:38
-msgid "City"
+#: .\accounts\templates\accounts\client_dashboard.html:111
+msgid "Recent Projects"
 msgstr ""
 
-#: .\core\templates\core\client_dashboard.html:18
-#: .\core\templates\core\signup.html:35
+#: .\accounts\templates\accounts\client_dashboard.html:120
+#: .\projects\templates\projects\my_projects.html:60
+msgid "View Proposals"
+msgstr ""
+
+#: .\accounts\templates\accounts\client_dashboard.html:128
+msgid "Latest Payments"
+msgstr ""
+
+#: .\accounts\templates\accounts\client_dashboard.html:140
+msgid "Pending Reviews"
+msgstr ""
+
+#: .\accounts\templates\accounts\client_dashboard.html:149
+msgid "Recent Messages"
+msgstr ""
+
+#: .\accounts\templates\accounts\contractor_dashboard.html:12
+msgid "Contractor Dashboard"
+msgstr ""
+
+#: .\accounts\templates\accounts\contractor_dashboard.html:42
+#: .\accounts\templates\accounts\contractor_dashboard.html:120
+#: .\projects\templates\projects\project_list.html:18
+msgid "Available Projects"
+msgstr ""
+
+#: .\accounts\templates\accounts\contractor_dashboard.html:47
+msgid "My Missions"
+msgstr ""
+
+#: .\accounts\templates\accounts\contractor_dashboard.html:52
+msgid "My Bids"
+msgstr ""
+
+#: .\accounts\templates\accounts\contractor_dashboard.html:57
+msgid "Documents"
+msgstr ""
+
+#: .\accounts\templates\accounts\contractor_dashboard.html:94
+msgid "Welcome to your contractor dashboard"
+msgstr ""
+
+#: .\accounts\templates\accounts\contractor_dashboard.html:96
+msgid "Manage your projects, missions and payments in one place."
+msgstr ""
+
+#: .\accounts\templates\accounts\contractor_dashboard.html:112
+msgid "Switch to Client mode"
+msgstr ""
+
+#: .\accounts\templates\accounts\contractor_dashboard.html:134
+msgid "My Active Missions"
+msgstr ""
+
+#: .\accounts\templates\accounts\contractor_dashboard.html:147
+msgid "Project Documents"
+msgstr ""
+
+#: .\accounts\templates\accounts\contractor_dashboard.html:156
+msgid "Recent Payments"
+msgstr ""
+
+#: .\accounts\templates\accounts\login.html:11
+#: .\accounts\templates\accounts\login.html:62
+#: .\accounts\templates\accounts\register.html:126
+#: .\core\templates\core\useful\base1.html:58
+msgid "Log in"
+msgstr ""
+
+#: .\accounts\templates\accounts\login.html:33
+msgid "Log in to CONTRACT-IT"
+msgstr ""
+
+#: .\accounts\templates\accounts\login.html:43
+#: .\accounts\templates\accounts\register.html:49
+#: .\env\Lib\site-packages\django\db\models\fields\__init__.py:1845
+msgid "Email address"
+msgstr ""
+
+#: .\accounts\templates\accounts\login.html:47
+msgid "e.g. ceasar@email.com"
+msgstr ""
+
+#: .\accounts\templates\accounts\login.html:52
+#: .\accounts\templates\accounts\register.html:61
+msgid "Password"
+msgstr ""
+
+#: .\accounts\templates\accounts\login.html:75
+msgid "Don't have an account?"
+msgstr ""
+
+#: .\accounts\templates\accounts\login.html:77
+#: .\core\templates\core\useful\base1.html:52 .\useful_commands_windows.txt:37
+msgid "Sign up"
+msgstr ""
+
+#: .\accounts\templates\accounts\register.html:10
+msgid "Register"
+msgstr ""
+
+#: .\accounts\templates\accounts\register.html:27
+msgid "Create your CONTRACT-IT account"
+msgstr ""
+
+#: .\accounts\templates\accounts\register.html:36
+msgid "First name"
+msgstr ""
+
+#: .\accounts\templates\accounts\register.html:38
+msgid "e.g. John"
+msgstr ""
+
+#: .\accounts\templates\accounts\register.html:42
+msgid "Last name"
+msgstr ""
+
+#: .\accounts\templates\accounts\register.html:44
+msgid "e.g. Smith"
+msgstr ""
+
+#: .\accounts\templates\accounts\register.html:55
 msgid "Phone number"
 msgstr ""
 
-#: .\core\templates\core\client_dashboard.html:19
-msgid "Company name"
+#: .\accounts\templates\accounts\register.html:57
+msgid "e.g. (514) 123-4567"
 msgstr ""
 
-#: .\core\templates\core\client_dashboard.html:20
-msgid "Projects published"
+#: .\accounts\templates\accounts\register.html:68
+msgid "What type of user are you?"
 msgstr ""
 
-#: .\core\templates\core\client_dashboard.html:24
-#: .\core\templates\core\contractor_dashboard.html:24
-msgid "Log out"
+#: .\accounts\templates\accounts\register.html:71
+msgid "Client (looking for contractors)"
 msgstr ""
 
-#: .\core\templates\core\client_dashboard.html:43
-#: .\core\templates\core\client_dashboard.html:44
-#: .\core\templates\core\client_dashboard.html:45
-#: .\core\templates\core\contractor_dashboard.html:44
-#: .\core\templates\core\contractor_dashboard.html:45
-#: .\core\templates\core\contractor_dashboard.html:46
-msgid "Not specified"
+#: .\accounts\templates\accounts\register.html:75
+msgid "Contractor (offering services)"
 msgstr ""
 
-#: .\core\templates\core\contractor_dashboard.html:6
-msgid "Dashboard Contractor"
+#: .\accounts\templates\accounts\register.html:81
+msgid "Your address"
 msgstr ""
 
-#: .\core\templates\core\contractor_dashboard.html:10
-msgid "Welcome Contractor"
+#: .\accounts\templates\accounts\register.html:83
+msgid "e.g. 123 rue Sainte-Catherine, Montréal"
 msgstr ""
 
-#: .\core\templates\core\contractor_dashboard.html:17
+#: .\accounts\templates\accounts\register.html:89
 msgid "Specialties"
 msgstr ""
 
-#: .\core\templates\core\contractor_dashboard.html:18
-msgid "Hourly rate"
+#: .\accounts\templates\accounts\register.html:91
+msgid "e.g. Roofing, Plumbing, Electricity"
 msgstr ""
 
-#: .\core\templates\core\contractor_dashboard.html:19
-msgid "Availability"
+#: .\accounts\templates\accounts\register.html:94
+msgid "Company name (optional)"
 msgstr ""
 
-#: .\core\templates\core\contractor_dashboard.html:20
+#: .\accounts\templates\accounts\register.html:96
+msgid "e.g. Toiture Pro Inc."
+msgstr ""
+
+#: .\accounts\templates\accounts\register.html:99
 msgid "Certifications"
 msgstr ""
 
-#: .\core\templates\core\contractor_dashboard.html:47
-msgid "None"
+#: .\accounts\templates\accounts\register.html:101
+msgid "e.g. RBQ license, ASP card"
 msgstr ""
 
-#: .\core\templates\core\create_project.html:5
-msgid "Publish a Project"
+#: .\accounts\templates\accounts\register.html:104
+msgid "Hourly rate ($CAD)"
 msgstr ""
 
-#: .\core\templates\core\create_project.html:9
-msgid "Publish a New Project"
+#: .\accounts\templates\accounts\register.html:109
+msgid "Availability"
 msgstr ""
 
-#: .\core\templates\core\create_project.html:12
-msgid "Project title"
+#: .\accounts\templates\accounts\register.html:111
+msgid "e.g. Available starting July"
 msgstr ""
 
-#: .\core\templates\core\create_project.html:15
-#: .\projects\templates\projects\project_detail.html:12
-msgid "Description"
+#: .\accounts\templates\accounts\register.html:118
+msgid "Create account"
 msgstr ""
 
-#: .\core\templates\core\create_project.html:18
-msgid "Budget (CAD)"
+#: .\accounts\templates\accounts\register.html:124
+msgid "Already have an account?"
 msgstr ""
 
-#: .\core\templates\core\create_project.html:21
-msgid "Deadline"
+#: .\bids\templates\bids\bid_confirmation.html:16
+msgid "Bid Submitted"
 msgstr ""
 
-#: .\core\templates\core\create_project.html:24
+#: .\bids\templates\bids\bid_confirmation.html:25
+msgid "Your proposal has been submitted!"
+msgstr ""
+
+#: .\bids\templates\bids\bid_confirmation.html:27
+msgid ""
+"Thank you for applying to this project. The client will review your proposal "
+"shortly."
+msgstr ""
+
+#: .\bids\templates\bids\bid_confirmation.html:35
+msgid "Back to Dashboard"
+msgstr ""
+
+#: .\bids\templates\bids\bid_confirmation.html:41
+msgid "Find More Projects"
+msgstr ""
+
+#: .\bids\templates\bids\my_bids.html:17 .\bids\templates\bids\my_bids.html:23
+msgid "My Submitted Bids"
+msgstr ""
+
+#: .\bids\templates\bids\my_bids.html:38
+#: .\projects\templates\projects\awarded_projects.html:45
+#: .\projects\templates\projects\project_detail.html:38
+#: .\projects\templates\projects\project_list.html:74
+msgid "Client"
+msgstr ""
+
+#: .\bids\templates\bids\my_bids.html:39
+#: .\core\templates\core\create_project.html:31
+#: .\projects\templates\projects\create_project.html:51
+#: .\projects\templates\projects\edit_project.html:44
+#: .\projects\templates\projects\project_detail.html:35
+#: .\projects\templates\projects\project_list.html:43
+#: .\projects\templates\projects\project_list.html:75
 msgid "Location"
 msgstr ""
 
+#: .\bids\templates\bids\my_bids.html:40
+#: .\projects\templates\projects\awarded_projects.html:46
+#: .\projects\templates\projects\my_projects.html:35
+#: .\projects\templates\projects\project_detail.html:37
+msgid "Budget"
+msgstr ""
+
+#: .\bids\templates\bids\my_bids.html:45
+msgid "Message"
+msgstr ""
+
+#: .\bids\templates\bids\my_bids.html:52
+msgid "Proposed Amount"
+msgstr ""
+
+#: .\bids\templates\bids\my_bids.html:56
+#: .\projects\templates\projects\awarded_projects.html:48
+#: .\projects\templates\projects\my_projects.html:34
+#: .\projects\templates\projects\project_detail.html:50
+msgid "Status"
+msgstr ""
+
+#: .\bids\templates\bids\my_bids.html:58
+#: .\bids\templates\bids\project_bids.html:57
+msgid "Pending"
+msgstr ""
+
+#: .\bids\templates\bids\my_bids.html:60
+#: .\bids\templates\bids\project_bids.html:59
+msgid "Accepted"
+msgstr ""
+
+#: .\bids\templates\bids\my_bids.html:62
+#: .\bids\templates\bids\project_bids.html:61
+msgid "Rejected"
+msgstr ""
+
+#: .\bids\templates\bids\my_bids.html:67
+msgid "Submitted on"
+msgstr ""
+
+#: .\bids\templates\bids\my_bids.html:75
+msgid "You haven't submitted any bids yet."
+msgstr ""
+
+#: .\bids\templates\bids\project_bids.html:24
+msgid "Bids Received"
+msgstr ""
+
+#: .\bids\templates\bids\project_bids.html:31
+msgid "Offers Received for Project:"
+msgstr ""
+
+#: .\bids\templates\bids\project_bids.html:36
+#: .\bids\templates\bids\submit_bid_form.html:33
+msgid "Category:"
+msgstr ""
+
+#: .\bids\templates\bids\project_bids.html:37
+#: .\bids\templates\bids\submit_bid_form.html:34
+msgid "Location:"
+msgstr ""
+
+#: .\bids\templates\bids\project_bids.html:38
+#: .\bids\templates\bids\submit_bid_form.html:35
+msgid "Budget:"
+msgstr ""
+
+#: .\bids\templates\bids\project_bids.html:39
+#: .\bids\templates\bids\submit_bid_form.html:36
+msgid "Deadline:"
+msgstr ""
+
+#: .\bids\templates\bids\project_bids.html:40
+#: .\bids\templates\bids\project_bids.html:55
+msgid "Status:"
+msgstr ""
+
+#: .\bids\templates\bids\project_bids.html:51
+msgid "Amount:"
+msgstr ""
+
+#: .\bids\templates\bids\project_bids.html:52
+msgid "Message:"
+msgstr ""
+
+#: .\bids\templates\bids\project_bids.html:72
+msgid "Accept this Proposal"
+msgstr ""
+
+#: .\bids\templates\bids\project_bids.html:80
+msgid "No bids received for this project yet."
+msgstr ""
+
+#: .\bids\templates\bids\submit_bid_form.html:21
+msgid "Submit a Proposal"
+msgstr ""
+
+#: .\bids\templates\bids\submit_bid_form.html:27
+msgid "Submit Your Proposal"
+msgstr ""
+
+#: .\bids\templates\bids\submit_bid_form.html:28
+msgid "Please review the project details below and submit your offer."
+msgstr ""
+
+#: .\bids\templates\bids\submit_bid_form.html:46
+msgid "Proposed Amount (CAD)"
+msgstr ""
+
+#: .\bids\templates\bids\submit_bid_form.html:53
+msgid "Message to the Client"
+msgstr ""
+
+#: .\bids\templates\bids\submit_bid_form.html:56
+msgid "Briefly explain why you are the right person for this job..."
+msgstr ""
+
+#: .\bids\templates\bids\submit_bid_form.html:63
+msgid "Submit Proposal"
+msgstr ""
+
+#: .\core\templates\core\create_project.html:6
+msgid "Publish a Project"
+msgstr ""
+
+#: .\core\templates\core\create_project.html:10
+msgid "Publish a New Project"
+msgstr ""
+
+#: .\core\templates\core\create_project.html:15
+msgid "Project title"
+msgstr ""
+
+#: .\core\templates\core\create_project.html:19
+#: .\projects\templates\projects\create_project.html:43
+#: .\projects\templates\projects\edit_project.html:34
+msgid "Description"
+msgstr ""
+
+#: .\core\templates\core\create_project.html:23
+#: .\projects\templates\projects\edit_project.html:49
+msgid "Budget (CAD)"
+msgstr ""
+
 #: .\core\templates\core\create_project.html:27
+#: .\projects\templates\projects\awarded_projects.html:47
+#: .\projects\templates\projects\create_project.html:59
+#: .\projects\templates\projects\edit_project.html:54
+#: .\projects\templates\projects\my_projects.html:36
+#: .\projects\templates\projects\project_detail.html:36
+msgid "Deadline"
+msgstr ""
+
+#: .\core\templates\core\create_project.html:35
 msgid "Project category"
 msgstr ""
 
-#: .\core\templates\core\create_project.html:34
-msgid "Submit Project"
+#: .\core\templates\core\create_project.html:37
+msgid "Select a category"
+msgstr ""
+
+#: .\core\templates\core\create_project.html:38
+msgid "Plumbing"
 msgstr ""
 
 #: .\core\templates\core\create_project.html:39
+msgid "Roofing"
+msgstr ""
+
+#: .\core\templates\core\create_project.html:40
+msgid "Painting"
+msgstr ""
+
+#: .\core\templates\core\create_project.html:41
+msgid "Flooring"
+msgstr ""
+
+#: .\core\templates\core\create_project.html:42
+msgid "Electrical work"
+msgstr ""
+
+#: .\core\templates\core\create_project.html:43
+msgid "Kitchen renovation"
+msgstr ""
+
+#: .\core\templates\core\create_project.html:44
+msgid "Bathroom renovation"
+msgstr ""
+
+#: .\core\templates\core\create_project.html:52
+msgid "Submit Project"
+msgstr ""
+
+#: .\core\templates\core\create_project.html:58
 msgid "Your project has been published successfully!"
 msgstr ""
 
-#: .\core\templates\core\create_project.html:81
-msgid "An error occurred. Please try again."
+#: .\core\templates\core\in_footer\about.html:29
+#: .\core\templates\core\in_footer\about.html:34
+#: .\core\templates\core\in_footer\accessibility.html:29
+#: .\core\templates\core\in_footer\accessibility.html:34
+#: .\core\templates\core\in_footer\contact.html:29
+#: .\core\templates\core\in_footer\contact.html:34
+#: .\core\templates\core\in_footer\cookies.html:29
+#: .\core\templates\core\in_footer\cookies.html:34
+#: .\core\templates\core\in_footer\help.html:29
+#: .\core\templates\core\in_footer\help.html:34
+#: .\core\templates\core\in_footer\how_to_find_work.html:29
+#: .\core\templates\core\in_footer\how_to_find_work.html:34
+#: .\core\templates\core\in_footer\how_to_hire.html:29
+#: .\core\templates\core\in_footer\how_to_hire.html:34
+#: .\core\templates\core\in_footer\privacy.html:29
+#: .\core\templates\core\in_footer\privacy.html:34
+#: .\core\templates\core\in_footer\project_catalog.html:29
+#: .\core\templates\core\in_footer\project_catalog.html:34
+#: .\core\templates\core\in_footer\talent_marketplace.html:29
+#: .\core\templates\core\in_footer\talent_marketplace.html:34
+#: .\core\templates\core\in_footer\terms.html:29
+#: .\core\templates\core\in_footer\terms.html:34
+#: .\core\templates\core\in_footer\trust_safety.html:29
+#: .\core\templates\core\in_footer\trust_safety.html:34
+msgid "Page Title"
 msgstr ""
 
-#: .\core\templates\core\in_footer\about.html:3
-#: .\core\templates\core\partials\footer.html:9
-msgid "How to Hire"
+#: .\core\templates\core\in_footer\about.html:38
+#: .\core\templates\core\in_footer\accessibility.html:38
+#: .\core\templates\core\in_footer\contact.html:38
+#: .\core\templates\core\in_footer\cookies.html:38
+#: .\core\templates\core\in_footer\help.html:38
+#: .\core\templates\core\in_footer\how_to_find_work.html:38
+#: .\core\templates\core\in_footer\how_to_hire.html:38
+#: .\core\templates\core\in_footer\privacy.html:38
+#: .\core\templates\core\in_footer\project_catalog.html:38
+#: .\core\templates\core\in_footer\talent_marketplace.html:38
+#: .\core\templates\core\in_footer\terms.html:38
+#: .\core\templates\core\in_footer\trust_safety.html:38
+msgid "This page is currently under construction. Content will be added soon."
 msgstr ""
 
-#: .\core\templates\core\in_footer\about.html:7
-msgid "How to Hire on Contract_it"
-msgstr ""
-
-#: .\core\templates\core\in_footer\about.html:10
-msgid ""
-"Hiring the right professional for your construction or renovation project "
-"has never been easier. On Contract_it, we connect you with verified, "
-"qualified entrepreneurs ready to bring your vision to life."
-msgstr ""
-
-#: .\core\templates\core\in_footer\about.html:13
-msgid "1. Post Your Project"
-msgstr ""
-
-#: .\core\templates\core\in_footer\about.html:15
-msgid ""
-"Use our smart assistant to describe your project in detail. Select the type "
-"of work, your preferred budget, deadlines, and any special requirements."
-msgstr ""
-
-#: .\core\templates\core\in_footer\about.html:18
-msgid "2. Receive Proposals"
-msgstr ""
-
-#: .\core\templates\core\in_footer\about.html:20
-msgid ""
-"Contractors will review your posting and send you tailored offers. Compare "
-"their profiles, reviews, pricing, and estimated timelines—all in one place."
-msgstr ""
-
-#: .\core\templates\core\in_footer\about.html:23
-msgid "3. Hire and Track Progress"
-msgstr ""
-
-#: .\core\templates\core\in_footer\about.html:25
-msgid ""
-"Once you've selected a contractor, the project begins! Use our dashboard to "
-"track milestones, approve work, and communicate via secure messaging."
-msgstr ""
-
-#: .\core\templates\core\in_footer\about.html:28
-msgid "4. Pay with Confidence"
-msgstr ""
-
-#: .\core\templates\core\in_footer\about.html:30
-msgid ""
-"Payments are released only after you approve each milestone. You can pay in "
-"full or use Klarna for installment options."
-msgstr ""
-
-#: .\core\templates\core\in_footer\about.html:33
-msgid "5. Rate and Review"
-msgstr ""
-
-#: .\core\templates\core\in_footer\about.html:35
-msgid ""
-"At the end of the project, leave a review to help others make informed "
-"decisions. Your feedback builds trust within the community."
-msgstr ""
-
-#: .\core\templates\core\in_footer\about.html:39
-msgid "Need help getting started?"
-msgstr ""
-
-#: .\core\templates\core\in_footer\about.html:39
-msgid "Help Center"
-msgstr ""
-
-#: .\core\templates\core\in_footer\about.html:39
-#: .\env\Lib\site-packages\django\utils\text.py:323
-msgid "or"
-msgstr ""
-
-#: .\core\templates\core\in_footer\about.html:39
-msgid "contact us"
-msgstr ""
-
-#: .\core\templates\core\in_footer\accessibility.html:3
-#: .\core\templates\core\in_footer\accessibility.html:7
-#: .\core\templates\core\in_footer\contact.html:3
-#: .\core\templates\core\in_footer\contact.html:7
-#: .\core\templates\core\in_footer\cookies.html:3
-#: .\core\templates\core\in_footer\cookies.html:7
-#: .\core\templates\core\in_footer\help.html:3
-#: .\core\templates\core\in_footer\help.html:7
-#: .\core\templates\core\in_footer\how_to_find_work.html:3
-#: .\core\templates\core\in_footer\how_to_find_work.html:7
-#: .\core\templates\core\in_footer\how_to_hire.html:3
-#: .\core\templates\core\in_footer\how_to_hire.html:7
-#: .\core\templates\core\in_footer\privacy.html:3
-#: .\core\templates\core\in_footer\privacy.html:7
-#: .\core\templates\core\in_footer\project_catalog.html:3
-#: .\core\templates\core\in_footer\project_catalog.html:7
-#: .\core\templates\core\in_footer\talent_marketplace.html:3
-#: .\core\templates\core\in_footer\talent_marketplace.html:7
-#: .\core\templates\core\in_footer\terms.html:3
-#: .\core\templates\core\in_footer\terms.html:7
-#: .\core\templates\core\in_footer\trust_safety.html:3
-#: .\core\templates\core\in_footer\trust_safety.html:7
-msgid "Titre de la page"
-msgstr ""
-
-#: .\core\templates\core\in_footer\accessibility.html:8
-#: .\core\templates\core\in_footer\contact.html:8
-#: .\core\templates\core\in_footer\cookies.html:8
-#: .\core\templates\core\in_footer\help.html:8
-#: .\core\templates\core\in_footer\how_to_find_work.html:8
-#: .\core\templates\core\in_footer\how_to_hire.html:8
-#: .\core\templates\core\in_footer\privacy.html:8
-#: .\core\templates\core\in_footer\project_catalog.html:8
-#: .\core\templates\core\in_footer\talent_marketplace.html:8
-#: .\core\templates\core\in_footer\terms.html:8
-#: .\core\templates\core\in_footer\trust_safety.html:8
-msgid "Contenu à venir..."
-msgstr ""
-
-#: .\core\templates\core\index.html:5
+#: .\core\templates\core\index.html:31
 msgid "Home"
 msgstr ""
 
-#: .\core\templates\core\index.html:13
+#: .\core\templates\core\index.html:40
 msgid "Find, hire, and pay skilled freelancers, all in one place"
 msgstr ""
 
-#: .\core\templates\core\index.html:16
+#: .\core\templates\core\index.html:43
 msgid ""
 "Whether you need simple deliverables or a strategic partner on a complex "
 "job, Contract_it helps you access the right freelancers and cost-effective "
 "solutions tailored to your needs."
 msgstr ""
 
-#: .\core\templates\core\index.html:19 .\core\templates\core\index.html:142
+#: .\core\templates\core\index.html:46 .\core\templates\core\index.html:170
 msgid "Get started"
 msgstr ""
 
-#: .\core\templates\core\index.html:27
+#: .\core\templates\core\index.html:54
 msgid "Clients rate talent"
 msgstr ""
 
-#: .\core\templates\core\index.html:30
+#: .\core\templates\core\index.html:57
 msgid "based on 2.9M+ reviews"
 msgstr ""
 
-#: .\core\templates\core\index.html:37
+#: .\core\templates\core\index.html:64
 msgid "Hire for anything, from quick to longer jobs"
 msgstr ""
 
-#: .\core\templates\core\index.html:41
+#: .\core\templates\core\index.html:69
 msgid "Development & IT"
 msgstr ""
 
-#: .\core\templates\core\index.html:42
+#: .\core\templates\core\index.html:70
 msgid "⭐ 4.9/5 — +1,853 skills"
 msgstr ""
 
-#: .\core\templates\core\index.html:45
+#: .\core\templates\core\index.html:73
 msgid "Design & Creative"
 msgstr ""
 
-#: .\core\templates\core\index.html:46
+#: .\core\templates\core\index.html:74
 msgid "⭐ 4.9/5 — +968 skills"
 msgstr ""
 
-#: .\core\templates\core\index.html:49
+#: .\core\templates\core\index.html:77
 msgid "Sales & Marketing"
 msgstr ""
 
-#: .\core\templates\core\index.html:50
+#: .\core\templates\core\index.html:78
 msgid "⭐ 4.8/5 — +392 skills"
 msgstr ""
 
-#: .\core\templates\core\index.html:53
+#: .\core\templates\core\index.html:81
 msgid "Writing & Translation"
 msgstr ""
 
-#: .\core\templates\core\index.html:54
+#: .\core\templates\core\index.html:82
 msgid "⭐ 4.9/5 — +505 skills"
 msgstr ""
 
-#: .\core\templates\core\index.html:57
+#: .\core\templates\core\index.html:85
 msgid "Admin & Customer Support"
 msgstr ""
 
-#: .\core\templates\core\index.html:58
+#: .\core\templates\core\index.html:86
 msgid "⭐ 4.8/5 — +508 skills"
 msgstr ""
 
-#: .\core\templates\core\index.html:61
+#: .\core\templates\core\index.html:89
 msgid "Finance & Accounting"
 msgstr ""
 
-#: .\core\templates\core\index.html:62
+#: .\core\templates\core\index.html:90
 msgid "⭐ 4.8/5 — +214 skills"
 msgstr ""
 
-#: .\core\templates\core\index.html:66
+#: .\core\templates\core\index.html:94
 msgid "View more"
 msgstr ""
 
-#: .\core\templates\core\index.html:74
+#: .\core\templates\core\index.html:102
 msgid "Work with anyone. Anywhere."
 msgstr ""
 
-#: .\core\templates\core\index.html:80
+#: .\core\templates\core\index.html:109
 msgid "Data Analyst * Power BI * SPSS"
 msgstr ""
 
-#: .\core\templates\core\index.html:81
+#: .\core\templates\core\index.html:110
 msgid "4.9/5 (66 jobs)"
 msgstr ""
 
-#: .\core\templates\core\index.html:82
+#: .\core\templates\core\index.html:111
 msgid "See more"
 msgstr ""
 
-#: .\core\templates\core\index.html:88
+#: .\core\templates\core\index.html:116
 msgid "See more profiles"
 msgstr ""
 
-#: .\core\templates\core\index.html:97
+#: .\core\templates\core\index.html:125
 msgid "How to hire on Contract_it"
 msgstr ""
 
-#: .\core\templates\core\index.html:101
+#: .\core\templates\core\index.html:129
 msgid "Post a job"
 msgstr ""
 
-#: .\core\templates\core\index.html:102
+#: .\core\templates\core\index.html:130
 msgid "Tell us what you need. Provide as many details as possible."
 msgstr ""
 
-#: .\core\templates\core\index.html:106
+#: .\core\templates\core\index.html:134
 msgid "Talent comes to you"
 msgstr ""
 
-#: .\core\templates\core\index.html:107
+#: .\core\templates\core\index.html:135
 msgid "Get qualified proposals within 24 hours."
 msgstr ""
 
-#: .\core\templates\core\index.html:111
+#: .\core\templates\core\index.html:139
 msgid "Collaborate easily"
 msgstr ""
 
-#: .\core\templates\core\index.html:112
+#: .\core\templates\core\index.html:140
 msgid "Chat, video call, and track project progress."
 msgstr ""
 
-#: .\core\templates\core\index.html:116
+#: .\core\templates\core\index.html:144
 msgid "Payment simplified"
 msgstr ""
 
-#: .\core\templates\core\index.html:117
+#: .\core\templates\core\index.html:145
 msgid "Only pay for work you approve."
 msgstr ""
 
-#: .\core\templates\core\index.html:127
+#: .\core\templates\core\index.html:155
 msgid ""
 "“One of the greatest advantages of utilizing freelancers is finding a great "
 "variety of talent with different skills and bringing on new talent quickly "
 "as our needs change.”"
 msgstr ""
 
-#: .\core\templates\core\index.html:131
+#: .\core\templates\core\index.html:159
 msgid "Director of Content Experience, Microsoft"
 msgstr ""
 
-#: .\core\templates\core\index.html:140
+#: .\core\templates\core\index.html:168
 msgid "Start connecting with freelance talent today"
 msgstr ""
 
-#: .\core\templates\core\index.html:145
+#: .\core\templates\core\index.html:173
 msgid "Find opportunities for every stage of your freelance career."
 msgstr ""
 
-#: .\core\templates\core\index.html:147
+#: .\core\templates\core\index.html:175
 msgid "Apply as an independent pro"
 msgstr ""
 
-#: .\core\templates\core\login.html:9
-msgid "Log in to CONTRACT-IT"
-msgstr ""
-
-#: .\core\templates\core\login.html:13
-msgid "e.g. Ceasar123"
-msgstr ""
-
-#: .\core\templates\core\login.html:15 .\core\templates\core\signup.html:18
-msgid "Password"
-msgstr ""
-
-#: .\core\templates\core\login.html:24 .\core\templates\core\login.html:68
-msgid "Logged in successfully!"
-msgstr ""
-
-#: .\core\templates\core\login.html:28
-msgid "Don't have an account?"
-msgstr ""
-
-#: .\core\templates\core\login.html:88
-msgid "Login failed. Please check your credentials."
-msgstr ""
-
-#: .\core\templates\core\partials\footer.html:7
+#: .\core\templates\core\useful\footer.html:34
 msgid "For Clients"
 msgstr ""
 
-#: .\core\templates\core\partials\footer.html:10
+#: .\core\templates\core\useful\footer.html:36
+msgid "How to Hire"
+msgstr ""
+
+#: .\core\templates\core\useful\footer.html:37
 msgid "Talent Marketplace"
 msgstr ""
 
-#: .\core\templates\core\partials\footer.html:11
+#: .\core\templates\core\useful\footer.html:38
 msgid "Project Catalog"
 msgstr ""
 
-#: .\core\templates\core\partials\footer.html:17
+#: .\core\templates\core\useful\footer.html:44
 msgid "For Entrepreneurs"
 msgstr ""
 
-#: .\core\templates\core\partials\footer.html:19
+#: .\core\templates\core\useful\footer.html:46
 msgid "How to Find Work"
 msgstr ""
 
-#: .\core\templates\core\partials\footer.html:25
-msgid "Support"
-msgstr ""
-
-#: .\core\templates\core\partials\footer.html:27
+#: .\core\templates\core\useful\footer.html:54
 msgid "Help & Support"
 msgstr ""
 
-#: .\core\templates\core\partials\footer.html:28
-msgid "Contact Us"
-msgstr ""
-
-#: .\core\templates\core\partials\footer.html:29
+#: .\core\templates\core\useful\footer.html:56
 msgid "Trust & Safety"
 msgstr ""
 
-#: .\core\templates\core\partials\footer.html:35
+#: .\core\templates\core\useful\footer.html:62
 msgid "Company"
 msgstr ""
 
-#: .\core\templates\core\partials\footer.html:37
+#: .\core\templates\core\useful\footer.html:64
 msgid "About Us"
 msgstr ""
 
-#: .\core\templates\core\partials\footer.html:38
+#: .\core\templates\core\useful\footer.html:65
 msgid "Cookie Settings"
 msgstr ""
 
-#: .\core\templates\core\partials\footer.html:39
+#: .\core\templates\core\useful\footer.html:66
 msgid "Accessibility"
 msgstr ""
 
-#: .\core\templates\core\partials\footer.html:48
+#: .\core\templates\core\useful\footer.html:76
 msgid "Follow Us"
 msgstr ""
 
-#: .\core\templates\core\partials\footer.html:57
+#: .\core\templates\core\useful\footer.html:86
 msgid "Mobile app"
 msgstr ""
 
-#: .\core\templates\core\partials\footer.html:65
+#: .\core\templates\core\useful\footer.html:95
 msgid "Terms of Service"
 msgstr ""
 
-#: .\core\templates\core\partials\footer.html:66
+#: .\core\templates\core\useful\footer.html:96
 msgid "Privacy Policy"
-msgstr ""
-
-#: .\core\templates\core\signup.html:9
-msgid "Create an account"
-msgstr ""
-
-#: .\core\templates\core\signup.html:15
-#: .\env\Lib\site-packages\django\db\models\fields\__init__.py:1845
-msgid "Email address"
-msgstr ""
-
-#: .\core\templates\core\signup.html:21
-msgid "Role:"
-msgstr ""
-
-#: .\core\templates\core\signup.html:22
-msgid "Choose your role(s)"
-msgstr ""
-
-#: .\core\templates\core\signup.html:26
-msgid "I am a client"
-msgstr ""
-
-#: .\core\templates\core\signup.html:31
-msgid "I am a contractor"
-msgstr ""
-
-#: .\core\templates\core\signup.html:46
-msgid "Account created successfully!"
-msgstr ""
-
-#: .\core\templates\core\signup.html:108
-msgid "Account created, but login failed."
-msgstr ""
-
-#: .\core\templates\core\signup.html:112
-msgid "There was a problem. Please try again."
-msgstr ""
-
-#: .\env\Lib\site-packages\django\contrib\messages\apps.py:15
-msgid "Messages"
 msgstr ""
 
 #: .\env\Lib\site-packages\django\contrib\sitemaps\apps.py:8
@@ -1297,10 +1461,12 @@ msgid "Unknown"
 msgstr ""
 
 #: .\env\Lib\site-packages\django\forms\widgets.py:795
+#: .\projects\templates\projects\create_project.html:73
 msgid "Yes"
 msgstr ""
 
 #: .\env\Lib\site-packages\django\forms\widgets.py:796
+#: .\projects\templates\projects\create_project.html:72
 msgid "No"
 msgstr ""
 
@@ -1648,6 +1814,10 @@ msgctxt "String to return when truncating text"
 msgid "%(truncated_text)s…"
 msgstr ""
 
+#: .\env\Lib\site-packages\django\utils\text.py:323
+msgid "or"
+msgstr ""
+
 #. Translators: This string is used as a separator between list elements
 #: .\env\Lib\site-packages\django\utils\text.py:342
 #: .\env\Lib\site-packages\django\utils\timesince.py:135
@@ -1863,10 +2033,202 @@ msgstr ""
 msgid "Connect, get help, or contribute"
 msgstr ""
 
-#: .\projects\templates\projects\project_detail.html:13
-msgid "Budget"
+#: .\projects\templates\projects\awarded_projects.html:22
+msgid "My Awarded Projects"
 msgstr ""
 
-#: .\projects\templates\projects\project_detail.html:28
-msgid "View Bids Received"
+#: .\projects\templates\projects\awarded_projects.html:30
+msgid "Projects Awarded to You"
+msgstr ""
+
+#: .\projects\templates\projects\awarded_projects.html:36
+msgid "You haven't been awarded any projects yet."
+msgstr ""
+
+#: .\projects\templates\projects\awarded_projects.html:44
+#: .\projects\templates\projects\create_project.html:85
+#: .\projects\templates\projects\edit_project.html:29
+#: .\projects\templates\projects\edit_project.html:62
+#: .\projects\templates\projects\my_projects.html:33
+#: .\projects\templates\projects\project_detail.html:47
+#: .\projects\templates\projects\project_list.html:73
+msgid "Title"
+msgstr ""
+
+#: .\projects\templates\projects\awarded_projects.html:49
+#: .\projects\templates\projects\my_projects.html:38
+#: .\projects\templates\projects\project_list.html:77
+msgid "Actions"
+msgstr ""
+
+#: .\projects\templates\projects\awarded_projects.html:63
+msgid "View"
+msgstr ""
+
+#: .\projects\templates\projects\create_project.html:21
+msgid "Post a New Project"
+msgstr ""
+
+#: .\projects\templates\projects\create_project.html:27
+msgid "Create a New Project"
+msgstr ""
+
+#: .\projects\templates\projects\create_project.html:36
+msgid "General Information"
+msgstr ""
+
+#: .\projects\templates\projects\create_project.html:39
+msgid "Project Title"
+msgstr ""
+
+#: .\projects\templates\projects\create_project.html:40
+msgid "e.g. Bathroom Renovation"
+msgstr ""
+
+#: .\projects\templates\projects\create_project.html:47
+#: .\projects\templates\projects\edit_project.html:39
+#: .\projects\templates\projects\project_detail.html:27
+#: .\projects\templates\projects\project_list.html:48
+msgid "Category"
+msgstr ""
+
+#: .\projects\templates\projects\create_project.html:55
+msgid "Total Budget ($ CAD)"
+msgstr ""
+
+#: .\projects\templates\projects\create_project.html:63
+msgid "Visibility"
+msgstr ""
+
+#: .\projects\templates\projects\create_project.html:65
+msgid "Public"
+msgstr ""
+
+#: .\projects\templates\projects\create_project.html:66
+msgid "Private"
+msgstr ""
+
+#: .\projects\templates\projects\create_project.html:70
+msgid "Drafted with AI?"
+msgstr ""
+
+#: .\projects\templates\projects\create_project.html:80
+msgid "Project Milestones"
+msgstr ""
+
+#: .\projects\templates\projects\create_project.html:86
+#: .\projects\templates\projects\edit_project.html:70
+#: .\projects\templates\projects\project_detail.html:48
+msgid "Due Date"
+msgstr ""
+
+#: .\projects\templates\projects\create_project.html:87
+msgid "Amount ($)"
+msgstr ""
+
+#: .\projects\templates\projects\create_project.html:88
+msgid "Remove"
+msgstr ""
+
+#: .\projects\templates\projects\create_project.html:105
+msgid "Add Milestone"
+msgstr ""
+
+#: .\projects\templates\projects\create_project.html:108
+msgid "The sum of milestone amounts must match the total project budget."
+msgstr ""
+
+#: .\projects\templates\projects\create_project.html:113
+msgid "Publish Project"
+msgstr ""
+
+#: .\projects\templates\projects\edit_project.html:16
+msgid "Edit Project"
+msgstr ""
+
+#: .\projects\templates\projects\edit_project.html:22
+msgid "Edit Your Project"
+msgstr ""
+
+#: .\projects\templates\projects\edit_project.html:59
+#: .\projects\templates\projects\project_detail.html:43
+msgid "Milestones"
+msgstr ""
+
+#: .\projects\templates\projects\edit_project.html:66
+#: .\projects\templates\projects\project_detail.html:49
+msgid "Amount"
+msgstr ""
+
+#: .\projects\templates\projects\edit_project.html:75
+msgid "No milestones defined yet."
+msgstr ""
+
+#: .\projects\templates\projects\edit_project.html:81
+msgid "Cancel"
+msgstr ""
+
+#: .\projects\templates\projects\edit_project.html:84
+msgid "Save Changes"
+msgstr ""
+
+#: .\projects\templates\projects\my_projects.html:24
+msgid "Your Posted Projects"
+msgstr ""
+
+#: .\projects\templates\projects\my_projects.html:27
+msgid "You haven't posted any projects yet."
+msgstr ""
+
+#: .\projects\templates\projects\my_projects.html:37
+msgid "Bids"
+msgstr ""
+
+#: .\projects\templates\projects\my_projects.html:52
+#: .\projects\templates\projects\project_list.html:89
+msgid "View Details"
+msgstr ""
+
+#: .\projects\templates\projects\my_projects.html:56
+msgid "Edit"
+msgstr ""
+
+#: .\projects\templates\projects\project_detail.html:30
+msgid "Project Description"
+msgstr ""
+
+#: .\projects\templates\projects\project_detail.html:70
+msgid "Submit a Bid"
+msgstr ""
+
+#: .\projects\templates\projects\project_detail.html:75
+msgid "You have already submitted a bid for this project."
+msgstr ""
+
+#: .\projects\templates\projects\project_list.html:27
+msgid "Filter Projects"
+msgstr ""
+
+#: .\projects\templates\projects\project_list.html:33
+msgid "Min Budget ($)"
+msgstr ""
+
+#: .\projects\templates\projects\project_list.html:38
+msgid "Max Budget ($)"
+msgstr ""
+
+#: .\projects\templates\projects\project_list.html:54
+msgid "Apply Filters"
+msgstr ""
+
+#: .\projects\templates\projects\project_list.html:63
+msgid "Open Projects to Bid On"
+msgstr ""
+
+#: .\projects\templates\projects\project_list.html:67
+msgid "No active projects match your filters."
+msgstr ""
+
+#: .\projects\templates\projects\project_list.html:76
+msgid "Budget ($ CAD)"
 msgstr ""
