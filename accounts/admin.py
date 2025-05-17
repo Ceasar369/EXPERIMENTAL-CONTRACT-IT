@@ -38,6 +38,8 @@ class CustomUserAdmin(UserAdmin):
     # ✍️ Correction IMPORTANTE : liste explicite sans le champ 'username' (qui a été supprimé du modèle)
     list_display = ('email', 'first_name', 'last_name', 'is_client', 'is_contractor', 'is_staff')
 
+    readonly_fields = ('date_joined',)
+
     # 🔍 Barre de recherche dans l’admin
     search_fields = ('email', 'city')
     # 🧭 Tri par défaut
@@ -59,7 +61,7 @@ class CustomUserAdmin(UserAdmin):
                 (None, {'fields': ('email', 'password')}),
                 ('Informations personnelles', {'fields': ()}),
                 ('Permissions', {'fields': ('is_active', 'is_staff', 'is_superuser', 'groups', 'user_permissions')}),
-                ('Dates importantes', {'fields': ('last_login', 'date_joined')}),
+                ('Dates importantes', {'fields': ('last_login',)}),
             )
 
         elif obj and obj.is_client:
