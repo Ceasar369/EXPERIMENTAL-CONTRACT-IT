@@ -64,7 +64,8 @@ class SubmitBidFormView(View):
             message=message
         )
 
-        return redirect('bid_confirmation_view')
+        return redirect('bids:bid_confirmation_view')
+
 
 # ---------------------------------------------------------------------
 # 2️⃣ bid_confirmation_view : page de confirmation après soumission
@@ -134,7 +135,7 @@ def accept_bid_view(request, bid_id):
     bid.save()
 
     # TODO : activer une messagerie ici, notifier l’entrepreneur, etc.
-    return redirect('bid_accepted_confirmation_view')
+    return redirect('bids:bid_accepted_confirmation_view')
 
 
 # ---------------------------------------------------------------------

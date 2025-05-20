@@ -1,0 +1,38 @@
+{% extends "core/useful/base2.html" %}
+{% load i18n %}
+
+{# --------------------------------------------- #}
+{# 📄 Template : payments/request_payment.html   #}
+{# 🎯 Page pour que l'entrepreneur soumette une   #}
+{#     demande de paiement pour un jalon donné    #}
+{# --------------------------------------------- #}
+
+{% block content %}
+<div class="max-w-2xl mx-auto bg-white shadow-md rounded p-6 mt-8">
+  <h2 class="text-xl font-bold text-gray-800 mb-4">Soumettre une demande de paiement</h2>
+
+  <p class="text-sm text-gray-600 mb-2">
+    <strong>Jalon concerné :</strong> {{ milestone.title }}<br>
+    <strong>Échéance prévue :</strong> {{ milestone.due_date|date:"d/m/Y" }}<br>
+    <strong>Budget estimé :</strong> {{ milestone.amount }} $ CAD
+  </p>
+
+  <form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+
+    <div class="mb-4">
+      <label for="id_description" class="block text-sm font-medium text-gray-700">Description des travaux effectués</label>
+      {{ form.description }}
+    </div>
+
+    <div class="mb-4">
+      <label for="id_image" class="block text-sm font-medium text-gray-700">Preuve visuelle (facultatif)</label>
+      {{ form.image }}
+    </div>
+
+    <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+      Envoyer la demande
+    </button>
+  </form>
+</div>
+{% endblock %}

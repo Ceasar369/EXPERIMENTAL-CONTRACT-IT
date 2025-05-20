@@ -24,6 +24,8 @@ from .views import (
     bid_accepted_confirmation_view
 )
 
+app_name = "bids"
+
 # ---------------------------------------------------------------------
 # 🔗 Liste des routes disponibles pour les soumissions (bids)
 # ---------------------------------------------------------------------

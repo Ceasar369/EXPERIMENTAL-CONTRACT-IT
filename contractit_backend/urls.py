@@ -44,6 +44,11 @@ urlpatterns = [
     # 🔧 Endpoints de l’API (non traduits, fixes)
     path('api/accounts/', include('accounts.urls')),
     path('api/projects/', include('projects.urls')),
+
+    # Cela permet d'accéder aux routes définies dans `payments/urls.py` via le préfixe '/payments/'
+    # Exemple : /payments/request/12/ ou /payments/approve/5/
+    path('payments/', include('payments.urls', namespace='payments')),
+
 ]
 
 # ---------------------------------------------------------------------

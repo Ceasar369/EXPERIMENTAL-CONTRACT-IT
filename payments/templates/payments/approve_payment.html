@@ -1,0 +1,48 @@
+{% extends "core/useful/base2.html" %}
+{% load i18n %}
+
+{# --------------------------------------------- #}
+{# 📄 Template : payments/approve_payment.html   #}
+{# 🎯 Affiche les détails d'une demande de paiement #}
+{#     Permet au client d'approuver ou refuser     #}
+{# --------------------------------------------- #}
+
+{% block content %}
+<div class="max-w-2xl mx-auto bg-white shadow-md rounded p-6 mt-8">
+  <h2 class="text-xl font-bold text-gray-800 mb-4">Demande de paiement pour le jalon : {{ payment.milestone.title }}</h2>
+
+  <p class="text-sm text-gray-600 mb-2"><strong>Travaux décrits :</strong> {{ payment.description }}</p>
+
+  {% if payment.image %}
+    <div class="mb-4">
+      <p class="text-sm text-gray-700">Preuve visuelle :</p>
+      <img src="{{ payment.image.url }}" alt="preuve" class="max-w-md rounded border">
+    </div>
+  {% endif %}
+
+  <form method="post">
+    {% csrf_token %}
+
+    {# Si on a cliqué sur "Refuser", on affiche le formulaire de refus #}
+    {% if request.POST.decline or payment.declined %}
+      <div class="mb-4">
+        <label class="block text-sm font-medium text-gray-700">Motif du refus</label>
+        {{ form.refusal_reason }}
+      </div>
+
+      <div class="mb-4">
+        <label class="block text-sm font-medium text-gray-700">Demandes ou commentaires pour l’entrepreneur</label>
+        {{ form.client_requests }}
+      </div>
+
+      <button type="submit" name="decline" class="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700">Confirmer le refus</button>
+    {% else %}
+      <div class="flex gap-4">
+        <button type="submit" name="approve" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">Approuver le paiement</button>
+        <button type="submit" name="decline" class="bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600">Refuser avec commentaires</button>
+      </div>
+    {% endif %}
+
+  </form>
+</div>
+{% endblock %}

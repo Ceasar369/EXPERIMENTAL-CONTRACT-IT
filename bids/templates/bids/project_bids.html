@@ -72,7 +72,7 @@
 
                 <!-- ✅ Bouton d'acceptation (si bid en attente et projet actif) -->
                 {% if project.status == 'active' and bid.status == 'pending' %}
-                <form method="post" action="{% url 'accept_bid_view' bid.id %}">
+                <form method="post" action="{% url 'bids:accept_bid_view' bid.id %}">
                     {% csrf_token %}
                     <button type="submit"
                             class="mt-4 bg-teal-600 text-white px-4 py-2 rounded hover:bg-teal-700 transition">

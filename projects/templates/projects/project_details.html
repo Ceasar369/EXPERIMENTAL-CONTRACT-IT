@@ -9,7 +9,9 @@
 # 🎯 Affiche tous les détails d’un projet CONTRACT-IT :
 #    - informations principales (titre, description, lieu…),
 #    - jalons associés (milestones),
-#    - bouton "Submit a Bid" (si l’entrepreneur n’a pas encore postulé).
+#    - bouton "Submit a Bid" (si l’entrepreneur n’a pas encore postulé),
+#    - boutons supplémentaires pour demander ou approuver un paiement selon le rôle,
+#    - possibilité pour le client de libérer un paiement directement.
 #
 # 🔒 Accessible aux utilisateurs connectés (client ou entrepreneur).
 # 🔁 Vue liée : project_detail_page_view(request, project_id)
@@ -20,6 +22,7 @@
 {% block title %}{{ project.title }}{% endblock %}
 
 {% block content %}
+<!-- 📦 Conteneur principal -->
 <div class="max-w-4xl mx-auto bg-white p-8 shadow-md rounded-md">
 
     <!-- 🧾 TITRE + CATÉGORIE -->
@@ -28,11 +31,11 @@
         {% trans "Category" %}: <span class="font-semibold">{{ project.category }}</span>
     </p>
 
-    <!-- 📄 DESCRIPTION -->
+    <!-- 📄 DESCRIPTION DU PROJET -->
     <h2 class="text-xl font-semibold mt-4 mb-2">{% trans "Project Description" %}</h2>
     <p class="text-gray-700 leading-relaxed">{{ project.description }}</p>
 
-    <!-- 📍 INFOS CLÉS DU PROJET -->
+    <!-- 📍 INFOS CLÉS (lieu, budget, deadline...) -->
     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-6">
         <p><strong>{% trans "Location" %}:</strong> {{ project.location }}</p>
         <p><strong>{% trans "Deadline" %}:</strong> {{ project.deadline }}</p>
@@ -40,7 +43,7 @@
         <p><strong>{% trans "Client" %}:</strong> {{ project.client.username }}</p>
     </div>
 
-    <!-- 🧱 JALONS DU PROJET -->
+    <!-- 🧱 TABLEAU DES JALONS DU PROJET -->
     {% if project.milestones.all %}
         <h2 class="text-xl font-semibold mt-8 mb-2">{% trans "Milestones" %}</h2>
         <table class="w-full border mt-2 text-sm">
@@ -50,6 +53,7 @@
                     <th class="p-2 border">{% trans "Due Date" %}</th>
                     <th class="p-2 border">{% trans "Amount" %}</th>
                     <th class="p-2 border">{% trans "Status" %}</th>
+                    <th class="p-2 border">{% trans "Actions" %}</th>
                 </tr>
             </thead>
             <tbody>
@@ -59,24 +63,60 @@
                     <td class="p-2 border">{{ milestone.due_date }}</td>
                     <td class="p-2 border">{{ milestone.amount }}</td>
                     <td class="p-2 border">{{ milestone.get_status_display }}</td>
+                    <td class="p-2 border text-center">
+                        {% comment %} Actions disponibles selon le rôle connecté {% endcomment %}
+
+                        {% if user.is_authenticated and user == project.contractor %}
+                            {% if milestone.payment_request %}
+                                <!-- 🔴 ENTREPRENEUR : désactive le bouton si la demande existe déjà -->
+                                <span class="inline-block text-xs bg-red-100 text-red-800 px-3 py-1 rounded font-semibold cursor-not-allowed opacity-70">
+                                    {% trans "Payment Requested" %}
+                                </span>
+                            {% else %}
+                                <!-- ✅ ENTREPRENEUR : bouton actif pour soumettre une demande -->
+                                <a href="{% url 'payments:request-payment' milestone.id %}" class="text-sm text-green-600 hover:underline font-semibold">
+                                    {% trans "Request Payment" %}
+                                </a>
+                            {% endif %}
+
+                        {% elif user.is_authenticated and user == project.client %}
+                            {% if milestone.payment_request %}
+                                <!-- 👤 CLIENT : bouton pour approuver une demande existante -->
+                                <a href="{% url 'payments:approve-payment' milestone.payment_request.id %}" class="text-sm text-blue-600 hover:underline">
+                                    {% trans "Approve Payment" %}
+                                </a>
+                            {% else %}
+                                <!-- 👤 CLIENT : libérer un paiement sans demande de l’entrepreneur -->
+                                <a href="{% url 'payments:release-payment' milestone.id %}" class="text-sm text-yellow-600 hover:underline">
+                                    {% trans "Release Payment" %}
+                                </a>
+                                <p class="text-xs text-red-500 mt-1 italic">
+                                    ⚠ {% trans "No payment request was submitted by the contractor. By releasing this payment, you are authorizing payment without requiring proof of work." %}
+                                </p>
+                            {% endif %}
+                        {% else %}
+                            <!-- Aucun rôle ou action applicable -->
+                            <span class="text-gray-400 text-xs">{% trans "No action available" %}</span>
+                        {% endif %}
+                    </td>
                 </tr>
                 {% endfor %}
             </tbody>
         </table>
     {% endif %}
 
-    <!-- 🚧 BOUTON DE CANDIDATURE (soumission d’offre) -->
+    <!-- 🚧 ENTREPRENEUR : bouton pour soumettre une proposition (s’il n’a pas encore postulé) -->
     {% if not has_already_bid %}
         {% if user.is_authenticated and user.is_contractor and project.client != user %}
             <div class="mt-8 text-center">
-                <a href="{% url 'submit_bid_view' project.id %}" class="inline-block bg-teal-600 text-white px-6 py-3 rounded hover:bg-teal-700 font-semibold">
+                <a href="{% url 'bids:submit_bid_view' project.id %}" class="inline-block bg-teal-600 text-white px-6 py-3 rounded hover:bg-teal-700 font-semibold">
                     {% trans "Submit a Bid" %}
                 </a>
             </div>
         {% endif %}
     {% endif %}
 
-    <!-- ⚙️ ONGLET CLIENT : Modifier et voir les offres reçues -->
+    <!-- ⚙️ CLIENT : actions spécifiques (éditer + voir les offres reçues) -->
     {% if user.is_authenticated and user == project.client %}
         <div class="mt-10 flex justify-center space-x-6">
 
@@ -87,7 +127,7 @@
             </a>
 
             <!-- 📑 Voir les propositions reçues -->
-            <a href="{% url 'view_project_bids_view' project.id %}"
+            <a href="{% url 'bids:project_bids_view' project.id %}"
                class="inline-block px-5 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition font-semibold">
                 {% trans "View Proposals" %}
             </a>

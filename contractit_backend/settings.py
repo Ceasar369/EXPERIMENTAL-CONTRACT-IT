@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     "rest_framework_simplejwt.token_blacklist",  # pour la gestion des tokens JWT
     "accounts",
     'bids',
+    'payments',
 ]
 
 AUTH_USER_MODEL = 'accounts.CustomUser'
